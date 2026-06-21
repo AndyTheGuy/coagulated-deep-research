@@ -97,7 +97,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_fusion.py
   ```
 
-### [ ] Task 2.5.5: Query Diversification Utility
+### [x] Task 2.5.5: Query Diversification Utility
 - **Description**: Implement query diversification utility to generate 3-5 query variants for a research sub-question using a BULK/STANDARD tier LLM call.
 - **Files**:
   - **`search/diversify.py`**
