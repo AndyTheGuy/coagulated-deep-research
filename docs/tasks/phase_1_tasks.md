@@ -138,7 +138,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
   uv run python -m cli.main
   ```
 
-### [ ] Task 1.10: Streamlit App Shell
+### [x] Task 1.10: Streamlit App Shell
 - **Description**: Build the baseline Streamlit app UI layout, establishing components for user input, progress logs, and mock outputs.
 - **Files**:
   - `ui/app.py`
