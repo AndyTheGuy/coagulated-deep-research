@@ -174,7 +174,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run python -c "from core.graph import compile_graph; compile_graph()"
   ```
 
-### [ ] Task 2.11: Search Pipeline Integration Test
+### [x] Task 2.11: Search Pipeline Integration Test
 - **Description**: Create an end-to-end integration test validating the entire search pipeline (query -> diversify -> parallel search -> scrape -> dedup -> fuse -> cache -> aggregate).
 - **Files**:
   - **`tests/integration/test_search_pipeline.py`**
