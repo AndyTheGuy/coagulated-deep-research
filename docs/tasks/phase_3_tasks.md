@@ -4,6 +4,19 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ---
 
+## Step 0: Pydantic Model Updates
+
+### [ ] Task 3.0: Pydantic Model Updates for Phase 3
+- **Description**: Add any new Pydantic models required by Phase 3 (e.g. `Claim`, `VerifiedSource`, `QuoteVerification`, `VerificationResult`, `ReportConfidenceScore`) to `core/models.py` before building nodes or pipelines. This guarantees complete type-safety across all subsequent modules.
+- **Files**:
+  - **`core/models.py`**
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_models.py
+  ```
+
+---
+
 ## Step 1: Claim Extraction
 
 ### [ ] Task 3.1: Claim Extractor
@@ -111,16 +124,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ---
 
-## Step 5: Pydantic Models & Graph Wiring
-
-### [ ] Task 3.8: Pydantic Model Updates for Phase 3
-- **Description**: Add any new Pydantic models required by Phase 3 (e.g. `QuoteVerification`, `VerificationResult`, `ReportConfidenceScore`).
-- **Files**:
-  - `core/models.py`
-- **Verification Command**:
-  ```bash
-  uv run pytest tests/unit/test_models.py
-  ```
+## Step 5: Graph Wiring
 
 ### [ ] Task 3.9: Graph Wiring Update
 - **Description**: Wire the verifier and writer nodes into the existing LangGraph `StateGraph`. Implement conditional routing from the verifier back to the supervisor when gaps are found.
