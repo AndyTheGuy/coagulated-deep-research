@@ -22,7 +22,7 @@ Use this task list to implement Phase 4. Mark tasks as completed `[x]` as you fi
 
 ## Step 1: Plan-MCTS (Plan-Space Monte Carlo Tree Search)
 
-### [ ] Task 4.1: Plan-MCTS Planning Engine
+### [x] Task 4.1: Plan-MCTS Planning Engine
 - **Description**: Implement the natural language-based Plan-Space Monte Carlo Tree Search (Plan-MCTS) engine.
   - Reason over natural language research intents (subplans) rather than DOM-level clicking.
   - Governed by the Upper Confidence Bound Applied to Trees (UCT) formula.
