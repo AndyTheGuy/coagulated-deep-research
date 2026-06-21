@@ -162,7 +162,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_cache.py
   ```
 
-### [ ] Task 2.10: Graph Wiring Update
+### [x] Task 2.10: Graph Wiring Update
 - **Description**: Wire the new supervisor, parallel researchers, and context aggregator nodes into the LangGraph state machine.
 - **Files**:
   - **`core/graph.py`**
