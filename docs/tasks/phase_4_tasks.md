@@ -63,7 +63,7 @@ Use this task list to implement Phase 4. Mark tasks as completed `[x]` as you fi
 
 ## Step 3: Graph Node & Researcher Integration
 
-### [ ] Task 4.4: Advanced Researcher Node Wiring
+### [x] Task 4.4: Advanced Researcher Node Wiring
 - **Description**: Replace the basic parallel researcher search tool with the advanced MCTS explorer and Mango URL router inside the parallel researcher node loop.
 - **Files**:
   - **`core/nodes/research.py`** (integrate MCTS and Mango)
@@ -76,7 +76,7 @@ Use this task list to implement Phase 4. Mark tasks as completed `[x]` as you fi
 
 ## Step 4: Full System E2E & Verification
 
-### [ ] Task 4.5: Advanced Planning E2E Integration Test
+### [x] Task 4.5: Advanced Planning E2E Integration Test
 - **Description**: Write a complete end-to-end integration test validating that research tasks utilize MCP Sequential Thinking, memory graphs, and the MCTS planning engine successfully under mock environments.
 - **Files**:
   - **`tests/integration/test_advanced_planning_e2e.py`** [NEW]
