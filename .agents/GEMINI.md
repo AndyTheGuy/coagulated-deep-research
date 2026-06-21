@@ -44,8 +44,8 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ---
 
 ## 5. Active Development State
-- **Active Phase**: Phase 4 (Advanced Search) — UPCOMING 🚀 (Next Conversation)
-- **Active Task**: Task 4.0: MCP Client Integration & Hub
+- **Active Phase**: Phase 4 (Advanced Search) — IN PROGRESS 🚀
+- **Active Task**: Task 4.1: Plan-MCTS Planning Engine
 - **Task List**: [docs/tasks/phase_4_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_4_tasks.md)
 - **Phase 1 Status**: ✅ 100% complete, bug-fixed, fully tested (25/25 passing tests), committed and pushed.
 - **Phase 2 Status**: ✅ 100% complete, bug-fixed, fully tested (65/65 passing tests), committed, and pushed.
