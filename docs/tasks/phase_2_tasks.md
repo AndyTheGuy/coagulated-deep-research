@@ -85,7 +85,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_dedup.py
   ```
 
-### [ ] Task 2.5: Reciprocal Rank Fusion (RRF)
+### [x] Task 2.5: Reciprocal Rank Fusion (RRF)
 - **Description**: Implement RRF to merge and rank search result sets from SearXNG and DDG.
 - **Files**:
   - **`search/fusion.py`**
