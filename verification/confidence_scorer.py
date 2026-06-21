@@ -45,14 +45,14 @@ class ConfidenceScorer:
         confidence_score = 0.0
         remediation_notes = None
 
-        if quote_failed:
-            status = "failed"
-            confidence_score = 0.0
-            remediation_notes = "Quote verification failed: one or more quotes do not match cited source content."
-        elif verified_sources_count == 0:
+        if verified_sources_count == 0:
             status = "gap"
             confidence_score = 0.0
             remediation_notes = "Information gap: no accessible and verified sources found to back this claim."
+        elif quote_failed:
+            status = "failed"
+            confidence_score = 0.0
+            remediation_notes = "Quote verification failed: one or more quotes do not match cited source content."
         elif verified_sources_count == 1:
             status = "verified"
             # Medium confidence: Base of 0.5, plus up to 0.2 from quote quality (ranges from 0.5 to 0.7)
