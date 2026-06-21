@@ -55,7 +55,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
 
 ## Step 2: Core Components Scaffolding
 
-### [ ] Task 1.4: Define Data Models
+### [x] Task 1.4: Define Data Models
 - **Description**: Create Pydantic models for all data models, messages, and state schemas. Must define the state structure that flows through the LangGraph nodes.
 - **Files**:
   - `core/models.py`

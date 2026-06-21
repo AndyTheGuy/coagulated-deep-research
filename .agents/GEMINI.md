@@ -40,6 +40,6 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 
 ## 5. Active Development State
 - **Active Phase**: Phase 1 (Foundation)
-- **Active Task**: Step 2a - Define Data Models (core/models.py)
+- **Active Task**: Step 2b - 3-Tier LLM Router (core/llm_router.py)
 - **Task List**: [docs/tasks/phase_1_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_1_tasks.md)
 - **Known Blockers**: None.
