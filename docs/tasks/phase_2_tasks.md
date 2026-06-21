@@ -56,7 +56,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_ddg.py
   ```
 
-### [ ] Task 2.3: URL Scraping & Content Extraction
+### [x] Task 2.3: URL Scraping & Content Extraction
 - **Description**: Build a robust, async web scraper using `httpx` and `BeautifulSoup` to extract clean markdown or plain text content from URLs.
 - **Files**:
   - **`search/scraper.py`**
