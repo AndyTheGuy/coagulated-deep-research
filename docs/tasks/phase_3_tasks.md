@@ -145,7 +145,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ## Step 6: Integration Testing
 
-### [ ] Task 3.10: Verification Pipeline Integration Test
+### [x] Task 3.10: Verification Pipeline Integration Test
 - **Description**: Create an end-to-end integration test that runs a known report through the full verification pipeline and asserts correct confidence scoring behavior.
 - **Files**:
   - `tests/integration/test_verification_pipeline.py`
