@@ -34,6 +34,7 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 3. **Strict Schemas**: All data exchanges across agent nodes must be validated using Pydantic models.
 4. **Structured Logging**: Log every transition, query, scrape, and validation step via `structlog` for UI stream visibility.
 5. **No Key Commits**: Use GCP Application Default Credentials (ADC) or `.env` file templates. Do not commit secrets.
+6. **Git Hygiene**: Commit atomic changes following conventional commit types (`feat`, `fix`, `refactor`, `chore`, `docs`, `test`). Ensure pre-commit checks and tests pass before committing.
 
 ---
 
