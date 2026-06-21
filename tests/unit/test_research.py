@@ -36,7 +36,7 @@ async def test_researcher_node_success(sample_researcher_input, mock_llm_calls):
     mock_response_2.content = "Quantum error correction (QEC) is essential for fault-tolerant quantum computing. Surface codes are currently the leading approach."
     mock_response_2.usage_metadata = {"input_tokens": 20, "output_tokens": 10, "total_tokens": 30}
     
-    mock_openai.ainvoke.side_effect = [mock_response_1, mock_response_2]
+    mock_openai.ainvoke.side_effect = [mock_response_2]
 
     # Mock search results returned by search_searxng
     mock_search_results = [
@@ -53,15 +53,27 @@ async def test_researcher_node_success(sample_researcher_input, mock_llm_calls):
     
     # Mocking external calls
     with patch("core.nodes.research.search_searxng", new_callable=AsyncMock) as mock_searxng, \
-         patch("core.nodes.research.scrape_url", new_callable=AsyncMock) as mock_scrape, \
-         patch("core.nodes.research.get_embeddings", return_value=mock_embeddings_instance):
+         patch("core.nodes.research.BrowserExplorer.explore_url", new_callable=AsyncMock) as mock_explore, \
+         patch("core.nodes.research.get_embeddings", return_value=mock_embeddings_instance), \
+         patch("core.nodes.research.PCTSEngine.search", new_callable=AsyncMock) as mock_mcts, \
+         patch("core.nodes.research.evaluate_scraped_relevance", new_callable=AsyncMock) as mock_eval, \
+         patch("core.nodes.research.MangoRouter.select_url") as mock_select, \
+         patch("core.nodes.research.MCPHub") as mock_hub_class:
          
         mock_searxng.return_value = mock_search_results
+        mock_mcts.return_value = ("mock intent", ["quantum error correction codes", "surface codes stability"])
+        mock_eval.return_value = 0.8
+        mock_select.side_effect = ["https://quantum-example.com/surface", "https://quantum-example.com/qec", None]
         
-        # Setup mock scraping responses
-        mock_scrape.side_effect = [
-            ("Surface Codes Guide", "Detailed guide on surface codes and physical qubits."),
-            ("QEC Basics", "Thorough introduction to general quantum error correction.")
+        mock_hub = MagicMock()
+        mock_hub.connect_all = AsyncMock()
+        mock_hub.shutdown = AsyncMock()
+        mock_hub_class.return_value = mock_hub
+        
+        # Setup mock explorer responses
+        mock_explore.side_effect = [
+            {"success": True, "title": "Surface Codes Guide", "content": "Detailed guide on surface codes and physical qubits.", "method": "puppeteer"},
+            {"success": True, "title": "QEC Basics", "content": "Thorough introduction to general quantum error correction.", "method": "scraper_fallback"}
         ]
         
         # Execute node
@@ -93,9 +105,9 @@ async def test_researcher_node_success(sample_researcher_input, mock_llm_calls):
         assert result["verified_sources"][0].content == "Detailed guide on surface codes and physical qubits."
         
         # Token usage verification
-        assert result["token_usage"]["freellmapi"]["calls"] == 2
-        assert result["token_usage"]["freellmapi"]["input_tokens"] == 30
-        assert result["token_usage"]["freellmapi"]["output_tokens"] == 15
+        assert result["token_usage"]["freellmapi"]["calls"] == 1
+        assert result["token_usage"]["freellmapi"]["input_tokens"] == 20
+        assert result["token_usage"]["freellmapi"]["output_tokens"] == 10
         
         # Verify logger messages
         assert any("Successfully researched and synthesized findings" in log for log in result["logs"])
@@ -109,7 +121,7 @@ async def test_researcher_node_no_accessible_sources(sample_researcher_input, mo
     mock_response_1 = MagicMock()
     mock_response_1.content = '{"variants": ["quantum error correction codes", "surface codes stability"]}'
     mock_response_1.usage_metadata = {"input_tokens": 10, "output_tokens": 5, "total_tokens": 15}
-    mock_openai.ainvoke.side_effect = [mock_response_1]
+    mock_openai.ainvoke.side_effect = []
     
     mock_search_results = [
         SearchResult(title="Surface Codes Guide", url="https://quantum-example.com/surface", content="Surface code tutorial.")
@@ -119,13 +131,25 @@ async def test_researcher_node_no_accessible_sources(sample_researcher_input, mo
     mock_embeddings_instance.aembed_documents = AsyncMock(return_value=[[0.1]*768])
     
     with patch("core.nodes.research.search_searxng", new_callable=AsyncMock) as mock_searxng, \
-         patch("core.nodes.research.scrape_url", new_callable=AsyncMock) as mock_scrape, \
-         patch("core.nodes.research.get_embeddings", return_value=mock_embeddings_instance):
+         patch("core.nodes.research.BrowserExplorer.explore_url", new_callable=AsyncMock) as mock_explore, \
+         patch("core.nodes.research.get_embeddings", return_value=mock_embeddings_instance), \
+         patch("core.nodes.research.PCTSEngine.search", new_callable=AsyncMock) as mock_mcts, \
+         patch("core.nodes.research.evaluate_scraped_relevance", new_callable=AsyncMock) as mock_eval, \
+         patch("core.nodes.research.MangoRouter.select_url") as mock_select, \
+         patch("core.nodes.research.MCPHub") as mock_hub_class:
          
         mock_searxng.return_value = mock_search_results
+        mock_mcts.return_value = ("mock intent", ["quantum error correction codes", "surface codes stability"])
+        mock_eval.return_value = 0.0
+        mock_select.side_effect = ["https://quantum-example.com/surface", None]
         
-        # Raise scrape exception
-        mock_scrape.side_effect = Exception("HTTP 403 Forbidden")
+        mock_hub = MagicMock()
+        mock_hub.connect_all = AsyncMock()
+        mock_hub.shutdown = AsyncMock()
+        mock_hub_class.return_value = mock_hub
+        
+        # Setup mock explore failures
+        mock_explore.return_value = {"success": False, "error_message": "HTTP 403 Forbidden"}
         
         # Execute node
         result = await researcher_node(sample_researcher_input)

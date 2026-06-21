@@ -11,8 +11,9 @@ class BrowserExplorer:
     Provides fallback mechanism to standard web scraper if Puppeteer is not available.
     """
     
-    def __init__(self, mcp_hub: Optional[MCPHub] = None):
+    def __init__(self, mcp_hub: Optional[MCPHub] = None, scrape_func=None):
         self.mcp_hub = mcp_hub or MCPHub()
+        self.scrape_func = scrape_func
 
     async def explore_url(self, url: str) -> Dict[str, Any]:
         """Navigates to a URL, extracts page HTML or text, and logs progress.
@@ -54,7 +55,8 @@ class BrowserExplorer:
             
             # Graceful fallback to native beautifulsoup/httpx scrape
             try:
-                title, text = await scrape_url(url)
+                scrape_fn = self.scrape_func or scrape_url
+                title, text = await scrape_fn(url)
                 if not text or not text.strip():
                     raise ValueError("Scraped content is empty")
                     
