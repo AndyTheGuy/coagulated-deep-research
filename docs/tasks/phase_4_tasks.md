@@ -35,7 +35,7 @@ Use this task list to implement Phase 4. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_mcts_engine.py
   ```
 
-### [ ] Task 4.2: Puppeteer/Playwright Web Exploration Integration
+### [x] Task 4.2: Puppeteer/Playwright Web Exploration Integration
 - **Description**: Connect the MCTS planning engine with the headless browser MCP tool to execute dynamic search/navigation tasks.
 - **Files**:
   - **`planning/browser_explorer.py`** [NEW]
