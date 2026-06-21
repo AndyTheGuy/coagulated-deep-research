@@ -456,6 +456,8 @@ tests/
 ## Boundaries
 
 ### Always Do
+- Commit every successful task completion immediately (Save Point Pattern)
+- Push all commits to GitHub origin before ending a session/turn
 - Run `uv run pytest` before every commit
 - Use Pydantic models at every data boundary
 - Log every agent action via structlog (for the progress log UI)
