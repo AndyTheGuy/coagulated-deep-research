@@ -114,4 +114,3 @@ async def test_verification_pipeline_integration():
         
         # Verify cache lookup was performed
         assert mock_cache.get_url.call_count >= 2
-
