@@ -74,6 +74,33 @@ class Report(BaseModel):
     citations: List[str] = Field(default_factory=list)
     confidence_score: float = Field(default=0.0)
 
+class QuoteVerification(BaseModel):
+    """Result of fuzzy matching a literal quote against a source document."""
+    quote: str = Field(description="The literal quote to verify")
+    is_verified: bool = Field(default=False, description="True if matching score meets or exceeds the threshold")
+    score: float = Field(default=0.0, ge=0.0, le=1.0, description="Fuzzy match score (0.0 to 1.0)")
+    matched_text: Optional[str] = Field(default=None, description="Actual text segment matched in the source document")
+
+class VerificationResult(BaseModel):
+    """Detailed verification result for a single claim."""
+    claim_id: str = Field(description="ID of the claim verified")
+    claim_text: str = Field(description="Text of the claim")
+    status: Literal["verified", "unverified", "failed", "gap"] = Field(
+        default="unverified", description="Verification status: verified, unverified, failed, gap"
+    )
+    confidence_score: float = Field(default=0.0, ge=0.0, le=1.0, description="Confidence score for this claim (0.0 to 1.0)")
+    quotes_verification: List[QuoteVerification] = Field(default_factory=list, description="Verification details for individual quotes")
+    source_status: Dict[str, bool] = Field(default_factory=dict, description="Accessibility status for each source URL")
+
+class ReportConfidenceScore(BaseModel):
+    """Aggregated confidence metrics for an entire report."""
+    overall_score: float = Field(default=0.0, ge=0.0, le=1.0, description="Overall report confidence score (0.0 to 1.0)")
+    verified_claims_count: int = Field(default=0, ge=0, description="Number of verified claims")
+    total_claims_count: int = Field(default=0, ge=0, description="Total number of claims evaluated")
+    unverified_claims_count: int = Field(default=0, ge=0, description="Number of unverified claims")
+    failed_claims_count: int = Field(default=0, ge=0, description="Number of claims where verification failed")
+    gaps_count: int = Field(default=0, ge=0, description="Number of claims categorized as information gaps")
+
 def reduce_sub_questions(left: List[SubQuestion], right: List[SubQuestion]) -> List[SubQuestion]:
     """Merge lists of sub-questions, updating existing ones by ID and appending new ones."""
     merged = {q.id: q.model_copy() for q in left}

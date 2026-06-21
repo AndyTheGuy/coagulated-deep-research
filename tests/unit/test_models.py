@@ -7,6 +7,9 @@ from core.models import (
     Claim,
     Report,
     GraphState,
+    QuoteVerification,
+    VerificationResult,
+    ReportConfidenceScore,
     merge_dict_reducer
 )
 
@@ -128,3 +131,52 @@ def test_pydantic_validation_constraints():
     # Invalid Claim confidence_score (too high)
     with pytest.raises(ValidationError):
         Claim(claim_id="c1", claim_text="test", section="test", confidence_score=1.1)
+
+def test_new_models_defaults_and_validation():
+    """Verify initialization, default values, and structure of the new Phase 3 models."""
+    import pytest
+    from pydantic import ValidationError
+
+    # 1. QuoteVerification
+    qv = QuoteVerification(quote="He told them so", is_verified=True, score=0.92, matched_text="He told them so.")
+    assert qv.quote == "He told them so"
+    assert qv.is_verified is True
+    assert qv.score == 0.92
+    assert qv.matched_text == "He told them so."
+
+    # 2. VerificationResult
+    vr = VerificationResult(
+        claim_id="c123",
+        claim_text="The speed of light is constant",
+        status="verified",
+        confidence_score=0.95,
+        quotes_verification=[qv],
+        source_status={"https://wikipedia.org": True}
+    )
+    assert vr.claim_id == "c123"
+    assert vr.status == "verified"
+    assert vr.confidence_score == 0.95
+    assert len(vr.quotes_verification) == 1
+    assert vr.source_status["https://wikipedia.org"] is True
+
+    # 3. ReportConfidenceScore
+    rcs = ReportConfidenceScore(
+        overall_score=0.88,
+        verified_claims_count=8,
+        total_claims_count=10,
+        unverified_claims_count=1,
+        failed_claims_count=1,
+        gaps_count=0
+    )
+    assert rcs.overall_score == 0.88
+    assert rcs.verified_claims_count == 8
+    assert rcs.total_claims_count == 10
+
+    # Test Validation constraints
+    with pytest.raises(ValidationError):
+        VerificationResult(
+            claim_id="c123",
+            claim_text="test",
+            status="invalid_status",  # Must be verified, unverified, failed, gap
+            confidence_score=0.5
+        )
