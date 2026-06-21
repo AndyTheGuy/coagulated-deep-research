@@ -38,6 +38,8 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 4. **Structured Logging**: Log every transition, query, scrape, and validation step via `structlog` for UI stream visibility.
 5. **No Key Commits**: Use GCP Application Default Credentials (ADC) or `.env` file templates. Do not commit secrets.
 6. **Git Hygiene & Workflow**: Git is a mandatory, automatic part of your workflow. Commit every successful slice/task immediately (Save Point Pattern). Never accumulate large uncommitted changes. Push all commits to GitHub (`origin main`) before ending your turn. Use conventional commit messages (`feat`, `fix`, `refactor`, `chore`, `docs`, `test`). Ensure pre-commit checks and tests pass before committing.
+7. **Skill Suite Optimization**: For all future development, actively use the `/ponytail` skill suite to guarantee the simplest, most elegant, and standard-library-first implementations (strictly avoiding over-engineering).
+8. **Bug Auditing & Quality Verification**: Regularly invoke `/find-skills` or `/local-skill-finder` to locate specialized tools to audit code for bugs, implement robust unit/integration test suites, and enforce premium software design.
 
 ---
 
