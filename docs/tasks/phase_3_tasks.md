@@ -69,7 +69,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ## Step 3: Confidence Scoring & Remediation
 
-### [ ] Task 3.4: Confidence Scorer
+### [x] Task 3.4: Confidence Scorer
 - **Description**: Compute a per-claim confidence score based on source accessibility, quote verification result, and cross-reference count.
 - **Files**:
   - `verification/confidence_scorer.py`
