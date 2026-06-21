@@ -112,7 +112,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_verifier_node.py
   ```
 
-### [ ] Task 3.7: Report Writer Node
+### [x] Task 3.7: Report Writer Node
 - **Description**: Implement the academic report writer LangGraph node that compiles verified findings into a structured markdown report with literal quote citations.
 - **Files**:
   - `core/nodes/writer.py`
