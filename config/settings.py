@@ -36,5 +36,25 @@ class Settings(BaseSettings):
     QDRANT_PORT: int = Field(default=6333)
     QDRANT_API_KEY: str = Field(default="")
 
+    # Model Context Protocol (MCP) Configuration
+    MCP_SERVERS: dict = Field(default={
+        "sequential_thinking": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+            "mock": True
+        },
+        "knowledge_graph": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-knowledge-graph"],
+            "mock": True
+        },
+        "puppeteer": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+            "mock": True
+        }
+    })
+
 # Singleton settings instance
 settings = Settings()
+

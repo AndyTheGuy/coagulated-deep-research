@@ -56,3 +56,8 @@ To maximize development throughput while maintaining absolute correctness, utili
    - **Step 2 (Implement) & Step 4 (Test)**: While you implement production code, invoke `tester` to draft comprehensive test cases in parallel.
    - **Step 3 (Audit & Review)**: Invoke `auditor` to conduct an adversarial code quality and async-safety review.
    - **Step 7 (Sync Memory)**: Invoke `archivist` to synchronize memory checklists (`task.md`, phase checklists, `GEMINI.md`) while you stage and commit.
+
+3. **Active Waiting & Time Optimization**:
+   - Whenever a subagent is delegated a task that leaves the main agent waiting, the main agent MUST look for high-value tasks/design work to continue in parallel.
+   - To strictly avoid disrupting the subagent's active environment or violating the sequential checklist constraint, the main agent should draft upcoming task implementations (e.g. MCTS engines, routing algorithms) inside the persistent `<appDataDir>\brain\<conversation-id>/scratch/` directory.
+   - These isolated drafts can then be copied, customized, and integrated instantly once the active task is finished, verified, and committed, achieving maximum throughput safely.
