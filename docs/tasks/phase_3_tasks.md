@@ -129,7 +129,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ## Step 5: Graph Wiring
 
-### [ ] Task 3.9: Graph Wiring Update
+### [x] Task 3.9: Graph Wiring Update
 - **Description**: Wire the verifier and writer nodes into the existing LangGraph `StateGraph`. Implement conditional routing from the verifier back to the supervisor when gaps are found.
 - **Files**:
   - `core/graph.py`
