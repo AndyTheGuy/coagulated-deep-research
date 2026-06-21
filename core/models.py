@@ -74,6 +74,28 @@ class Report(BaseModel):
     citations: List[str] = Field(default_factory=list)
     confidence_score: float = Field(default=0.0)
 
+def reduce_sub_questions(left: List[SubQuestion], right: List[SubQuestion]) -> List[SubQuestion]:
+    """Merge lists of sub-questions, updating existing ones by ID and appending new ones."""
+    merged = {q.id: q.model_copy() for q in left}
+    for q in right:
+        if q.id in merged:
+            existing = merged[q.id]
+            if q.status != "pending":
+                existing.status = q.status
+            if q.assigned_researcher is not None:
+                existing.assigned_researcher = q.assigned_researcher
+            if q.results_summary is not None:
+                existing.results_summary = q.results_summary
+        else:
+            merged[q.id] = q.model_copy()
+    return list(merged.values())
+
+class ResearcherInput(BaseModel):
+    """Isolated state passed to each parallel researcher node."""
+    sub_question: SubQuestion
+    topic: str
+    constraints: List[str] = Field(default_factory=list)
+
 class GraphState(BaseModel):
     """The complete StateGraph state schema flowing through LangGraph nodes."""
     topic: str = Field(default="")
@@ -84,7 +106,7 @@ class GraphState(BaseModel):
     research_brief: Optional[ResearchBrief] = None
     
     # LangGraph state annotations with custom/standard reducers
-    sub_questions_state: List[SubQuestion] = Field(default_factory=list)
+    sub_questions_state: Annotated[List[SubQuestion], reduce_sub_questions] = Field(default_factory=list)
     search_results: Annotated[List[SearchResult], operator.add] = Field(default_factory=list)
     verified_sources: Annotated[List[VerifiedSource], operator.add] = Field(default_factory=list)
     claims: Annotated[List[Claim], operator.add] = Field(default_factory=list)
