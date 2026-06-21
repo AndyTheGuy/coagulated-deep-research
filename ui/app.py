@@ -2,6 +2,7 @@ import streamlit as st
 import time
 import os
 import asyncio
+import textwrap
 from ui.state import init_state
 from core.graph import compile_graph
 from core.models import ResearchBrief, GraphState, DREMEvaluation
@@ -543,7 +544,8 @@ with col_stats:
             </div>
         </div>
         """
-        return html
+        cleaned_html = "\n".join(line.strip() for line in html.splitlines())
+        return cleaned_html
 
     # Initial render of stats sidebar
     update_cost_stats_from_state()

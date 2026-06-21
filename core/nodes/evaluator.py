@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Optional
+import statistics
 import structlog
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
@@ -209,10 +210,7 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
     # --- 3. Factuality ---
     logger.info("Evaluating Factuality")
     # Programmatic component: average confidence of verified claims
-    if report.claims:
-        avg_claim_confidence = sum(c.confidence_score for c in report.claims) / len(report.claims)
-    else:
-        avg_claim_confidence = 1.0
+    avg_claim_confidence = statistics.fmean(c.confidence_score for c in report.claims) if report.claims else 1.0
 
     factuality_parser = JsonOutputParser(pydantic_object=FactualityEvaluation)
     factuality_prompt = ChatPromptTemplate.from_messages([
