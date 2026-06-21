@@ -99,7 +99,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
 
 ## Step 3: Graph Scaffolding & Scoping Nodes
 
-### [ ] Task 1.7: Scoping & Research Brief Nodes
+### [x] Task 1.7: Scoping & Research Brief Nodes
 - **Description**: Build the two scoping nodes: `clarify_with_user` (detecting topic ambiguity) and `write_research_brief` (compiling research plan, questions, constraints).
 - **Files**:
   - `core/nodes/scoping.py`
