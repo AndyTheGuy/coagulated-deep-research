@@ -150,7 +150,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
 
 ## Step 4: Cache & Integration
 
-### [ ] Task 2.9: Semantic Cache Layer
+### [x] Task 2.9: Semantic Cache Layer
 - **Description**: Build a cache layer to store search results and scrape content.
 - **Files**:
   - **`db/cache.py`**
