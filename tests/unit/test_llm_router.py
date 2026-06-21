@@ -44,8 +44,10 @@ async def test_standard_routes_to_freellmapi(mock_llm_calls):
     assert router.token_usage["failovers"] == 0
 
 @pytest.mark.asyncio
-async def test_failover_to_vertex_on_failure(mock_llm_calls):
-    """Test that a failure in FreeLLMAPI triggers a fallback to Vertex AI."""
+async def test_failover_to_vertex_on_failure(mock_llm_calls, monkeypatch):
+    """Test that a failure in FreeLLMAPI triggers a fallback to Vertex AI after retries."""
+    import asyncio
+    monkeypatch.setattr(asyncio, "sleep", AsyncMock())
     mock_vertex, mock_openai = mock_llm_calls
     
     # Make FreeLLMAPI fail
@@ -58,7 +60,7 @@ async def test_failover_to_vertex_on_failure(mock_llm_calls):
     response = await router.ainvoke(messages, tier="STANDARD", agent_name="test-agent")
     
     assert response.content == "Mocked Vertex AI response"
-    mock_openai.ainvoke.assert_called_once_with(messages)
+    assert mock_openai.ainvoke.call_count == 3  # Try once + 2 retries
     mock_vertex.ainvoke.assert_called_once_with(messages)
     
     # Check token tracking
@@ -67,6 +69,24 @@ async def test_failover_to_vertex_on_failure(mock_llm_calls):
     assert router.token_usage["vertex_ai"]["calls"] == 1
     assert router.token_usage["vertex_ai"]["input_tokens"] == 15
     assert router.token_usage["vertex_ai"]["output_tokens"] == 8
+
+@pytest.mark.asyncio
+async def test_vertex_ai_retry_on_failure(mock_llm_calls, monkeypatch):
+    """Test that Vertex AI retries on transient failures before finally raising an exception."""
+    import asyncio
+    monkeypatch.setattr(asyncio, "sleep", AsyncMock())
+    mock_vertex, mock_openai = mock_llm_calls
+    
+    # Make Vertex AI fail
+    mock_vertex.ainvoke = AsyncMock(side_effect=RuntimeError("Vertex Down"))
+    
+    router = LLMRouter()
+    messages = [HumanMessage(content="Hello")]
+    
+    with pytest.raises(RuntimeError, match="Vertex Down"):
+        await router.ainvoke(messages, tier="CRITICAL", agent_name="test-agent")
+        
+    assert mock_vertex.ainvoke.call_count == 3  # Try once + 2 retries
 
 def test_extract_token_usage():
     """Test that token extraction handles different response metadata formats."""

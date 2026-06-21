@@ -8,7 +8,21 @@ from core.models import GraphState, ResearchBrief, SubQuestion
 from core.llm_router import LLMRouter
 
 logger = structlog.get_logger("deep-research")
-router = LLMRouter()
+
+_router = None
+
+def get_router() -> LLMRouter:
+    global _router
+    if _router is None:
+        _router = LLMRouter()
+    return _router
+
+class RouterProxy:
+    """Proxy that defers LLMRouter instantiation until invocation, ensuring compatibility with unit tests."""
+    async def ainvoke(self, *args: Any, **kwargs: Any) -> Any:
+        return await get_router().ainvoke(*args, **kwargs)
+
+router = RouterProxy()
 
 class ClarificationOutput(BaseModel):
     """Pydantic model representing the output of the query ambiguity check."""

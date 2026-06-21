@@ -1,17 +1,30 @@
 import operator
-from typing import Annotated, Any, Dict, List, Optional
+from typing import Annotated, Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 # Define dict merger reducer for token usage accumulation
 def merge_dict_reducer(left: Dict[str, Any], right: Dict[str, Any]) -> Dict[str, Any]:
-    """Merge two dictionaries, keeping the latest updates."""
-    return {**left, **right}
+    """Merge two dictionaries, accumulating numerical values for duplicate keys (e.g. token counts)."""
+    merged = left.copy()
+    for key, value in right.items():
+        if key in merged:
+            if isinstance(merged[key], dict) and isinstance(value, dict):
+                merged[key] = merge_dict_reducer(merged[key], value)
+            elif isinstance(merged[key], (int, float)) and isinstance(value, (int, float)):
+                merged[key] = merged[key] + value
+            else:
+                merged[key] = value
+        else:
+            merged[key] = value
+    return merged
 
 class SubQuestion(BaseModel):
     """A research sub-question generated during the scoping phase."""
     id: str = Field(description="Unique identifier for the sub-question")
     question: str = Field(description="The research question text")
-    status: str = Field(default="pending", description="Status: pending, in_progress, completed, failed")
+    status: Literal["pending", "in_progress", "completed", "failed"] = Field(
+        default="pending", description="Status: pending, in_progress, completed, failed"
+    )
     assigned_researcher: Optional[str] = Field(default=None, description="Identifier of the research agent assigned")
     results_summary: Optional[str] = Field(default=None, description="Summary of research findings for this question")
 
@@ -47,8 +60,10 @@ class Claim(BaseModel):
     section: str
     supporting_quotes: List[str] = Field(default_factory=list, description="Literal quotes from source content")
     source_urls: List[str] = Field(default_factory=list, description="URLs of supporting source documents")
-    verification_status: str = Field(default="unverified", description="Status: verified, unverified, failed, gap")
-    confidence_score: float = Field(default=0.0, description="Score between 0.0 and 1.0")
+    verification_status: Literal["verified", "unverified", "failed", "gap"] = Field(
+        default="unverified", description="Status: verified, unverified, failed, gap"
+    )
+    confidence_score: float = Field(default=0.0, ge=0.0, le=1.0, description="Score between 0.0 and 1.0")
     remediation_notes: Optional[str] = None
 
 class Report(BaseModel):

@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import asyncio
 from ui.state import init_state
 from core.graph import compile_graph
 from core.models import ResearchBrief
@@ -85,21 +86,23 @@ with col_main:
         
         with st.spinner("Analyzing query..."):
             try:
-                import asyncio
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
-                result = loop.run_until_complete(app.ainvoke({
-                    "user_query": user_query,
-                    "topic": user_query[:50]
-                }))
+                try:
+                    result = loop.run_until_complete(app.ainvoke({
+                        "user_query": user_query,
+                        "topic": user_query[:50]
+                    }))
+                finally:
+                    loop.close()
                 st.session_state.graph_state = result
                 
                 # Check for token usage metrics to update side panel
                 token_usage = result.get("token_usage", {})
                 if token_usage:
                     # Update cost stats mock/real counts
-                    vertex = token_usage.get("vertex_ai", {"input_tokens": 120, "output_tokens": 80, "calls": 1})
-                    freellm = token_usage.get("freellmapi", {"input_tokens": 150, "output_tokens": 50, "calls": 2})
+                    vertex = token_usage.get("vertex_ai", {"input_tokens": 0, "output_tokens": 0, "calls": 0})
+                    freellm = token_usage.get("freellmapi", {"input_tokens": 0, "output_tokens": 0, "calls": 0})
                     st.session_state.cost_stats["vertex_calls"] = vertex.get("calls", 0)
                     st.session_state.cost_stats["vertex_input"] = vertex.get("input_tokens", 0)
                     st.session_state.cost_stats["vertex_output"] = vertex.get("output_tokens", 0)
@@ -132,21 +135,23 @@ with col_main:
             app = compile_graph()
             with st.spinner("Compiling research brief..."):
                 try:
-                    import asyncio
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
-                    result = loop.run_until_complete(app.ainvoke({
-                        "user_query": st.session_state.user_query,
-                        "clarification_question": question,
-                        "clarification_response": response,
-                        "clarification_needed": False
-                    }))
+                    try:
+                        result = loop.run_until_complete(app.ainvoke({
+                            "user_query": st.session_state.user_query,
+                            "clarification_question": question,
+                            "clarification_response": response,
+                            "clarification_needed": False
+                        }))
+                    finally:
+                        loop.close()
                     st.session_state.graph_state = result
                     st.session_state.logs.append(f"[{time.strftime('%H:%M:%S')}] [ScopingAgent] [write_research_brief] Generated research brief successfully.")
                     
                     token_usage = result.get("token_usage", {})
                     if token_usage:
-                        vertex = token_usage.get("vertex_ai", {"input_tokens": 180, "output_tokens": 120, "calls": 2})
+                        vertex = token_usage.get("vertex_ai", {"input_tokens": 0, "output_tokens": 0, "calls": 0})
                         st.session_state.cost_stats["vertex_calls"] = vertex.get("calls", 0)
                         st.session_state.cost_stats["vertex_input"] = vertex.get("input_tokens", 0)
                         st.session_state.cost_stats["vertex_output"] = vertex.get("output_tokens", 0)

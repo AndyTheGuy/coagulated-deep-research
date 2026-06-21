@@ -7,7 +7,7 @@ use_default_settings: true
 server:
   port: 8080
   bind_address: "0.0.0.0"
-  secret_key: "ultimatedeepresearchersecretkey"
+  # secret_key is set via SEARXNG_SECRET environment variable
   limiter: false
   image_proxy: true
 

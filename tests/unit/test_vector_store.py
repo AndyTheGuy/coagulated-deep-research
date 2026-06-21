@@ -45,3 +45,21 @@ def test_vector_store_operations():
     assert len(filtered_results) == 1
     assert "Qdrant" in filtered_results[0]["content"]
     assert filtered_results[0]["metadata"]["source"] == "qdrant_doc"
+
+@pytest.mark.asyncio
+async def test_async_vector_store_operations():
+    """Verify async wrappers for document addition and searching work properly."""
+    embeddings = LocalEmbeddings()
+    vector_store = VectorStore(embeddings=embeddings)
+    
+    # Async Insert
+    await vector_store.aadd_documents(
+        ["Async Qdrant is powerful."],
+        [{"source": "async_doc"}]
+    )
+    
+    # Async Search
+    results = await vector_store.asearch("async qdrant", limit=1)
+    assert len(results) == 1
+    assert "Qdrant" in results[0]["content"]
+    assert results[0]["metadata"]["source"] == "async_doc"

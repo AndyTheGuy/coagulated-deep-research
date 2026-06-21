@@ -1,3 +1,4 @@
+import uuid
 from typing import Any, Dict, List, Optional
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams, PointStruct, Filter
@@ -30,7 +31,7 @@ class VectorStore:
             metadata = metadatas[i] if metadatas else {}
             metadata["content"] = text
             points.append(PointStruct(
-                id=i,
+                id=str(uuid.uuid4()),
                 vector=vector,
                 payload=metadata
             ))
@@ -62,3 +63,18 @@ class VectorStore:
             }
             for hit in results.points
         ]
+
+    async def aadd_documents(self, texts: List[str], metadatas: Optional[List[Dict[str, Any]]] = None) -> None:
+        """Embed list of texts and upsert points to Qdrant collection asynchronously."""
+        import asyncio
+        await asyncio.to_thread(self.add_documents, texts, metadatas)
+
+    async def asearch(
+        self,
+        query: str,
+        limit: int = 5,
+        query_filter: Optional[Filter] = None
+    ) -> List[Dict[str, Any]]:
+        """Perform semantic search query on collection asynchronously."""
+        import asyncio
+        return await asyncio.to_thread(self.search, query, limit, query_filter)

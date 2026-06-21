@@ -84,10 +84,21 @@ def test_graph_state_defaults_and_reducers():
     assert len(state.token_usage) == 0
 
     # Test merge_dict_reducer
-    d1 = {"provider_calls": 5, "input_tokens": 100}
-    d2 = {"provider_calls": 6, "output_tokens": 50}
+    d1 = {
+        "vertex_ai": {"input_tokens": 100, "output_tokens": 50, "calls": 2},
+        "failovers": 1
+    }
+    d2 = {
+        "vertex_ai": {"input_tokens": 50, "output_tokens": 25, "calls": 1},
+        "freellmapi": {"input_tokens": 200, "output_tokens": 100, "calls": 4},
+        "failovers": 2
+    }
     merged = merge_dict_reducer(d1, d2)
-    assert merged == {"provider_calls": 6, "input_tokens": 100, "output_tokens": 50}
+    assert merged == {
+        "vertex_ai": {"input_tokens": 150, "output_tokens": 75, "calls": 3},
+        "freellmapi": {"input_tokens": 200, "output_tokens": 100, "calls": 4},
+        "failovers": 3
+    }
 
     # Test operator.add on list fields in GraphState context
     l1 = [SearchResult(title="t1", url="u1", content="c1")]
@@ -96,3 +107,24 @@ def test_graph_state_defaults_and_reducers():
     assert len(combined) == 2
     assert combined[0].title == "t1"
     assert combined[1].title == "t2"
+
+def test_pydantic_validation_constraints():
+    """Verify that Pydantic models enforce enums and range constraints."""
+    import pytest
+    from pydantic import ValidationError
+    
+    # Invalid SubQuestion status
+    with pytest.raises(ValidationError):
+        SubQuestion(id="q1", question="test", status="invalid_status")
+        
+    # Invalid Claim verification_status
+    with pytest.raises(ValidationError):
+        Claim(claim_id="c1", claim_text="test", section="test", verification_status="invalid_status")
+        
+    # Invalid Claim confidence_score (too low)
+    with pytest.raises(ValidationError):
+        Claim(claim_id="c1", claim_text="test", section="test", confidence_score=-0.1)
+        
+    # Invalid Claim confidence_score (too high)
+    with pytest.raises(ValidationError):
+        Claim(claim_id="c1", claim_text="test", section="test", confidence_score=1.1)

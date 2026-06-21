@@ -1,3 +1,4 @@
+import asyncio
 from typing import Any, Dict, List, Tuple
 import structlog
 from langchain_core.messages import BaseMessage
@@ -6,6 +7,31 @@ from langchain_openai import ChatOpenAI
 from config.settings import settings
 
 logger = structlog.get_logger("deep-research")
+
+async def _invoke_with_retry(
+    model: Any,
+    messages: List[BaseMessage],
+    retries: int = 3,
+    initial_delay: float = 1.0,
+    backoff_factor: float = 2.0,
+    **kwargs: Any
+) -> BaseMessage:
+    """Invoke LLM with exponential backoff on exceptions."""
+    delay = initial_delay
+    for attempt in range(retries):
+        try:
+            return await model.ainvoke(messages, **kwargs)
+        except Exception as e:
+            if attempt == retries - 1:
+                raise e
+            logger.warning(
+                "LLM invocation failed, retrying...",
+                attempt=attempt + 1,
+                delay=delay,
+                error=str(e)
+            )
+            await asyncio.sleep(delay)
+            delay *= backoff_factor
 
 def _extract_token_usage(response: Any) -> Tuple[int, int]:
     """Helper to extract input and output tokens from a LangChain response message."""
@@ -41,14 +67,14 @@ class LLMRouter:
         
         self._freellm_standard = ChatOpenAI(
             model=settings.STANDARD_MODEL,
-            openai_api_base=settings.FREE_LLM_API_BASE_URL,
+            base_url=settings.FREE_LLM_API_BASE_URL,
             openai_api_key=settings.FREE_LLM_API_KEY,
             timeout=10.0,
         )
         
         self._freellm_bulk = ChatOpenAI(
             model=settings.BULK_MODEL,
-            openai_api_base=settings.FREE_LLM_API_BASE_URL,
+            base_url=settings.FREE_LLM_API_BASE_URL,
             openai_api_key=settings.FREE_LLM_API_KEY,
             timeout=10.0,
         )
@@ -73,7 +99,7 @@ class LLMRouter:
         
         # Tier 1: CRITICAL goes strictly to Google Vertex AI
         if tier_upper == "CRITICAL":
-            return await self._invoke_vertex(messages, agent_name, node_name, **kwargs)
+            return await self._invoke_vertex(messages, agent_name, node_name, tier=tier_upper, **kwargs)
             
         # Tiers 2 & 3: STANDARD and BULK try FreeLLMAPI first
         model = self._freellm_standard if tier_upper == "STANDARD" else self._freellm_bulk
@@ -86,7 +112,7 @@ class LLMRouter:
                 node=node_name,
                 model=getattr(model, "model_name", "unknown")
             )
-            response = await model.ainvoke(messages, **kwargs)
+            response = await _invoke_with_retry(model, messages, retries=3, **kwargs)
             self._update_usage("freellmapi", response)
             return response
             
@@ -100,26 +126,37 @@ class LLMRouter:
             )
             self.token_usage["failovers"] += 1
             # Fallback to Vertex AI
-            return await self._invoke_vertex(messages, agent_name, node_name, **kwargs)
+            return await self._invoke_vertex(messages, agent_name, node_name, tier=tier_upper, **kwargs)
 
     async def _invoke_vertex(
         self,
         messages: List[BaseMessage],
         agent_name: str,
         node_name: str,
+        tier: str = "CRITICAL",
         **kwargs: Any
     ) -> BaseMessage:
         """Helper to invoke Google Vertex AI directly."""
         logger.info(
             "Invoking Vertex AI",
-            tier="CRITICAL",
+            tier=tier,
             agent=agent_name,
             node=node_name,
             model=getattr(self._vertex_model, "model", "unknown")
         )
-        response = await self._vertex_model.ainvoke(messages, **kwargs)
-        self._update_usage("vertex_ai", response)
-        return response
+        try:
+            response = await _invoke_with_retry(self._vertex_model, messages, retries=3, **kwargs)
+            self._update_usage("vertex_ai", response)
+            return response
+        except Exception as e:
+            logger.error(
+                "Vertex AI invocation failed after all retries",
+                tier=tier,
+                agent=agent_name,
+                node=node_name,
+                error=str(e)
+            )
+            raise e
 
     def _update_usage(self, provider: str, response: BaseMessage) -> None:
         """Helper to parse and add token counts to statistics."""
