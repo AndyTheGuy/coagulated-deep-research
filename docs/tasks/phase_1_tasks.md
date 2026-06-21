@@ -127,7 +127,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
 
 ## Step 4: Interface & Entry Points
 
-### [ ] Task 1.9: CLI Entry Fallback
+### [x] Task 1.9: CLI Entry Fallback
 - **Description**: Build a terminal CLI interface to test scoping and brief compilation.
 - **Files**:
   - `cli/main.py`
