@@ -8,17 +8,20 @@ from core.nodes import (
     researcher_node, 
     context_aggregator_node,
     verifier_node,
-    report_writer_node
+    report_writer_node,
+    evaluator_node
 )
 from core.router import supervisor_node, route_research
 
 logger = structlog.get_logger("deep-research")
+
 
 def route_after_ambiguity_check(state: GraphState) -> Literal["write_research_brief", "__end__"]:
     """Routing function to determine if we should stop for clarification or compile the brief."""
     if state.clarification_needed:
         return "__end__"
     return "write_research_brief"
+
 
 def route_after_verification(state: GraphState) -> Literal["supervisor_node", "report_writer_node"]:
     """Conditional routing function after verification critique.
@@ -37,8 +40,31 @@ def route_after_verification(state: GraphState) -> Literal["supervisor_node", "r
     logger.info("No gaps found. Routing to report writer to compile final report.")
     return "report_writer_node"
 
+
+def route_after_evaluation(state: GraphState) -> Literal["supervisor_node", "__end__"]:
+    """Conditional routing function after DREAM evaluation quality gate.
+    If the overall_passed flag in the evaluation is True, proceed to ending.
+    Otherwise, route back to supervisor to remediate gaps.
+    """
+    logger.info("Routing after DREAM evaluation")
+    evaluation = state.evaluation
+    if evaluation and evaluation.overall_passed:
+        logger.info("DREAM evaluation passed successfully! Ending workflow.")
+        return "__end__"
+        
+    # Check if there are indeed pending queries added by the evaluator
+    sub_questions = state.sub_questions_state or []
+    pending_questions = [q for q in sub_questions if q.status == "pending"]
+    if pending_questions:
+        logger.info("DREAM evaluation failed with gaps. Routing back to supervisor for gap remediation.", count=len(pending_questions))
+        return "supervisor_node"
+        
+    logger.info("DREAM evaluation failed but no pending questions found (safeguard). Ending workflow.")
+    return "__end__"
+
+
 def compile_graph():
-    """Build and compile the LangGraph StateGraph workflow for Phase 3."""
+    """Build and compile the LangGraph StateGraph workflow for Phase 5."""
     workflow = StateGraph(GraphState)
     
     # Register graph nodes
@@ -49,6 +75,7 @@ def compile_graph():
     workflow.add_node("context_aggregator", context_aggregator_node)
     workflow.add_node("verifier_node", verifier_node)
     workflow.add_node("report_writer_node", report_writer_node)
+    workflow.add_node("evaluator_node", evaluator_node)
     
     # Configure edges
     workflow.add_edge(START, "scoping_ambiguity_check")
@@ -91,8 +118,18 @@ def compile_graph():
         }
     )
     
-    # Final report is produced by report writer node
-    workflow.add_edge("report_writer_node", END)
+    # Final report is produced by report writer node, then evaluated by DREAM
+    workflow.add_edge("report_writer_node", "evaluator_node")
+    
+    # Evaluate report and loop back to supervisor if gaps are found
+    workflow.add_conditional_edges(
+        "evaluator_node",
+        route_after_evaluation,
+        {
+            "supervisor_node": "supervisor_node",
+            "__end__": END
+        }
+    )
     
     return workflow.compile()
 
