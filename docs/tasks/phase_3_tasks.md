@@ -4,12 +4,15 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ---
 
-## Step 0: Pydantic Model Updates
+## Step 0: Prerequisites & Pydantic Models
 
-### [ ] Task 3.0: Pydantic Model Updates for Phase 3
-- **Description**: Add any new Pydantic models required by Phase 3 (e.g. `Claim`, `VerifiedSource`, `QuoteVerification`, `VerificationResult`, `ReportConfidenceScore`) to `core/models.py` before building nodes or pipelines. This guarantees complete type-safety across all subsequent modules.
+### [ ] Task 3.0: Dependency Installation & Pydantic Model Updates
+- **Description**: 
+  - Install the fuzzy string matching library `rapidfuzz` using `uv add rapidfuzz` to add it to `pyproject.toml`.
+  - Add any new Pydantic models required by Phase 3 (e.g. `Claim`, `VerifiedSource`, `QuoteVerification`, `VerificationResult`, `ReportConfidenceScore`) to `core/models.py` before building nodes or pipelines. This guarantees complete type-safety across all subsequent modules.
 - **Files**:
-  - **`core/models.py`**
+  - **`pyproject.toml`** (dependency installation)
+  - **`core/models.py`** (schema definitions)
 - **Verification Command**:
   ```bash
   uv run pytest tests/unit/test_models.py
