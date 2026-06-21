@@ -39,7 +39,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ## Step 2: Source & Quote Verification
 
-### [ ] Task 3.2: Source Checker
+### [x] Task 3.2: Source Checker
 - **Description**: Implement async source checker that verifies each cited URL is accessible (HTTP 200) and retrieves its content (or pulls from the semantic cache built in Phase 2).
 - **Files**:
   - `verification/source_checker.py`
