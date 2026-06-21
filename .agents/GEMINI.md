@@ -52,3 +52,9 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 - **Phase 3 Status**: ✅ 100% complete, bug-fixed, fully tested (all passing), committed, and pushed.
 - **Workflow Reminder**: Follow the 8-step loop for every single task.
 - **Known Blockers**: None.
+
+### Phase 4 Handoff Prompt
+```markdown
+/goal Initialize Phase 4 (Advanced Search & Planning). First, define your subagent fleet (tester, auditor, archivist) using the subagent definitions in `.agents/AGENTS.md`. Read `.agents/GEMINI.md` to load the complete project context and its 8 key engineering constraints (including standard-library-first `/ponytail` development and `/find-skills` bug audits). Read `docs/tasks/phase_4_tasks.md` for the Phase 4 task checklist. Execute the tasks sequentially, starting from Task 4.0 (MCP Client Integration & Hub), strictly adhering to the 8-step atomic loop for every single task. Continue running non-stop until Phase 4 is 100% complete, fully tested with robust offline mocks, audited for quality, merged, committed, and pushed to origin main.
+```
+
