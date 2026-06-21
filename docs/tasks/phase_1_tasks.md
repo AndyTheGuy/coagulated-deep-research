@@ -20,7 +20,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
   uv sync
   ```
 
-### [ ] Task 1.2: Dockerized Infrastructure Setup
+### [x] Task 1.2: Dockerized Infrastructure Setup
 - **Description**: Configure a single Docker compose file running SearXNG and FreeLLMAPI. SearXNG must have its JSON API enabled, rate limiters disabled for local queries, and default search engines active.
 - **Files**:
   - `docker/docker-compose.yml`

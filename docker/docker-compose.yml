@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  searxng:
+    image: searxng/searxng:latest
+    container_name: searxng
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./searxng:/etc/searxng
+    environment:
+      - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
+    restart: always
+
+  freellmapi:
+    image: ghcr.io/tashfeenahmed/freellmapi:latest
+    container_name: freellmapi
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST_BIND=0.0.0.0
+      - ENCRYPTION_KEY=c3ecb15f917578a1bc1bdf96b83ba56f4d1e2e1ef2322a36b56834161a0d8591
+    volumes:
+      - freellmapi_data:/app/server/data
+    restart: always
+
+volumes:
+  freellmapi_data:
