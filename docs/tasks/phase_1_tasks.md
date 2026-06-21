@@ -67,7 +67,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_models.py
   ```
 
-### [ ] Task 1.5: 3-Tier LLM Router
+### [x] Task 1.5: 3-Tier LLM Router
 - **Description**: Implement the routing client that dispatches LLM calls to Google Vertex AI (Gemini 3.5 Flash) or FreeLLMAPI based on the task criticality tier. Must feature retry mechanisms and failover to Vertex AI if FreeLLMAPI times out or fails.
 - **Files**:
   - `core/llm_router.py`
