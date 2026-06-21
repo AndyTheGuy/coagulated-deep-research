@@ -22,7 +22,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ## Step 1: Claim Extraction
 
-### [ ] Task 3.1: Claim Extractor
+### [x] Task 3.1: Claim Extractor
 - **Description**: Implement the LLM-powered claim extractor that parses a draft report into individual factual `Claim` objects. Each claim must be tied to its source section, supporting quotes, and source URLs.
 - **Files**:
   - `verification/claim_extractor.py`

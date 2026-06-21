@@ -43,10 +43,10 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 
 ## 5. Active Development State
 - **Active Phase**: Phase 3 (Verification & Report Writing) — IN PROGRESS 🚀
-- **Active Task**: Task 3.1: Claim Extractor
+- **Active Task**: Task 3.2: Source Checker
 - **Task List**: [docs/tasks/phase_3_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_3_tasks.md)
 - **Phase 1 Status**: ✅ 100% complete, bug-fixed, fully tested (25/25 passing tests), committed and pushed.
 - **Phase 2 Status**: ✅ 100% complete, bug-fixed, fully tested (65/65 passing tests), committed, and pushed.
-- **Phase 3 Status**: 🚀 Underway. Task 3.0 completed and verified.
+- **Phase 3 Status**: 🚀 Underway. Tasks 3.0 and 3.1 completed and verified.
 - **Workflow Reminder**: Follow the 8-step loop for every single task.
 - **Known Blockers**: None.
