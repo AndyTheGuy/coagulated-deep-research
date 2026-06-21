@@ -6,7 +6,7 @@ Use this task list to implement Phase 5. Mark tasks as completed `[x]` as you fi
 
 ## Step 0: DREAM Evaluator Node
 
-### [ ] Task 5.0: Pydantic Schema Definitions for Evaluation
+### [x] Task 5.0: Pydantic Schema Definitions for Evaluation
 - **Description**: Add Pydantic schemas representing the evaluation reports, scores, and criteria.
 - **Files**:
   - **`core/models.py`** (add `DREMEvaluation`, `MetricScore`)
@@ -15,7 +15,7 @@ Use this task list to implement Phase 5. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_models.py
   ```
 
-### [ ] Task 5.1: DREAM Evaluation Node Implementation
+### [x] Task 5.1: DREAM Evaluation Node Implementation
 - **Description**: Build the DREAM evaluation engine inside the graph.
   - Implement **Key-Information Coverage (KIC)**: Convert key facts to binary questions via LLM, evaluate coverage (threshold ≥ 0.80).
   - Implement **Reasoning Quality (RQ)**: Cross-reference logical claims against ground truth via LLM (threshold ≥ 0.75).
