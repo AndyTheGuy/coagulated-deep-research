@@ -1,0 +1,32 @@
+{
+  "topic": "Quantum Key Distribution",
+  "scope": "Detailed scope of QKD, focusing on BB84 and Decoy State protocols. Out-of-scope: post-quantum algorithms (crystals, McEliece).",
+  "constraints": [
+    "Use academic journals",
+    "Limit to post-2020 sources"
+  ],
+  "sub_questions": [
+    {
+      "id": "q1",
+      "question": "How does the BB84 protocol establish cryptographic keys?",
+      "status": "pending",
+      "assigned_researcher": null,
+      "results_summary": null
+    },
+    {
+      "id": "q2",
+      "question": "What is the decoy state protocol and why is it needed?",
+      "status": "pending",
+      "assigned_researcher": null,
+      "results_summary": null
+    },
+    {
+      "id": "q3",
+      "question": "What are the key security proofs and vulnerabilities of QKD?",
+      "status": "pending",
+      "assigned_researcher": null,
+      "results_summary": null
+    }
+  ],
+  "target_source_count": 20
+}

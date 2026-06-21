@@ -1,0 +1,127 @@
+# Phase 2 Checklist: Search & Research
+
+Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you finish them. Do not implement code beyond Phase 2.
+
+---
+
+## Step 1: Search & Scraper Clients
+
+### [ ] Task 2.1: SearXNG API Client Wrapper
+- **Description**: Implement the async SearXNG client wrapper that queries the self-hosted Docker SearXNG instance and returns structured search results.
+- **Files**:
+  - `search/searxng.py`
+- **Acceptance Criteria**:
+  - Functions use `httpx` to perform async GET queries.
+  - Correctly parses JSON responses from the `http://localhost:8080` endpoint.
+  - Handles errors (network failure, timeout) by raising custom search exceptions.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_searxng.py
+  ```
+
+### [ ] Task 2.2: DuckDuckGo Fallback Client
+- **Description**: Implement a fallback search client using the `duckduckgo-search` library to run searches if SearXNG is unavailable.
+- **Files**:
+  - `search/ddg.py`
+- **Acceptance Criteria**:
+  - Uses the async DDG client to query results.
+  - Standardizes raw outputs to match the `SearchResult` Pydantic schema.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_ddg.py
+  ```
+
+### [ ] Task 2.3: URL Scraping & Content Extraction
+- **Description**: Build a robust, async web scraper using `httpx` and `BeautifulSoup` to extract clean markdown or plain text content from URLs.
+- **Files**:
+  - `search/scraper.py`
+- **Acceptance Criteria**:
+  - Fetches page source asynchronously with User-Agent spoofing and standard timeouts.
+  - Extracts clean content (strips script, style, nav, footer tags).
+  - Uses HTML-to-markdown conversion or structured text extraction.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_scraper.py
+  ```
+
+---
+
+## Step 2: Search Pipeline Logic
+
+### [ ] Task 2.4: Deduplication Logic
+- **Description**: Implement URL and semantic deduplication to prevent analyzing redundant pages.
+- **Files**:
+  - `search/dedup.py`
+- **Acceptance Criteria**:
+  - URL-based exact matching deduplication.
+  - Semantic similarity deduplication using embeddings (removes pages with >0.95 cosine similarity).
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_dedup.py
+  ```
+
+### [ ] Task 2.5: Reciprocal Rank Fusion (RRF)
+- **Description**: Implement RRF to merge and rank search result sets from SearXNG and DDG.
+- **Files**:
+  - `search/fusion.py`
+- **Acceptance Criteria**:
+  - Implements standard RRF scoring formula: \(RRF(d) = \sum_{m \in M} \frac{1}{k + r_m(d)}\).
+  - Merges rankings deterministically.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_fusion.py
+  ```
+
+---
+
+## Step 3: Multi-Agent Topology & Nodes
+
+### [ ] Task 2.6: Supervisor Router
+- **Description**: Implement the routing logic that parses the research brief, allocates sub-questions to researcher agents, and determines execution paths.
+- **Files**:
+  - `core/router.py`
+- **Acceptance Criteria**:
+  - Dynanically generates sub-tasks and routes researcher execution.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_router.py
+  ```
+
+### [ ] Task 2.7: Parallel Researcher Agents
+- **Description**: Implement the researcher agent nodes which run parallel queries, scrape relevant pages, and summarize findings in isolation.
+- **Files**:
+  - `core/nodes/research.py`
+- **Acceptance Criteria**:
+  - Node function executes asynchronously in parallel (using StateGraph send / Map-Reduce).
+  - Employs LLM to summarize raw content relative to the specific sub-question.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_research.py
+  ```
+
+### [ ] Task 2.8: Context Aggregator
+- **Description**: Implement the context aggregator node to combine findings from all researcher agents, filter redundant details, and prepare standard context.
+- **Files**:
+  - `core/nodes/aggregator.py`
+- **Acceptance Criteria**:
+  - Merges summarized context blocks, formats metadata references.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_aggregator.py
+  ```
+
+---
+
+## Step 4: Cache & Integration
+
+### [ ] Task 2.9: Semantic Cache Layer
+- **Description**: Build a cache layer to store search results and scrape content.
+- **Files**:
+  - `db/cache.py`
+- **Acceptance Criteria**:
+  - Caches documents locally using SQLite/shelve.
+  - Implements semantic similarity lookups for cache hits.
+- **Verification Command**:
+  ```bash
+  uv run pytest tests/unit/test_cache.py
+  ```

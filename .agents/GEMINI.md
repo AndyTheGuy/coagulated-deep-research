@@ -39,7 +39,7 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ---
 
 ## 5. Active Development State
-- **Active Phase**: Phase 1 (Foundation)
-- **Active Task**: Step 5a - Unit and Integration Test Shells (tests/fixtures/sample_research_brief.json)
-- **Task List**: [docs/tasks/phase_1_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_1_tasks.md)
+- **Active Phase**: Phase 2 (Search & Research)
+- **Active Task**: Step 2.1 - Implement SearXNG API Client Wrapper (search/searxng.py)
+- **Task List**: [docs/tasks/phase_2_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_2_tasks.md)
 - **Known Blockers**: None.
