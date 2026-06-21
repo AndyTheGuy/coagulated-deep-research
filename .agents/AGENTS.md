@@ -40,3 +40,19 @@ When ALL tasks in the active phase checklist are complete:
 4. **STOP — Do NOT begin the next phase**: After delivering the evaluation report, stop. The next phase MUST be implemented in a fresh, clean conversation. Do not write any production code for the next phase. This rule is non-negotiable and applies to every phase.
 
 5. **Update Memory**: Update `.agents/GEMINI.md` to reflect the current phase as complete, the next phase as upcoming, and the active task pointer as ready for the next conversation.
+
+---
+
+## Subagent Fleet Strategy
+
+To maximize development throughput while maintaining absolute correctness, utilize parallelized subagents within the 8-step atomic loop:
+
+1. **Defining the Fleet**: At the start of the session, define these specialized subagents using `define_subagent`:
+   - `tester`: Specialized in writing exhaustive unit/integration tests (using `pytest` + `pytest-asyncio`). Equipped with write tools.
+   - `auditor`: Specialized in async-first compliance, PEP 8, security, and dry-run code analysis. Equipped with read tools.
+   - `archivist`: Specialized in updating task checklists, `task.md`, and persistent memory files. Equipped with write tools.
+
+2. **Parallel Loop Execution**:
+   - **Step 2 (Implement) & Step 4 (Test)**: While you implement production code, invoke `tester` to draft comprehensive test cases in parallel.
+   - **Step 3 (Audit & Review)**: Invoke `auditor` to conduct an adversarial code quality and async-safety review.
+   - **Step 7 (Sync Memory)**: Invoke `archivist` to synchronize memory checklists (`task.md`, phase checklists, `GEMINI.md`) while you stage and commit.
