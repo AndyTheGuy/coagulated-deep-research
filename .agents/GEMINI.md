@@ -40,6 +40,6 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 
 ## 5. Active Development State
 - **Active Phase**: Phase 1 (Foundation)
-- **Active Task**: Step 1a - Initialize project structure, package config, and basic settings.
+- **Active Task**: Step 1b - Dockerized Infrastructure Setup (SearXNG + FreeLLMAPI).
 - **Task List**: [docs/tasks/phase_1_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_1_tasks.md)
 - **Known Blockers**: None. Docker services (SearXNG + FreeLLMAPI) need to be configured and run in Step 1b.
