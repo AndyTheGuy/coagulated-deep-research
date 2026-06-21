@@ -27,6 +27,7 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 - **Phase 2 Task Checklist**: [docs/tasks/phase_2_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_2_tasks.md)
 - **Phase 3 Task Checklist (Draft)**: [docs/tasks/phase_3_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_3_tasks.md)
 - **Workspace Rules (Atomic Loop + Phase Completion)**: [.agents/AGENTS.md](file:///c:/Users/beste/Documents/antigravity/deep-research/.agents/AGENTS.md)
+- **Phase 2 Walkthrough (Persistent Memory)**: [.agents/PHASE_2_WALKTHROUGH.md](file:///c:/Users/beste/Documents/antigravity/deep-research/.agents/PHASE_2_WALKTHROUGH.md)
 
 ---
 
