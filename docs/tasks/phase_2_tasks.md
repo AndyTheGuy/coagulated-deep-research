@@ -44,7 +44,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_searxng.py
   ```
 
-### [ ] Task 2.2: DuckDuckGo Fallback Client
+### [x] Task 2.2: DuckDuckGo Fallback Client
 - **Description**: Implement a fallback search client using the `duckduckgo-search` library to run searches if SearXNG is unavailable.
 - **Files**:
   - **`search/ddg.py`**
