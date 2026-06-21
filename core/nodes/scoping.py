@@ -74,11 +74,15 @@ async def clarify_with_user_node(state: GraphState) -> Dict[str, Any]:
         logger.info("Clarification analysis complete", clarification_needed=parsed.get("clarification_needed"))
         return {
             "clarification_needed": parsed.get("clarification_needed", False),
-            "clarification_question": parsed.get("clarifying_question")
+            "clarification_question": parsed.get("clarifying_question"),
+            "token_usage": get_router().token_usage,
         }
     except Exception as e:
         logger.error("Failed to parse clarification output, defaulting to no clarification", error=str(e))
-        return {"clarification_needed": False}
+        return {
+            "clarification_needed": False,
+            "token_usage": get_router().token_usage,
+        }
 
 async def write_research_brief_node(state: GraphState) -> Dict[str, Any]:
     """Node that compiles the user query and any clarification into a structured ResearchBrief."""
@@ -126,7 +130,8 @@ async def write_research_brief_node(state: GraphState) -> Dict[str, Any]:
         
         return {
             "research_brief": brief,
-            "sub_questions_state": brief.sub_questions
+            "sub_questions_state": brief.sub_questions,
+            "token_usage": get_router().token_usage,
         }
     except Exception as e:
         logger.error("Failed to parse or validate research brief", error=str(e))
@@ -140,5 +145,6 @@ async def write_research_brief_node(state: GraphState) -> Dict[str, Any]:
         return {
             "research_brief": fallback_brief,
             "sub_questions_state": fallback_brief.sub_questions,
-            "errors": [f"Scoping failed: {str(e)}"]
+            "errors": [f"Scoping failed: {str(e)}"],
+            "token_usage": get_router().token_usage,
         }
