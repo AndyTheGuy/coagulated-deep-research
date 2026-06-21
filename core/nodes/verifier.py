@@ -5,7 +5,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
 
 from core.models import GraphState, Report, SubQuestion
-from core.nodes.scoping import router
+from core.nodes.scoping import router, get_router
 from verification.pipeline import VerificationPipeline
 
 logger = structlog.get_logger("deep-research")
@@ -148,12 +148,14 @@ async def verifier_node(state: GraphState) -> Dict[str, Any]:
         return {
             "draft_report": verified_report,
             "sub_questions_state": new_sub_questions, # This will be appended due to list reducer
-            "logs": logs
+            "logs": logs,
+            "token_usage": get_router().token_usage
         }
         
     except Exception as e:
         logger.error("Failed to parse verifier critique, defaulting to proceeding with no gaps", error=str(e))
         return {
             "draft_report": verified_report,
-            "logs": [f"Verifier node: Failed to parse critique ({str(e)}), proceeding without gaps."]
+            "logs": [f"Verifier node: Failed to parse critique ({str(e)}), proceeding without gaps."],
+            "token_usage": get_router().token_usage
         }

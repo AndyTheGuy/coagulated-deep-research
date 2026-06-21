@@ -43,7 +43,7 @@ Use this task list to implement Phase 5. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_log_streamer.py
   ```
 
-### [ ] Task 5.3: Streamlit Interface Construction
+### [x] Task 5.3: Streamlit Interface Construction
 - **Description**: Implement a high-premium, responsive Streamlit dashboard interface based on the UI specifications.
   - **Research Input Panel**: Topic, optional constraints, target counts, "Start Research" button.
   - **Clarification Dialog**: Interactive inline input if the scoping agent flags ambiguity.
@@ -62,7 +62,7 @@ Use this task list to implement Phase 5. Mark tasks as completed `[x]` as you fi
 
 ## Step 2: Cost Tracking & Performance Optimization
 
-### [ ] Task 5.4: Live Cost Tracking Integration
+### [x] Task 5.4: Live Cost Tracking Integration
 - **Description**: Integrate the LLMRouter token usage statistics into the UI state and state graph.
   - Track Vertex AI prompt and completion counts, pricing them according to Gemini 3.5 Flash 2026 pricing.
   - Track FreeLLMAPI calls separately as zero-cost metrics.
@@ -77,7 +77,7 @@ Use this task list to implement Phase 5. Mark tasks as completed `[x]` as you fi
 
 ## Step 3: End-to-End Evaluation & Verification
 
-### [ ] Task 5.5: Phase 5 End-to-End Integration Test
+### [x] Task 5.5: Phase 5 End-to-End Integration Test
 - **Description**: Write a complete end-to-end integration test validating the DREAM evaluator conditional routing loop and Streamlit data streaming compatibility.
 - **Files**:
   - **`tests/integration/test_dream_evaluation_e2e.py`** [NEW]

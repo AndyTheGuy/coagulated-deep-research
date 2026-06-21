@@ -5,7 +5,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from pydantic import BaseModel, Field
 
 from core.models import GraphState, Report
-from core.nodes.scoping import router
+from core.nodes.scoping import router, get_router
 
 logger = structlog.get_logger("deep-research")
 
@@ -102,7 +102,8 @@ async def report_writer_node(state: GraphState) -> Dict[str, Any]:
         
         return {
             "final_report": final_report,
-            "logs": [f"Report writer compiled final report: \"{final_report.title}\" with confidence score {final_report.confidence_score}."]
+            "logs": [f"Report writer compiled final report: \"{final_report.title}\" with confidence score {final_report.confidence_score}."],
+            "token_usage": get_router().token_usage
         }
         
     except Exception as e:
@@ -117,5 +118,6 @@ async def report_writer_node(state: GraphState) -> Dict[str, Any]:
         return {
             "final_report": fallback_final,
             "logs": [f"Report writer failed to parse final output ({str(e)}), fell back to verified draft."],
-            "errors": [f"Writer output parsing failed: {str(e)}"]
+            "errors": [f"Writer output parsing failed: {str(e)}"],
+            "token_usage": get_router().token_usage
         }
