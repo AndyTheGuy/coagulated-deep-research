@@ -31,7 +31,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
 
 ## Step 1: Search & Scraper Clients
 
-### [ ] Task 2.1: SearXNG API Client Wrapper
+### [x] Task 2.1: SearXNG API Client Wrapper
 - **Description**: Implement the async SearXNG client wrapper that queries the self-hosted Docker SearXNG instance and returns structured search results.
 - **Files**:
   - **`search/searxng.py`**
