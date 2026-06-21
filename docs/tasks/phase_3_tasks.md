@@ -156,7 +156,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/integration/test_verification_pipeline.py
   ```
 
-### [ ] Task 3.11: End-to-End Research + Write Graph Test
+### [x] Task 3.11: End-to-End Research + Write Graph Test
 - **Description**: Integration test that runs a full mock graph end-to-end from query through scoping, research aggregation, verification, and report writing.
 - **Files**:
   - `tests/integration/test_full_pipeline_e2e.py`
