@@ -73,7 +73,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
 
 ## Step 2: Search Pipeline Logic
 
-### [ ] Task 2.4: Deduplication Logic
+### [x] Task 2.4: Deduplication Logic
 - **Description**: Implement URL and semantic deduplication to prevent analyzing redundant pages.
 - **Files**:
   - **`search/dedup.py`**
