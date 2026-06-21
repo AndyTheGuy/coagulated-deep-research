@@ -72,21 +72,24 @@ async def test_failover_to_vertex_on_failure(mock_llm_calls, monkeypatch):
 
 @pytest.mark.asyncio
 async def test_vertex_ai_retry_on_failure(mock_llm_calls, monkeypatch):
-    """Test that Vertex AI retries on transient failures before finally raising an exception."""
+    """Test that Vertex AI retries on transient failures before failing over to FreeLLMAPI, and propagates if both fail."""
     import asyncio
     monkeypatch.setattr(asyncio, "sleep", AsyncMock())
     mock_vertex, mock_openai = mock_llm_calls
     
-    # Make Vertex AI fail
+    # Make both Vertex AI and FreeLLMAPI fail
     mock_vertex.ainvoke = AsyncMock(side_effect=RuntimeError("Vertex Down"))
+    mock_openai.ainvoke = AsyncMock(side_effect=RuntimeError("API Down"))
     
     router = LLMRouter()
     messages = [HumanMessage(content="Hello")]
     
-    with pytest.raises(RuntimeError, match="Vertex Down"):
+    # Since Vertex fails, it will attempt FreeLLMAPI, which also fails, propagating "API Down"
+    with pytest.raises(RuntimeError, match="API Down"):
         await router.ainvoke(messages, tier="CRITICAL", agent_name="test-agent")
         
-    assert mock_vertex.ainvoke.call_count == 3  # Try once + 2 retries
+    assert mock_vertex.ainvoke.call_count == 3  # Try once + 2 retries on Vertex
+    assert mock_openai.ainvoke.call_count == 3  # Try once + 2 retries on FreeLLMAPI
 
 def test_extract_token_usage():
     """Test that token extraction handles different response metadata formats."""

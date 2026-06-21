@@ -44,19 +44,21 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ---
 
 ## 5. Active Development State
-- **Active Phase**: Phase 5 (Human-in-the-Loop & Streaming UI) — COMPLETED ✅ (Next Session: Phase 6 🚀)
-- **Active Task**: Phase 5 Critical Evaluation and Handoff
+- **Active Phase**: Phase 5 (Human-in-the-Loop & Streaming UI) — ACTIVE 🔍
+- **Active Task**: Debug Streamlit event-loop deadlock/freeze during parallel research streaming
 - **Task List**: [docs/tasks/phase_5_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_5_tasks.md)
 - **Phase 1 Status**: ✅ 100% complete, bug-fixed, fully tested (25/25 passing tests), committed and pushed.
 - **Phase 2 Status**: ✅ 100% complete, bug-fixed, fully tested (65/65 passing tests), committed, and pushed.
 - **Phase 3 Status**: ✅ 100% complete, bug-fixed, fully tested (all passing), committed, and pushed.
 - **Phase 4 Status**: ✅ 100% complete, bug-fixed, fully tested (135/135 passing tests), committed, and pushed.
-- **Phase 5 Status**: ✅ 100% complete, bug-fixed, fully tested (155/155 passing tests), committed, and pushed.
+- **Phase 5 Status**: 🧪 Completed features; 155/155 passing tests; actively resolving Streamlit event-loop deadlock during graph stream execution.
 - **Workflow Reminder**: Follow the 8-step loop for every single task.
-- **Known Blockers**: None.
+- **Known Blockers**: Threading conflict / event-loop mismatch in `LLMRouter` singletons when driven by Streamlit's script execution threads.
 
-### Phase 6 Handoff Prompt
+### Phase 5 UI Debug Handoff Prompt
 ```markdown
-/goal Initialize Phase 6 (Multi-Format Export & Final Polish). Read `.agents/GEMINI.md` to load the complete project context. Read `docs/tasks/phase_6_tasks.md` for the Phase 6 task checklist. Execute the tasks sequentially starting from Task 6.0, strictly adhering to the 8-step atomic loop for every single task. Continue running non-stop until Phase 6 is 100% complete, fully tested, audited for quality, merged, committed, and pushed to origin main.
+/goal Debug and resolve the Streamlit execution freeze in our LangGraph agentic pipeline.
+
+Read `.agents/GEMINI.md` to load the complete project context. The compiled LangGraph StateGraph workflow runs and streams perfectly to 100% completion inside a standard python CLI process (run `uv run python scratch/run_graph_test.py` to verify). However, inside the Streamlit web interface (`ui/app.py` running on `http://localhost:8501`), when clicking "Start Deep Research", the graph executes the first node (`scoping_ambiguity_check`) and then completely freezes or terminates without proceeding to the next node (`write_research_brief`). Fix this issue by implementing thread-safe router context or running the asyncio event loop safely outside Streamlit's script-runner thread. Confirm 100% success with browser testing and ensure no regressions (155/155 passing tests).
 ```
 

@@ -1,3 +1,4 @@
+import asyncio
 from typing import List, Optional, Any
 import structlog
 from pydantic import BaseModel, Field
@@ -9,12 +10,20 @@ logger = structlog.get_logger("deep-research")
 
 # Proxy to defer router instantiation
 _router = None
+_router_loop = None
 
 def get_router() -> LLMRouter:
-    global _router
-    if _router is None:
+    global _router, _router_loop
+    try:
+        current_loop = asyncio.get_running_loop()
+    except RuntimeError:
+        current_loop = None
+        
+    if _router is None or _router_loop != current_loop:
         _router = LLMRouter()
+        _router_loop = current_loop
     return _router
+
 
 class RouterProxy:
     """Proxy that defers LLMRouter instantiation until invocation, ensuring compatibility with unit tests."""

@@ -25,6 +25,13 @@ st.set_page_config(
 # Initialize session state variables
 init_state()
 
+# Resolve Mock LLM environment variable from session state *before* running any graph blocking loop
+if "mock_llm_mode" in st.session_state:
+    os.environ["MOCK_LLM"] = "true" if st.session_state["mock_llm_mode"] else "false"
+else:
+    # Sync environment variable to session state on initial load
+    st.session_state["mock_llm_mode"] = os.environ.get("MOCK_LLM") == "true"
+
 # 2. Custom CSS for Premium Glassmorphic UI Aesthetics
 st.markdown("""
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -275,6 +282,7 @@ with col_main:
             live_status = st.status("🧬 Executing Autonomous Research Graph...", expanded=True)
             
             with live_status:
+                queue_placeholder = st.empty()
                 try:
                     async for chunk in app.astream(initial_state, stream_mode="updates"):
                         # 1. Update main GraphState inside session state
@@ -293,10 +301,11 @@ with col_main:
                         # 4. Display current state of the parallel research queue
                         sub_qs = getattr(st.session_state.graph_state, "sub_questions_state", []) or []
                         if sub_qs:
-                            st.write("##### 📋 Sub-questions Status Queue:")
+                            queue_html = "##### 📋 Sub-questions Status Queue:\n"
                             for q in sub_qs:
                                 badge_type = "badge-warning" if q.status == "pending" else "badge-info" if q.status == "in_progress" else "badge-success" if q.status == "completed" else "badge-danger"
-                                st.markdown(f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>", unsafe_allow_html=True)
+                                queue_html += f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>\n"
+                            queue_placeholder.markdown(queue_html, unsafe_allow_html=True)
                                 
                     live_status.update(label="✅ Workflow Execution Finished Successfully!", state="complete")
                     
@@ -345,6 +354,7 @@ with col_main:
                     live_status = st.status("🧬 Resuming Deep Research Workflow...", expanded=True)
                     
                     with live_status:
+                        queue_placeholder = st.empty()
                         try:
                             async for chunk in app.astream(initial_state, stream_mode="updates"):
                                 update_graph_state_with_chunk(chunk)
@@ -359,10 +369,11 @@ with col_main:
                                 
                                 sub_qs = getattr(st.session_state.graph_state, "sub_questions_state", []) or []
                                 if sub_qs:
-                                    st.write("##### 📋 Sub-questions Status Queue:")
+                                    queue_html = "##### 📋 Sub-questions Status Queue:\n"
                                     for q in sub_qs:
                                         badge_type = "badge-warning" if q.status == "pending" else "badge-info" if q.status == "in_progress" else "badge-success" if q.status == "completed" else "badge-danger"
-                                        st.markdown(f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>", unsafe_allow_html=True)
+                                        queue_html += f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>\n"
+                                    queue_placeholder.markdown(queue_html, unsafe_allow_html=True)
                                         
                             live_status.update(label="✅ Workflow Execution Finished Successfully!", state="complete")
                             
@@ -494,6 +505,12 @@ with col_main:
 
 with col_stats:
     st.markdown('<h3 style="text-align: center; margin-bottom: 20px;">📊 Statistics</h3>', unsafe_allow_html=True)
+    
+    st.checkbox(
+        "Enable Offline Mock Mode",
+        key="mock_llm_mode",
+        help="Run the entire research workflow offline using high-fidelity mock LLM generation (perfect for quick demonstration, zero API costs, zero internet requirements)."
+    )
     
     stats_placeholder = st.empty()
     
