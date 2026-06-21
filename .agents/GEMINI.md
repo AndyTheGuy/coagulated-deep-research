@@ -24,7 +24,9 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ## 3. Project File Layout Pointers
 - **System Specification**: [docs/spec.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/spec.md)
 - **System Architectures & Blueprints**: [agentic_deep_research_master_blueprint.md](file:///c:/Users/beste/Documents/antigravity/deep-research/agentic_deep_research_master_blueprint.md)
-- **Active Task Checklist**: [docs/tasks/phase_1_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_1_tasks.md)
+- **Phase 2 Task Checklist**: [docs/tasks/phase_2_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_2_tasks.md)
+- **Phase 3 Task Checklist (Draft)**: [docs/tasks/phase_3_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_3_tasks.md)
+- **Workspace Rules (Atomic Loop + Phase Completion)**: [.agents/AGENTS.md](file:///c:/Users/beste/Documents/antigravity/deep-research/.agents/AGENTS.md)
 
 ---
 
@@ -39,7 +41,10 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ---
 
 ## 5. Active Development State
-- **Active Phase**: Phase 1 (Foundation) -> Ready to transition to Phase 2 (Search & Research)
-- **Active Task**: Step 1 - Task 2.1: SearXNG API Client Wrapper
+- **Active Phase**: Phase 2 (Search & Research) — STARTING NOW
+- **Active Task**: Task 2.1 — SearXNG API Client Wrapper
 - **Task List**: [docs/tasks/phase_2_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_2_tasks.md)
-- **Known Blockers**: None. Phase 1 is 100% complete, bug-fixed, and fully tested (25/25 passing tests).
+- **Phase 1 Status**: ✅ 100% complete, bug-fixed, fully tested (25/25 passing tests), committed and pushed.
+- **Phase 3 Status**: Draft task list exists at `docs/tasks/phase_3_tasks.md`. Must be critically reviewed at the END of Phase 2 — NOT implemented until Phase 3 conversation.
+- **Workflow Reminder**: Follow the 8-step Atomic Task Execution Loop in `.agents/AGENTS.md` for every single task. At the end of Phase 2, follow the Phase Completion Rules (critical eval + stop — do NOT start Phase 3).
+- **Known Blockers**: None.
