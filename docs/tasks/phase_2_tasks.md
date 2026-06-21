@@ -112,7 +112,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
 
 ## Step 3: Multi-Agent Topology & Nodes
 
-### [ ] Task 2.6: Supervisor Router
+### [x] Task 2.6: Supervisor Router
 - **Description**: Implement the routing logic that parses the research brief, allocates sub-questions to researcher agents, and determines execution paths.
 - **Files**:
   - **`core/router.py`**
@@ -123,7 +123,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_router.py
   ```
 
-### [ ] Task 2.7: Parallel Researcher Agents
+### [x] Task 2.7: Parallel Researcher Agents
 - **Description**: Implement the researcher agent nodes which run parallel queries, scrape relevant pages, and summarize findings in isolation.
 - **Files**:
   - **`core/nodes/research.py`**
