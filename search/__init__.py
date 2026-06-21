@@ -3,6 +3,7 @@ from search.ddg import search_ddg, DDGSearchError
 from search.scraper import scrape_url, ScrapingError
 from search.dedup import deduplicate_by_url, deduplicate_semantically, cosine_similarity
 from search.fusion import reciprocal_rank_fusion
+from search.diversify import diversify_query
 
 __all__ = [
     "search_searxng", 
@@ -15,5 +16,6 @@ __all__ = [
     "deduplicate_by_url",
     "deduplicate_semantically",
     "cosine_similarity",
-    "reciprocal_rank_fusion"
+    "reciprocal_rank_fusion",
+    "diversify_query"
 ]
