@@ -48,7 +48,7 @@ Use this task list to implement Phase 4. Mark tasks as completed `[x]` as you fi
 
 ## Step 2: Mango URL Router (Thompson Sampling)
 
-### [ ] Task 4.3: Thompson Sampling Starting-Point Selector
+### [x] Task 4.3: Thompson Sampling Starting-Point Selector
 - **Description**: Implement the Mango starting-point optimization algorithm modeled as a Multi-Armed Bandit.
   - Prevents redundant web traversal by keeping Beta distributions for candidate URL starting points.
   - Updates rewards (alpha/beta parameters) based on the relevance and factuality density of scraped content.
