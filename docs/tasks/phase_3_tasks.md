@@ -83,7 +83,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_confidence_scorer.py
   ```
 
-### [ ] Task 3.5: Verification Pipeline Orchestrator
+### [x] Task 3.5: Verification Pipeline Orchestrator
 - **Description**: Wire all 4 verification stages into a single `run_verification_pipeline()` function that takes a `Report` and returns a fully verified/annotated report with confidence metadata.
 - **Files**:
   - `verification/pipeline.py`
