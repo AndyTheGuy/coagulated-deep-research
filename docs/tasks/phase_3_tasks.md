@@ -52,7 +52,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_source_checker.py
   ```
 
-### [ ] Task 3.3: Quote Verifier
+### [x] Task 3.3: Quote Verifier
 - **Description**: Implement the fuzzy quote verifier that checks whether each literal quote from a claim actually appears in its cited source document.
 - **Files**:
   - `verification/quote_verifier.py`
