@@ -10,8 +10,11 @@ from core.models import (
     QuoteVerification,
     VerificationResult,
     ReportConfidenceScore,
+    MetricScore,
+    DREMEvaluation,
     merge_dict_reducer
 )
+
 
 def test_sub_question_defaults():
     """Verify default values and custom fields for SubQuestion."""
@@ -180,3 +183,107 @@ def test_new_models_defaults_and_validation():
             status="invalid_status",  # Must be verified, unverified, failed, gap
             confidence_score=0.5
         )
+
+def test_dream_evaluation_and_metric_scores():
+    """Verify default values, validation, and serialization of MetricScore and DREMEvaluation,
+    and ensure GraphState correctly accepts and handles the evaluation field.
+    """
+    import pytest
+    from pydantic import ValidationError
+
+    # 1. MetricScore Defaults
+    ms_default = MetricScore(metric_name="Factuality")
+    assert ms_default.metric_name == "Factuality"
+    assert ms_default.score == 0.0
+    assert ms_default.threshold == 0.0
+    assert ms_default.passed is False
+    assert ms_default.details is None
+
+    # 2. MetricScore Validation
+    # score under 0.0
+    with pytest.raises(ValidationError):
+        MetricScore(metric_name="Factuality", score=-0.1)
+    # score over 1.0
+    with pytest.raises(ValidationError):
+        MetricScore(metric_name="Factuality", score=1.1)
+    # threshold under 0.0
+    with pytest.raises(ValidationError):
+        MetricScore(metric_name="Factuality", threshold=-0.1)
+    # threshold over 1.0
+    with pytest.raises(ValidationError):
+        MetricScore(metric_name="Factuality", threshold=1.1)
+
+    # 3. MetricScore Serialization
+    ms_valid = MetricScore(
+        metric_name="RQ",
+        score=0.85,
+        threshold=0.80,
+        passed=True,
+        details={"reason": "good reasoning"}
+    )
+    serialized_ms = ms_valid.model_dump()
+    assert serialized_ms["metric_name"] == "RQ"
+    assert serialized_ms["score"] == 0.85
+    assert serialized_ms["threshold"] == 0.80
+    assert serialized_ms["passed"] is True
+    assert serialized_ms["details"] == {"reason": "good reasoning"}
+
+    # Deserialization from dictionary
+    ms_deserialized = MetricScore(**serialized_ms)
+    assert ms_deserialized.score == 0.85
+    assert ms_deserialized.passed is True
+
+    # 4. DREMEvaluation Default Values and Validation
+    kic = MetricScore(metric_name="KIC", score=0.9, threshold=0.8, passed=True)
+    rq = MetricScore(metric_name="RQ", score=0.85, threshold=0.8, passed=True)
+    fact = MetricScore(metric_name="Factuality", score=0.95, threshold=0.9, passed=True)
+
+    eval_report = DREMEvaluation(
+        key_information_coverage=kic,
+        reasoning_quality=rq,
+        factuality=fact
+    )
+    assert eval_report.key_information_coverage.score == 0.9
+    assert eval_report.reasoning_quality.score == 0.85
+    assert eval_report.factuality.score == 0.95
+    assert eval_report.overall_passed is False  # default
+    assert eval_report.evaluator_notes is None  # default
+
+    # 5. DREMEvaluation Serialization
+    serialized_eval = eval_report.model_dump()
+    assert "key_information_coverage" in serialized_eval
+    assert serialized_eval["key_information_coverage"]["score"] == 0.9
+    assert serialized_eval["overall_passed"] is False
+
+    eval_deserialized = DREMEvaluation(**serialized_eval)
+    assert eval_deserialized.key_information_coverage.metric_name == "KIC"
+    assert eval_deserialized.overall_passed is False
+
+    # 6. GraphState with DREMEvaluation integration
+    state_default = GraphState(topic="AI", user_query="What is AI?")
+    assert state_default.evaluation is None
+
+    # GraphState with evaluation set
+    eval_report_passed = DREMEvaluation(
+        key_information_coverage=kic,
+        reasoning_quality=rq,
+        factuality=fact,
+        overall_passed=True,
+        evaluator_notes="Excellent report, passed all metrics."
+    )
+    state_with_eval = GraphState(
+        topic="AI",
+        user_query="What is AI?",
+        evaluation=eval_report_passed
+    )
+    assert state_with_eval.evaluation is not None
+    assert state_with_eval.evaluation.overall_passed is True
+    assert state_with_eval.evaluation.key_information_coverage.score == 0.9
+    assert state_with_eval.evaluation.evaluator_notes == "Excellent report, passed all metrics."
+
+    # Serialization of GraphState with evaluation
+    state_serialized = state_with_eval.model_dump()
+    assert "evaluation" in state_serialized
+    assert state_serialized["evaluation"]["overall_passed"] is True
+    assert state_serialized["evaluation"]["evaluator_notes"] == "Excellent report, passed all metrics."
+
