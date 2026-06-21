@@ -99,7 +99,7 @@ Use this task list to implement Phase 3. Mark tasks as completed `[x]` as you fi
 
 ## Step 4: Graph Nodes — Verifier & Writer
 
-### [ ] Task 3.6: Adversarial Verifier Node
+### [x] Task 3.6: Adversarial Verifier Node
 - **Description**: Implement the adversarial verifier LangGraph node. It critiques the aggregated context, identifies logical holes and unverified claims, and decides whether to route back to the supervisor for gap-filling or forward to the writer.
 - **Files**:
   - `core/nodes/verifier.py`
