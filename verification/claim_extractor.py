@@ -5,7 +5,6 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 
 from core.models import Report, Claim
-from core.nodes.scoping import router, get_router
 
 logger = structlog.get_logger("deep-research")
 
@@ -37,6 +36,9 @@ class ClaimExtractor:
     async def extract_claims(self, report: Report) -> List[Claim]:
         """Extract factual claims from the report content."""
         logger.info("Extracting claims from report", report_title=report.title)
+        
+        # Local import to prevent circular dependency
+        from core.nodes.scoping import router
         
         formatted_prompt = self.prompt.format_prompt(
             report_content=report.content,
