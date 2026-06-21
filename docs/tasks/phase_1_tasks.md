@@ -81,7 +81,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_llm_router.py
   ```
 
-### [ ] Task 1.6: Qdrant Vector DB & Embedding Scaffolding
+### [x] Task 1.6: Qdrant Vector DB & Embedding Scaffolding
 - **Description**: Scaffolding the `sentence-transformers` embedding service (using `all-mpnet-base-v2`) and client connections to in-memory Qdrant.
 - **Files**:
   - `db/embeddings.py`
