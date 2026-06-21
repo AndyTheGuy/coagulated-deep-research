@@ -135,7 +135,7 @@ Use this task list to implement Phase 2. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/unit/test_research.py
   ```
 
-### [ ] Task 2.8: Context Aggregator
+### [x] Task 2.8: Context Aggregator
 - **Description**: Implement the context aggregator node to combine findings from all researcher agents, filter redundant details, and prepare standard context.
 - **Files**:
   - **`core/nodes/aggregator.py`**

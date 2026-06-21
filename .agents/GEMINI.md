@@ -41,8 +41,8 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ---
 
 ## 5. Active Development State
-- **Active Phase**: Phase 2 (Search & Research) — STARTING NOW
-- **Active Task**: Task 2.8 — Context Aggregator
+- **Active Phase**: Phase 2 (Search & Research) — IN PROGRESS
+- **Active Task**: Task 2.9 — Semantic Cache Layer
 - **Task List**: [docs/tasks/phase_2_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_2_tasks.md)
 - **Phase 1 Status**: ✅ 100% complete, bug-fixed, fully tested (25/25 passing tests), committed and pushed.
 - **Phase 3 Status**: Draft task list exists at `docs/tasks/phase_3_tasks.md`. Must be critically reviewed at the END of Phase 2 — NOT implemented until Phase 3 conversation.
