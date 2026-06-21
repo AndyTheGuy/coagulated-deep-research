@@ -111,7 +111,7 @@ Use this task list to implement Phase 1. Mark tasks as completed `[x]` as you fi
   uv run pytest tests/integration/test_scoping_flow.py
   ```
 
-### [ ] Task 1.8: Graph Definition
+### [x] Task 1.8: Graph Definition
 - **Description**: Scaffold the LangGraph `StateGraph` definition. Connect the scoping nodes, supervisor placeholder, and terminal output.
 - **Files**:
   - `core/graph.py`
