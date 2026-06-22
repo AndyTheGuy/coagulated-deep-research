@@ -42,6 +42,9 @@ async def report_writer_node(state: GraphState) -> Dict[str, Any]:
     claims_details = "\n".join(claims_text_list) if claims_text_list else "No verified claims metadata."
 
     # 3. Compile prompt and call LLM
+    from config.settings import is_mock_llm_enabled
+    mock_mode = is_mock_llm_enabled()
+    
     parser = JsonOutputParser(pydantic_object=WriterOutput)
     
     system_prompt = (
@@ -56,9 +59,19 @@ async def report_writer_node(state: GraphState) -> Dict[str, Any]:
         "listing all cited source URLs (aim for at least 20 sources if available in the context).\n"
         "5. Confidence Summary: Append a 'Report Confidence Assessment' section highlighting the overall report "
         "confidence score (which is {overall_score}) and summarizing the verification statistics (verified/failed/gaps).\n\n"
-        "Format the output strictly as a JSON object matching the following schema:\n"
-        "{format_instructions}"
     )
+    
+    if mock_mode:
+        system_prompt += (
+            "Format the output strictly as a JSON object matching the following schema:\n"
+            "{format_instructions}"
+        )
+    else:
+        system_prompt += (
+            "Your output must be the RAW Markdown content of the report itself. Start directly with the markdown h1 title "
+            "(e.g. '# Report Title') on the first line. Do NOT wrap your output in JSON, markdown code blocks, or HTML tags. "
+            "Output only pure, raw markdown."
+        )
     
     user_prompt = (
         "Draft Report Title: {title}\n"
@@ -77,7 +90,7 @@ async def report_writer_node(state: GraphState) -> Dict[str, Any]:
         title=draft.title,
         draft_content=draft.content,
         claims_details=claims_details,
-        format_instructions=parser.get_format_instructions()
+        format_instructions=parser.get_format_instructions() if mock_mode else ""
     )
     
     response = await router.ainvoke(
@@ -88,14 +101,40 @@ async def report_writer_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed = parser.parse(clean_json_string(response.content))
-        writer_out = WriterOutput(**parsed)
-        logger.info("Report writing complete", title=writer_out.title)
+        raw_content = response.content.strip()
+        parsed_json = None
         
-        # Instantiate final report model, carrying over claims list and confidence score
+        # Try JSON parsing first (handles mock mode and existing tests)
+        try:
+            cleaned = clean_json_string(raw_content)
+            parsed_json = parser.parse(cleaned)
+        except Exception:
+            pass
+            
+        if parsed_json and isinstance(parsed_json, dict) and "content" in parsed_json:
+            writer_title = parsed_json.get("title", draft.title)
+            writer_content = parsed_json.get("content", "")
+        else:
+            # Live/Raw Markdown mode fallback
+            if mock_mode:
+                raise ValueError("JSON parsing failed in mock mode")
+            
+            # Enforce that raw markdown must start with an H1 header
+            if not raw_content.startswith("#"):
+                raise ValueError("Malformed raw markdown output: missing leading H1 title")
+                
+            writer_content = raw_content
+            writer_title = draft.title
+            import re
+            first_h1 = re.search(r"^#\s+(.+)$", writer_content, re.MULTILINE)
+            if first_h1:
+                writer_title = first_h1.group(1).strip().strip("*_`#")
+                
+        logger.info("Report writing complete", title=writer_title)
+        
         final_report = Report(
-            title=writer_out.title,
-            content=writer_out.content,
+            title=writer_title,
+            content=writer_content,
             claims=draft.claims,
             citations=draft.citations,
             confidence_score=draft.confidence_score

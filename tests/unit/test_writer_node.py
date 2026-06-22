@@ -98,3 +98,32 @@ async def test_writer_node_parsing_failure():
         assert final.content == "Aggregated draft findings" # Fallback content
         assert "errors" in updates
         assert any("parsing failed" in err for err in updates["errors"])
+
+@pytest.mark.asyncio
+async def test_writer_node_raw_markdown_success():
+    state = GraphState(
+        topic="AI Safety Benchmarks",
+        draft_report=Report(
+            title="Aggregated Findings: AI Safety",
+            content="Aggregated draft findings",
+            claims=[],
+            citations=[],
+            confidence_score=0.95
+        )
+    )
+    
+    raw_markdown = "# High-Quality Research Report on AI Safety\n\nThis is the raw markdown body of the report."
+    mock_response = AIMessage(content=raw_markdown)
+    
+    with patch("core.nodes.scoping.router.ainvoke", new_callable=AsyncMock) as mock_ainvoke, \
+         patch("config.settings.is_mock_llm_enabled", return_value=False):
+        mock_ainvoke.return_value = mock_response
+        
+        updates = await report_writer_node(state)
+        
+        assert "final_report" in updates
+        final = updates["final_report"]
+        assert final.title == "High-Quality Research Report on AI Safety"
+        assert final.content == raw_markdown
+        assert final.confidence_score == 0.95
+        assert "errors" not in updates
