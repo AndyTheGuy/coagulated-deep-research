@@ -60,13 +60,11 @@ class Settings(BaseSettings):
 settings = Settings()
 
 import contextvars
-_mock_llm_var = contextvars.ContextVar("mock_llm", default=False)
+_mock_llm_var = contextvars.ContextVar("mock_llm", default=os.environ.get("MOCK_LLM") == "true")
 
 def is_mock_llm_enabled() -> bool:
-    """Check if mock LLM mode is enabled in either the thread-local context or environment variables (for backward-compatibility)."""
-    if _mock_llm_var.get():
-        return True
-    return os.environ.get("MOCK_LLM") == "true"
+    """Check if mock LLM mode is enabled in the active thread-local/task-local context."""
+    return _mock_llm_var.get()
 
 def set_mock_llm_enabled(enabled: bool) -> None:
     """Set the mock LLM mode for the current thread/context."""

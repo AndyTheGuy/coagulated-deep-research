@@ -53,7 +53,7 @@ def test_logger_integration():
 
 
 def test_mock_llm_state_isolation_and_fallback():
-    """Test that is_mock_llm_enabled/set_mock_llm_enabled isolates state per thread and falls back to os.environ."""
+    """Test that is_mock_llm_enabled/set_mock_llm_enabled isolates state per thread and ignores dynamic os.environ changes."""
     import threading
     from config.settings import is_mock_llm_enabled, set_mock_llm_enabled
 
@@ -70,9 +70,9 @@ def test_mock_llm_state_isolation_and_fallback():
         set_mock_llm_enabled(False)
         assert not is_mock_llm_enabled()
 
-        # 2. Test fallback to os.environ
+        # 2. Test that dynamic os.environ changes are ignored
         with mock.patch.dict(os.environ, {"MOCK_LLM": "true"}):
-            assert is_mock_llm_enabled()
+            assert not is_mock_llm_enabled()
 
         # 3. Test thread isolation
         thread_results = {}

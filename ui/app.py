@@ -41,7 +41,6 @@ except ImportError:
 if "mock_llm_mode" in st.session_state:
     is_mock = st.session_state["mock_llm_mode"]
     set_mock_llm_enabled(is_mock)
-    os.environ["MOCK_LLM"] = "true" if is_mock else "false"
 else:
     # Sync environment variable to session state on initial load
     is_enabled = os.environ.get("MOCK_LLM") == "true"
