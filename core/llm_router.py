@@ -332,26 +332,30 @@ class LLMRouter:
             }"""
             input_tokens, output_tokens = 250, 300
         elif agent_name == "EvaluatorAgent":
-            content = """{
-                "key_information_coverage": {
-                    "score": 0.92,
-                    "threshold": 0.80,
-                    "passed": true
-                },
-                "reasoning_quality": {
-                    "score": 0.88,
-                    "threshold": 0.75,
-                    "passed": true
-                },
-                "factuality": {
-                    "score": 0.95,
-                    "threshold": 0.90,
-                    "passed": true
-                },
-                "overall_passed": true,
-                "evaluator_notes": "Highly precise report aligning perfectly with modern standard-library constraints. Accurate citation mappings."
-            }"""
-            input_tokens, output_tokens = 400, 180
+            if node_name == "extract_key_facts":
+                content = '{"key_facts": ["urllib.request is standard library", "cosine similarity computed via math.sqrt", "multiprocessing bypasses GIL"]}'
+                input_tokens, output_tokens = 80, 40
+            elif node_name == "check_coverage":
+                content = """{
+                    "coverage_items": [
+                        {"fact": "urllib.request is standard library", "covered": true, "explanation": "The report covers urllib.request under async HTTP."},
+                        {"fact": "cosine similarity computed via math.sqrt", "covered": true, "explanation": "The report covers native cosine similarity using math.sqrt."},
+                        {"fact": "multiprocessing bypasses GIL", "covered": true, "explanation": "The report mentions multiprocessing ProcessPoolExecutor to bypass the GIL."}
+                    ]
+                }"""
+                input_tokens, output_tokens = 150, 100
+            elif node_name == "evaluate_reasoning":
+                content = '{"score": 0.95, "explanation": "The report has outstanding coherence and is logically sound based on verified claims."}'
+                input_tokens, output_tokens = 120, 30
+            elif node_name == "evaluate_factuality":
+                content = '{"score": 0.98, "explanation": "Inline citations are perfectly mapped to standard bibliography items."}'
+                input_tokens, output_tokens = 120, 30
+            elif node_name == "remediation_formulation":
+                content = '{"gaps_found": false, "remediation_queries": [], "remediation_notes": "Passed all metrics!"}'
+                input_tokens, output_tokens = 150, 20
+            else:
+                content = '{"status": "success"}'
+                input_tokens, output_tokens = 10, 5
         elif agent_name == "MCTSPlanner" and node_name == "generate_candidate_intents":
             content = "Determine best lightweight modules for async HTTP requests\nAnalyze native vector indexing using math functions\nEvaluate standard multiprocessing vs multithreading for CPU bound work"
             input_tokens, output_tokens = 30, 45
