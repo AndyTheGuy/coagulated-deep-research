@@ -17,16 +17,17 @@ class Settings(BaseSettings):
 
     # Google Vertex AI (Primary Provider for Critical Tasks)
     GCP_PROJECT_ID: str = Field(default="agenticuse")
-    GCP_LOCATION: str = Field(default="us-central1")
+    GCP_LOCATION: str = Field(default="global")
 
     # FreeLLMAPI Configuration (Standard/Bulk Tasks)
     FREE_LLM_API_BASE_URL: str = Field(default="http://localhost:8000/v1")
     FREE_LLM_API_KEY: str = Field(default="")
+    USE_FREE_LLM_API: bool = Field(default=False)
 
     # LLM Routing - Model Mapping
-    CRITICAL_MODEL: str = Field(default="gemini-1.5-flash")
-    STANDARD_MODEL: str = Field(default="gpt-4o-mini")
-    BULK_MODEL: str = Field(default="gpt-4o-mini")
+    CRITICAL_MODEL: str = Field(default="gemini-3.5-flash")
+    STANDARD_MODEL: str = Field(default="auto")
+    BULK_MODEL: str = Field(default="auto")
 
     # Web Search Configuration
     SEARXNG_URL: str = Field(default="http://localhost:8080")

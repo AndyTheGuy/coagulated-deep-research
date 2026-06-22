@@ -11,10 +11,11 @@ def test_settings_default_values():
         assert settings.ENV == "development"
         assert settings.LOG_LEVEL == "INFO"
         assert settings.GCP_PROJECT_ID == "agenticuse"
-        assert settings.GCP_LOCATION == "us-central1"
+        assert settings.GCP_LOCATION == "global"
         assert settings.FREE_LLM_API_BASE_URL == "http://localhost:8000/v1"
-        assert settings.CRITICAL_MODEL == "gemini-1.5-flash"
+        assert settings.CRITICAL_MODEL == "gemini-3.5-flash"
         assert settings.QDRANT_PORT == 6333
+
 
 def test_settings_env_override():
     """Test that settings can be overridden via environment variables."""

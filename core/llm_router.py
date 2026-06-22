@@ -54,30 +54,89 @@ def _extract_token_usage(response: Any) -> Tuple[int, int]:
         
     return 0, 0
 
+def resolve_vertex_model_name(model_name: str, tier: str) -> str:
+    """Resolve and enforce native Gemini model names for Vertex AI, filtering out non-Gemini formats."""
+    lower_name = model_name.lower()
+    
+    # Enforce mapping from generic placeholders or standard/bulk OpenAI defaults to native Gemini
+    if lower_name in ("auto", "gpt-4o-mini", "gpt-3.5-turbo", "gpt-4o", "claude-3-opus-20240229", "claude-3-sonnet-20240229"):
+        if tier.upper() == "CRITICAL":
+            return "gemini-3.5-flash"
+        elif tier.upper() == "STANDARD":
+            return "gemini-2.5-flash"
+        else: # BULK
+            return "gemini-2.5-flash-lite"
+            
+    # Map old/unapproved Gemini models to approved ones in the model garden
+    if "gemini-1.5-flash" in lower_name:
+        return "gemini-3.5-flash"
+    if "gemini-1.5-pro" in lower_name:
+        return "gemini-2.5-pro"
+            
+    # Extract native model ID if prefix or wrappers are used
+    approved_models = (
+        "gemini-3.5-flash",
+        "gemini-3.1-flash-lite",
+        "gemini-3.1-flash-image",
+        "gemini-3.1-pro-preview",
+        "gemini-3-flash-preview",
+        "gemini-2.5-pro",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.5-flash-image",
+        "gemini-2.5-computer-use-preview-10-2025"
+    )
+    for native_id in approved_models:
+        if native_id in lower_name:
+            return native_id
+            
+    # Fallback default if completely unrecognizable but Vertex AI is requested
+    return "gemini-3.5-flash"
+
 class LLMRouter:
     """3-Tier router for LLM calls with automatic failover and token tracking."""
     
     def __init__(self) -> None:
-        # Initialize LangChain model interfaces
+        # Enforce native Gemini model names on Vertex AI
+        critical_v = resolve_vertex_model_name(settings.CRITICAL_MODEL, "CRITICAL")
+        standard_v = resolve_vertex_model_name(settings.STANDARD_MODEL, "STANDARD")
+        bulk_v = resolve_vertex_model_name(settings.BULK_MODEL, "BULK")
+        
+        # Initialize LangChain Vertex model interfaces
         self._vertex_model = ChatVertexAI(
-            model=settings.CRITICAL_MODEL,
+            model=critical_v,
             project=settings.GCP_PROJECT_ID,
             location=settings.GCP_LOCATION,
         )
         
-        self._freellm_standard = ChatOpenAI(
-            model=settings.STANDARD_MODEL,
-            base_url=settings.FREE_LLM_API_BASE_URL,
-            openai_api_key=settings.FREE_LLM_API_KEY,
-            timeout=10.0,
+        self._vertex_standard = ChatVertexAI(
+            model=standard_v,
+            project=settings.GCP_PROJECT_ID,
+            location=settings.GCP_LOCATION,
         )
         
-        self._freellm_bulk = ChatOpenAI(
-            model=settings.BULK_MODEL,
-            base_url=settings.FREE_LLM_API_BASE_URL,
-            openai_api_key=settings.FREE_LLM_API_KEY,
-            timeout=10.0,
+        self._vertex_bulk = ChatVertexAI(
+            model=bulk_v,
+            project=settings.GCP_PROJECT_ID,
+            location=settings.GCP_LOCATION,
         )
+        
+        # FreeLLMAPI configuration (only instantiated if enabled to save initialization checks)
+        self._freellm_standard = None
+        self._freellm_bulk = None
+        if settings.USE_FREE_LLM_API:
+            self._freellm_standard = ChatOpenAI(
+                model=settings.STANDARD_MODEL,
+                base_url=settings.FREE_LLM_API_BASE_URL,
+                openai_api_key=settings.FREE_LLM_API_KEY,
+                timeout=10.0,
+            )
+            self._freellm_bulk = ChatOpenAI(
+                model=settings.BULK_MODEL,
+                base_url=settings.FREE_LLM_API_BASE_URL,
+                openai_api_key=settings.FREE_LLM_API_KEY,
+                timeout=10.0,
+            )
         
         # In-memory tracking dict for token usage metrics
         self.token_usage: Dict[str, Any] = {
@@ -94,7 +153,7 @@ class LLMRouter:
         node_name: str = "unknown",
         **kwargs: Any
     ) -> BaseMessage:
-        """Route and execute the LLM invocation with failover for non-critical tiers."""
+        """Route and execute the LLM invocation with automatic failover and native enforcement."""
         import os
         if os.environ.get("MOCK_LLM") == "true":
             response = self._get_mock_response(agent_name, node_name, messages)
@@ -103,10 +162,35 @@ class LLMRouter:
 
         tier_upper = tier.upper()
         
-        # Tier 1: CRITICAL goes strictly to Google Vertex AI with failover to FreeLLMAPI if Vertex fails
+        # Direct Vertex AI Mode (if FreeLLMAPI is completely disabled)
+        if not settings.USE_FREE_LLM_API:
+            if tier_upper == "CRITICAL":
+                model_instance = self._vertex_model
+            elif tier_upper == "STANDARD":
+                model_instance = self._vertex_standard
+            else: # BULK
+                model_instance = self._vertex_bulk
+                
+            try:
+                return await self._invoke_vertex(model_instance, messages, agent_name, node_name, tier=tier_upper, **kwargs)
+            except Exception as e:
+                # If standard or bulk fails on Vertex, fallback to the critical Vertex model as ultimate firewall
+                if tier_upper != "CRITICAL":
+                    logger.warn(
+                        "Vertex AI call failed for standard/bulk tier, falling back to critical model",
+                        tier=tier_upper,
+                        agent=agent_name,
+                        node=node_name,
+                        error=str(e)
+                    )
+                    self.token_usage["failovers"] += 1
+                    return await self._invoke_vertex(self._vertex_model, messages, agent_name, node_name, tier=tier_upper, **kwargs)
+                raise e
+
+        # Hybrid FreeLLMAPI Mode (if explicitly enabled)
         if tier_upper == "CRITICAL":
             try:
-                return await self._invoke_vertex(messages, agent_name, node_name, tier=tier_upper, **kwargs)
+                return await self._invoke_vertex(self._vertex_model, messages, agent_name, node_name, tier=tier_upper, **kwargs)
             except Exception as e:
                 logger.warn(
                     "Vertex AI direct call failed for CRITICAL tier, executing failover to FreeLLMAPI",
@@ -116,15 +200,11 @@ class LLMRouter:
                     error=str(e)
                 )
                 self.token_usage["failovers"] += 1
-                # Fallback to FreeLLMAPI standard
-                model = self._freellm_standard
-                response = await _invoke_with_retry(model, messages, retries=3, **kwargs)
+                response = await _invoke_with_retry(self._freellm_standard, messages, retries=3, **kwargs)
                 self._update_usage("freellmapi", response)
                 return response
             
-        # Tiers 2 & 3: STANDARD and BULK try FreeLLMAPI first
         model = self._freellm_standard if tier_upper == "STANDARD" else self._freellm_bulk
-        
         try:
             logger.info(
                 "Invoking FreeLLMAPI",
@@ -136,7 +216,6 @@ class LLMRouter:
             response = await _invoke_with_retry(model, messages, retries=3, **kwargs)
             self._update_usage("freellmapi", response)
             return response
-            
         except Exception as e:
             logger.warn(
                 "FreeLLMAPI call failed, executing failover to Vertex AI",
@@ -146,27 +225,29 @@ class LLMRouter:
                 error=str(e)
             )
             self.token_usage["failovers"] += 1
-            # Fallback to Vertex AI
-            return await self._invoke_vertex(messages, agent_name, node_name, tier=tier_upper, **kwargs)
+            # Fallback to corresponding Vertex model
+            target_vertex_model = self._vertex_standard if tier_upper == "STANDARD" else self._vertex_bulk
+            return await self._invoke_vertex(target_vertex_model, messages, agent_name, node_name, tier=tier_upper, **kwargs)
 
     async def _invoke_vertex(
         self,
+        model_instance: ChatVertexAI,
         messages: List[BaseMessage],
         agent_name: str,
         node_name: str,
-        tier: str = "CRITICAL",
+        tier: str,
         **kwargs: Any
     ) -> BaseMessage:
-        """Helper to invoke Google Vertex AI directly."""
+        """Helper to invoke a specific Google Vertex AI model directly."""
         logger.info(
             "Invoking Vertex AI",
             tier=tier,
             agent=agent_name,
             node=node_name,
-            model=getattr(self._vertex_model, "model", "unknown")
+            model=getattr(model_instance, "model", "unknown")
         )
         try:
-            response = await _invoke_with_retry(self._vertex_model, messages, retries=3, **kwargs)
+            response = await _invoke_with_retry(model_instance, messages, retries=3, **kwargs)
             self._update_usage("vertex_ai", response)
             return response
         except Exception as e:

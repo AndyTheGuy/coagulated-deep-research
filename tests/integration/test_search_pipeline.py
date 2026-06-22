@@ -8,6 +8,12 @@ def mock_pipeline_dependencies(monkeypatch):
     """Mocks all external models and services (LLMs, SearXNG, scrapers, embeddings)
     to enable a fast, deterministic, offline integration test.
     """
+    from config.settings import settings
+    monkeypatch.setattr(settings, "USE_FREE_LLM_API", True)
+    monkeypatch.setattr(settings, "CRITICAL_MODEL", "gemini-3.5-flash")
+    monkeypatch.setattr(settings, "STANDARD_MODEL", "gpt-4o-mini")
+    monkeypatch.setattr(settings, "BULK_MODEL", "gpt-4o-mini")
+
     # Mock LLM model instances
     mock_vertex_instance = MagicMock()
     mock_vertex_instance.model = "gemini-1.5-flash"

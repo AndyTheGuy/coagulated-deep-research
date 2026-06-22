@@ -5,6 +5,12 @@ from langchain_core.messages import AIMessage
 @pytest.fixture
 def mock_llm_calls(monkeypatch):
     """Fixture to mock ChatVertexAI and ChatOpenAI responses."""
+    from config.settings import settings
+    monkeypatch.setattr(settings, "USE_FREE_LLM_API", True)
+    monkeypatch.setattr(settings, "CRITICAL_MODEL", "gemini-3.5-flash")
+    monkeypatch.setattr(settings, "STANDARD_MODEL", "gpt-4o-mini")
+    monkeypatch.setattr(settings, "BULK_MODEL", "gpt-4o-mini")
+
     mock_vertex_instance = MagicMock()
     mock_vertex_instance.model = "gemini-1.5-flash"
     mock_vertex_instance.ainvoke = AsyncMock(return_value=AIMessage(
@@ -26,3 +32,4 @@ def mock_llm_calls(monkeypatch):
     monkeypatch.setattr("core.llm_router.ChatOpenAI", mock_openai_cls)
 
     return mock_vertex_instance, mock_openai_instance
+
