@@ -43,6 +43,10 @@ class BrowserExplorer:
         try:
             # Try Puppeteer MCP server first
             puppeteer_client = await self.mcp_hub.get_client("puppeteer")
+            if getattr(puppeteer_client, "mock", False) is True:
+                logger.info("Puppeteer MCP client is in mock mode; forcing graceful fallback to standard scraper")
+                raise RuntimeError("Puppeteer MCP client is mocked")
+                
             logger.debug("Puppeteer MCP server available, executing navigation")
             
             # 1. Navigate
@@ -101,6 +105,9 @@ class BrowserExplorer:
         """Clicks an element in the browser. Only supported under Puppeteer."""
         try:
             puppeteer_client = await self.mcp_hub.get_client("puppeteer")
+            if getattr(puppeteer_client, "mock", False) is True:
+                logger.info("Click operation bypassed because Puppeteer MCP client is mocked")
+                return False
             await puppeteer_client.call_tool("click", {"selector": selector})
             logger.info("BrowserExplorer successfully clicked selector", selector=selector)
             return True
