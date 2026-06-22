@@ -1,5 +1,6 @@
 import asyncio
 import re
+import math
 import structlog
 from typing import Any, Dict, List, Tuple
 from langchain_core.prompts import ChatPromptTemplate
@@ -18,6 +19,56 @@ from core.mcp_client import MCPHub
 from search.scraper import scrape_url
 
 logger = structlog.get_logger("deep-research")
+
+TOYOTA_QUANTUM_BLACKLIST = {"toyota", "minibus", "hiace", "taxi", "dealership", "automotive", "van", "passenger"}
+
+def cosine_similarity(v1: List[float], v2: List[float]) -> float:
+    dot = sum(a * b for a, b in zip(v1, v2))
+    norm_a = math.sqrt(sum(a * a for a in v1))
+    norm_b = math.sqrt(sum(b * b for b in v2))
+    return dot / (norm_a * norm_b) if norm_a * norm_b > 0 else 0.0
+
+async def filter_irrelevant_results(
+    results: List[SearchResult], 
+    question: str, 
+    embeddings_service: LocalEmbeddings, 
+    threshold: float = 0.3
+) -> List[SearchResult]:
+    """Filters search results based on semantic similarity to the question and a hard blacklist."""
+    if not results:
+        return []
+        
+    filtered = []
+    
+    # Pre-filter with Blacklist
+    for res in results:
+        text_to_check = f"{res.title} {res.content} {res.url}".lower()
+        if any(bad_word in text_to_check for bad_word in TOYOTA_QUANTUM_BLACKLIST):
+            logger.info("Blacklisted result dropped", url=res.url)
+            continue
+        filtered.append(res)
+        
+    if not filtered:
+        return []
+        
+    # Semantic pre-filtering
+    try:
+        q_emb = await embeddings_service.aembed_query(question)
+        docs_text = [f"{r.title} {r.content}" for r in filtered]
+        doc_embs = await embeddings_service.aembed_documents(docs_text)
+        
+        semantically_filtered = []
+        for res, d_emb in zip(filtered, doc_embs):
+            sim = cosine_similarity(q_emb, d_emb)
+            if sim >= threshold:
+                semantically_filtered.append(res)
+            else:
+                logger.info("Semantically irrelevant result dropped", url=res.url, sim=sim)
+                
+        return semantically_filtered
+    except Exception as e:
+        logger.error("Failed semantic pre-filtering, returning blacklist-filtered results", error=str(e))
+        return filtered
 
 # Lazy-loaded embeddings model to avoid redundant initialization
 _embeddings = None
@@ -121,9 +172,11 @@ async def researcher_node(state: ResearcherInput) -> Dict[str, Any]:
     
     # 3. Reciprocal Rank Fusion & Deduplication
     fused_results = reciprocal_rank_fusion(search_results_lists)
-    deduped_by_url = deduplicate_by_url(fused_results)
     
     embeddings_service = get_embeddings()
+    filtered_results = await filter_irrelevant_results(fused_results, sub_q.question, embeddings_service)
+    
+    deduped_by_url = deduplicate_by_url(filtered_results)
     deduped_results = await deduplicate_semantically(deduped_by_url, embeddings_service)
     
     # 4. Multi-Armed Bandit starting point selection (Mango)

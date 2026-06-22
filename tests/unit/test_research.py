@@ -166,3 +166,32 @@ async def test_researcher_node_no_accessible_sources(sample_researcher_input, mo
         
         assert len(result["errors"]) == 1
         assert "Scraping failed" in result["errors"][0]
+
+@pytest.mark.asyncio
+async def test_filter_irrelevant_results():
+    """Test the semantic and blacklist pre-filtering."""
+    from core.nodes.research import filter_irrelevant_results
+    
+    mock_embeddings = AsyncMock()
+    # Let question be vector [1, 0, 0]
+    mock_embeddings.aembed_query.return_value = [1.0, 0.0, 0.0]
+    # Doc 1: Highly relevant [1, 0, 0]
+    # Doc 2: Irrelevant [0, 1, 0]
+    # Doc 3: Blacklisted (will be dropped before semantic)
+    mock_embeddings.aembed_documents.return_value = [
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0]
+    ]
+    
+    results = [
+        SearchResult(title="Quantum Error Correction", url="http://qec.com", content="Surface codes are great."),
+        SearchResult(title="Cooking recipes", url="http://cook.com", content="How to bake a cake."),
+        SearchResult(title="Toyota Quantum 2024", url="http://cars.com", content="Buy a new minibus.")
+    ]
+    
+    filtered = await filter_irrelevant_results(results, "What is QEC?", mock_embeddings, threshold=0.5)
+    
+    # Expect only the first result to survive
+    assert len(filtered) == 1
+    assert filtered[0].title == "Quantum Error Correction"
+
