@@ -35,7 +35,7 @@ async def search_searxng(
     if not query or not query.strip():
         return []
         
-    url = f"{settings.SEARXNG_URL.rstrip('/')}/"
+    url = f"{settings.SEARXNG_URL.rstrip('/')}/search"
     params = {
         "q": query,
         "format": "json"
