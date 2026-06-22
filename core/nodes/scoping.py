@@ -1,4 +1,5 @@
 import asyncio
+import contextvars
 from typing import Any, Dict, Optional
 import structlog
 from langchain_core.prompts import ChatPromptTemplate
@@ -10,20 +11,32 @@ from core.llm_router import LLMRouter
 
 logger = structlog.get_logger("deep-research")
 
-_router = None
-_router_loop = None
+_router_var: contextvars.ContextVar[Optional[LLMRouter]] = contextvars.ContextVar("scoping_router", default=None)
+_router_loop_var: contextvars.ContextVar[Optional[asyncio.AbstractEventLoop]] = contextvars.ContextVar("scoping_router_loop", default=None)
+
+# Compatibility global variable for tests that monkeypatch or reset '_router'
+_router: Optional[LLMRouter] = None
 
 def get_router() -> LLMRouter:
-    global _router, _router_loop
+    global _router
     try:
         current_loop = asyncio.get_running_loop()
     except RuntimeError:
         current_loop = None
         
-    if _router is None or _router_loop != current_loop:
-        _router = LLMRouter()
-        _router_loop = current_loop
-    return _router
+    router_inst = _router_var.get()
+    router_loop = _router_loop_var.get()
+    
+    # If _router was set to None externally (e.g., by a test via monkeypatch)
+    if _router is None:
+        router_inst = None
+        
+    if router_inst is None or router_loop != current_loop:
+        router_inst = LLMRouter()
+        _router_var.set(router_inst)
+        _router_loop_var.set(current_loop)
+        _router = router_inst
+    return router_inst
 
 
 class RouterProxy:

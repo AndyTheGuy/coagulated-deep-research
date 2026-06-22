@@ -213,6 +213,18 @@ def estimate_remaining_cost() -> float:
     """Compute an estimated remaining cost based on pending/in_progress sub-questions."""
     return utils_estimate_remaining(st.session_state.graph_state, st.session_state.cost_stats)
 
+def run_async_safely(coro) -> Any:
+    """Safely execute an async coroutine on a fresh, dedicated event loop to prevent event loop / threading clashes."""
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        return loop.run_until_complete(coro)
+    finally:
+        try:
+            loop.close()
+        except Exception:
+            pass
+
 # 4. Layout: Left Main Column and Right Statistics Column
 col_main, col_stats = st.columns([3, 1])
 
@@ -319,7 +331,7 @@ with col_main:
 
         # Handle button click trigger
         if start_btn and user_query:
-            asyncio.run(run_deep_research(user_query, target_source_count, constraints_input))
+            run_async_safely(run_deep_research(user_query, target_source_count, constraints_input))
 
         # Inline Clarification dialog
         state = st.session_state.graph_state
@@ -384,7 +396,7 @@ with col_main:
                     
                     st.rerun()
                     
-                asyncio.run(resume_with_clarification())
+                run_async_safely(resume_with_clarification())
 
         # Research Brief Viewer (Rendered statically when complete)
         if state and state.research_brief:
