@@ -46,7 +46,7 @@ async def search_searxng(
     logger.info("Querying SearXNG", query=query, url=url, engines=engines)
     
     try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
             response = await client.get(url, params=params)
             response.raise_for_status()
             
