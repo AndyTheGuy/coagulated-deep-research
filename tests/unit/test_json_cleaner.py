@@ -27,3 +27,28 @@ def test_parse_json_safely_success():
 def test_parse_json_safely_failure():
     with pytest.raises(Exception):
         parse_json_safely('{"invalid_json": ')
+
+def test_clean_json_string_control_characters():
+    # 1. Literal newline inside string value
+    raw_with_newline = '{"text": "Line 1\nLine 2"}'
+    assert clean_json_string(raw_with_newline) == '{"text": "Line 1\\nLine 2"}'
+    
+    # 2. Literal tab inside string value
+    raw_with_tab = '{"text": "Col 1\tCol 2"}'
+    assert clean_json_string(raw_with_tab) == '{"text": "Col 1\\tCol 2"}'
+    
+    # 3. Preserves newlines outside string values
+    formatted_json = '{\n  "key": "value"\n}'
+    assert clean_json_string(formatted_json) == '{\n  "key": "value"\n}'
+    
+    # 4. Correctly handles escaped double quotes without toggling in_string incorrectly
+    escaped_quotes = '{"text": "He said \\"hello\\" to me"}'
+    assert clean_json_string(escaped_quotes) == '{"text": "He said \\"hello\\" to me"}'
+    
+    # 5. Correctly handles double backslashes
+    double_backslash = '{"text": "Double \\\\ backslash"}'
+    assert clean_json_string(double_backslash) == '{"text": "Double \\\\ backslash"}'
+
+    # 6. End-to-end safe parsing
+    parsed = parse_json_safely('{"report": "Line 1\nLine 2", "score": 1.0}')
+    assert parsed == {"report": "Line 1\nLine 2", "score": 1.0}
