@@ -44,14 +44,16 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ---
 
 ## 5. Active Development State
-- **Active Phase**: Phase 6 (Self-Improvement) — UPCOMING 🚀
-- **Active Task**: Initialize and scaffold the Python-native Skill Registry.
+- **Active Phase**: Phase 6: Self-Improvement
+- **Active Task**: Task 6.0: Python-native Skill Registry Scaffolding
 - **Task List**: [docs/tasks/phase_6_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_6_tasks.md)
 - **Phase 1 Status**: ✅ 100% complete, bug-fixed, fully tested (25/25 passing tests), committed and pushed.
 - **Phase 2 Status**: ✅ 100% complete, bug-fixed, fully tested (65/65 passing tests), committed, and pushed.
 - **Phase 3 Status**: ✅ 100% complete, bug-fixed, fully tested (all passing), committed, and pushed.
 - **Phase 4 Status**: ✅ 100% complete, bug-fixed, fully tested (135/135 passing tests), committed, and pushed.
 - **Phase 5 Status**: ✅ 100% complete, bug-fixed, fully tested (168/168 passing tests), committed, and pushed.
+- **Remediation Plan**: ✅ 100% complete, hotfixes applied and tested.
+- **Phase 6 Status**: ⏳ Not Started.
 - **Workflow Reminder**: Follow the 8-step loop for every single task.
 - **Known Blockers**: None.
 
