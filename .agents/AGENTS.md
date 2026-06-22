@@ -61,3 +61,22 @@ To maximize development throughput while maintaining absolute correctness, utili
    - Whenever a subagent is delegated a task that leaves the main agent waiting, the main agent MUST look for high-value tasks/design work to continue in parallel.
    - To strictly avoid disrupting the subagent's active environment or violating the sequential checklist constraint, the main agent should draft upcoming task implementations (e.g. MCTS engines, routing algorithms) inside the persistent `<appDataDir>\brain\<conversation-id>/scratch/` directory.
    - These isolated drafts can then be copied, customized, and integrated instantly once the active task is finished, verified, and committed, achieving maximum throughput safely.
+
+---
+
+## Technical & Testing Lessons (Persistent Memory)
+
+To prevent long debugging loops, silent crashes, or false-positive green test runs in future interactive UI integrations, always abide by these rules:
+
+1. **Beware the "Selector Automation Sandbox" (UI Automation Pitfall)**:
+   - **The Lesson**: Automated subagents using browser devtools or raw browser execution (CDP/Puppeteer) are fragile at triggering React or Streamlit state reruns (e.g. setting `.value` on DOM elements does not update underlying framework component states). Subagents can easily get stuck in a "selector-not-found" or "click-did-not-trigger" loop rather than debugging actual runtime logic.
+   - **The Rule**: If automated browser testing struggles with complex reactive state widgets for more than 15 minutes, stop the automation. Have the human partner manually perform the UI clicks in their browser while you monitor log outputs and inspect file syntax top-to-bottom.
+
+2. **Streamlit Lifecycle awareness (Linear Executions & Namespaces)**:
+   - **The Lesson**: Streamlit parses and executes scripts linearly from top to bottom on every user interaction. Standard Python unit tests run backend logic directly and will *never* catch `NameError` placeholder exceptions arising from Streamlit's rendering order.
+   - **The Rule**: When streaming log/stats outputs to UI containers/placeholders (`st.empty()`), NEVER run the execution logic inline in the middle of the script. Set session state triggers and defer all execution blocks (`run_async_safely`) to the absolute bottom of the script, ensuring all placeholders are fully rendered and registered in the active Python namespace first. Pass placeholders as arguments to the executors to preserve dynamic layout rendering placements.
+
+3. **Validate Event-Loop / Thread Cleanup**:
+   - **The Lesson**: Storing event-loop-bound singletons in module-level global variables causes severe threading and event-loop deadlocks inside interactive, multi-threaded frameworks like Streamlit.
+   - **The Rule**: Always isolate event-loop-bound caches using task-local context containers (`contextvars.ContextVar`) rather than simple global/module variables. This ensures thread-safety, loop safety, and clean test isolation.
+
