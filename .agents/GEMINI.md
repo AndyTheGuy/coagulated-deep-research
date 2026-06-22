@@ -44,21 +44,21 @@ It must perform parallel searches, verify citations with fuzzy matching, and pro
 ---
 
 ## 5. Active Development State
-- **Active Phase**: Phase 5 (Human-in-the-Loop & Streaming UI) — ACTIVE 🔍
-- **Active Task**: Debug Streamlit event-loop deadlock/freeze during parallel research streaming
-- **Task List**: [docs/tasks/phase_5_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_5_tasks.md)
+- **Active Phase**: Phase 6 (Self-Improvement) — UPCOMING 🚀
+- **Active Task**: Initialize and scaffold the Python-native Skill Registry.
+- **Task List**: [docs/tasks/phase_6_tasks.md](file:///c:/Users/beste/Documents/antigravity/deep-research/docs/tasks/phase_6_tasks.md)
 - **Phase 1 Status**: ✅ 100% complete, bug-fixed, fully tested (25/25 passing tests), committed and pushed.
 - **Phase 2 Status**: ✅ 100% complete, bug-fixed, fully tested (65/65 passing tests), committed, and pushed.
 - **Phase 3 Status**: ✅ 100% complete, bug-fixed, fully tested (all passing), committed, and pushed.
 - **Phase 4 Status**: ✅ 100% complete, bug-fixed, fully tested (135/135 passing tests), committed, and pushed.
-- **Phase 5 Status**: 🧪 Completed features; 155/155 passing tests; actively resolving Streamlit event-loop deadlock during graph stream execution.
+- **Phase 5 Status**: ✅ 100% complete, bug-fixed, fully tested (155/155 passing tests), committed, and pushed.
 - **Workflow Reminder**: Follow the 8-step loop for every single task.
-- **Known Blockers**: Threading conflict / event-loop mismatch in `LLMRouter` singletons when driven by Streamlit's script execution threads.
+- **Known Blockers**: None.
 
-### Phase 5 UI Debug Handoff Prompt
+### Phase 6 Skill Registry Handoff Prompt
 ```markdown
-/goal Debug and resolve the Streamlit execution freeze in our LangGraph agentic pipeline.
+/goal Initialize Phase 6 of the Deep Researcher by scaffolding the Python-native Skill Registry.
 
-Read `.agents/GEMINI.md` to load the complete project context. The compiled LangGraph StateGraph workflow runs and streams perfectly to 100% completion inside a standard python CLI process (run `uv run python scratch/run_graph_test.py` to verify). However, inside the Streamlit web interface (`ui/app.py` running on `http://localhost:8501`), when clicking "Start Deep Research", the graph executes the first node (`scoping_ambiguity_check`) and then completely freezes or terminates without proceeding to the next node (`write_research_brief`). Fix this issue by implementing thread-safe router context or running the asyncio event loop safely outside Streamlit's script-runner thread. Confirm 100% success with browser testing and ensure no regressions (155/155 passing tests).
+Read `.agents/GEMINI.md` to load the complete project context. The goal of this phase is to enable the deep researcher to dynamically load, execute, and generate skills (custom Python functions/modules) to self-remediate research deficits. Start by implementing `skills/registry.py` with `@register_skill` decorators and schemas, verifying with clean unit tests as specified in `docs/tasks/phase_6_tasks.md`.
 ```
 
