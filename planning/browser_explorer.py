@@ -3,6 +3,7 @@ import structlog
 from typing import Any, Dict, List, Optional
 from core.mcp_client import MCPHub
 from search.scraper import scrape_url
+from config.settings import is_mock_llm_enabled
 
 logger = structlog.get_logger("deep-research")
 
@@ -21,8 +22,7 @@ class BrowserExplorer:
         """
         logger.info("BrowserExplorer exploring URL", url=url)
         
-        import os
-        if os.environ.get("MOCK_LLM") == "true":
+        if is_mock_llm_enabled():
             logger.info("BrowserExplorer returning mock content in mock mode", url=url)
             mock_content = ""
             if "urllib.request" in url:

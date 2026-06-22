@@ -29,12 +29,18 @@ st.set_page_config(
 # Initialize session state variables
 init_state()
 
-# Resolve Mock LLM environment variable from session state *before* running any graph blocking loop
+from config.settings import set_mock_llm_enabled
+
+# Resolve Mock LLM environment variable and thread-local state from session state *before* running any graph blocking loop
 if "mock_llm_mode" in st.session_state:
-    os.environ["MOCK_LLM"] = "true" if st.session_state["mock_llm_mode"] else "false"
+    is_mock = st.session_state["mock_llm_mode"]
+    set_mock_llm_enabled(is_mock)
+    os.environ["MOCK_LLM"] = "true" if is_mock else "false"
 else:
     # Sync environment variable to session state on initial load
-    st.session_state["mock_llm_mode"] = os.environ.get("MOCK_LLM") == "true"
+    is_enabled = os.environ.get("MOCK_LLM") == "true"
+    st.session_state["mock_llm_mode"] = is_enabled
+    set_mock_llm_enabled(is_enabled)
 
 # 2. Custom CSS for Premium Glassmorphic UI Aesthetics
 st.markdown("""

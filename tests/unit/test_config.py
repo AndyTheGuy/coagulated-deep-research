@@ -50,3 +50,56 @@ def test_logger_integration():
     """Test that the structlog logger is initialized and callable."""
     from config import logger
     logger.info("testing log integration", key="value")
+
+
+def test_mock_llm_state_isolation_and_fallback():
+    """Test that is_mock_llm_enabled/set_mock_llm_enabled isolates state per thread and falls back to os.environ."""
+    import threading
+    from config.settings import is_mock_llm_enabled, set_mock_llm_enabled
+
+    # Ensure clean start state
+    set_mock_llm_enabled(False)
+    with mock.patch.dict(os.environ, {"MOCK_LLM": "false"}):
+        assert not is_mock_llm_enabled()
+
+        # 1. Test set/get inside the same thread
+        set_mock_llm_enabled(True)
+        assert is_mock_llm_enabled()
+
+        # Reset
+        set_mock_llm_enabled(False)
+        assert not is_mock_llm_enabled()
+
+        # 2. Test fallback to os.environ
+        with mock.patch.dict(os.environ, {"MOCK_LLM": "true"}):
+            assert is_mock_llm_enabled()
+
+        # 3. Test thread isolation
+        thread_results = {}
+
+        def thread_a_func():
+            set_mock_llm_enabled(True)
+            thread_results["A_after_set"] = is_mock_llm_enabled()
+
+        def thread_b_func():
+            # Thread B starts after Thread A has set its value to True
+            thread_results["B_initial"] = is_mock_llm_enabled()
+            set_mock_llm_enabled(False)
+            thread_results["B_after_set_false"] = is_mock_llm_enabled()
+
+        t_a = threading.Thread(target=thread_a_func)
+        t_b = threading.Thread(target=thread_b_func)
+
+        t_a.start()
+        t_a.join()
+
+        t_b.start()
+        t_b.join()
+
+        # Thread A set to True should have been isolated to Thread A
+        assert thread_results["A_after_set"] is True
+        # Thread B should have started with False (default)
+        assert thread_results["B_initial"] is False
+        assert thread_results["B_after_set_false"] is False
+        # Main thread should still be False
+        assert not is_mock_llm_enabled()

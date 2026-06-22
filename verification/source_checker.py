@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 
 from core.models import VerifiedSource
 from db.cache import SemanticCache
+from config.settings import is_mock_llm_enabled
 
 logger = structlog.get_logger("deep-research")
 
@@ -21,8 +22,7 @@ class SourceChecker:
         """Verify URL accessibility and fetch content, checking cache first."""
         logger.info("Checking source URL", url=url)
         
-        import os
-        if os.environ.get("MOCK_LLM") == "true":
+        if is_mock_llm_enabled():
             logger.info("SourceChecker returning mock content in mock mode", url=url)
             mock_content = ""
             if "urllib.request" in url:

@@ -4,7 +4,7 @@ import structlog
 from langchain_core.messages import BaseMessage
 from langchain_google_vertexai import ChatVertexAI
 from langchain_openai import ChatOpenAI
-from config.settings import settings
+from config.settings import settings, is_mock_llm_enabled
 
 logger = structlog.get_logger("deep-research")
 
@@ -154,8 +154,7 @@ class LLMRouter:
         **kwargs: Any
     ) -> BaseMessage:
         """Route and execute the LLM invocation with automatic failover and native enforcement."""
-        import os
-        if os.environ.get("MOCK_LLM") == "true":
+        if is_mock_llm_enabled():
             response = self._get_mock_response(agent_name, node_name, messages)
             self._update_usage("freellmapi" if tier.upper() != "CRITICAL" else "vertex_ai", response)
             return response
