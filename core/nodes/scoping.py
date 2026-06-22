@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field
 
 from core.models import GraphState, ResearchBrief, SubQuestion
 from core.llm_router import LLMRouter
+from core.utils.json_cleaner import clean_json_string
 
 logger = structlog.get_logger("deep-research")
 
@@ -92,7 +93,7 @@ async def clarify_with_user_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed = parser.parse(response.content)
+        parsed = parser.parse(clean_json_string(response.content))
         logger.info("Clarification analysis complete", clarification_needed=parsed.get("clarification_needed"))
         return {
             "clarification_needed": parsed.get("clarification_needed", False),
@@ -146,7 +147,7 @@ async def write_research_brief_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed_brief = parser.parse(response.content)
+        parsed_brief = parser.parse(clean_json_string(response.content))
         brief = ResearchBrief(**parsed_brief)
         logger.info("Generated research brief", topic=brief.topic, sub_questions=[q.question for q in brief.sub_questions])
         

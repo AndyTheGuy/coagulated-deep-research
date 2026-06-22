@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 from core.llm_router import LLMRouter
+from core.utils.json_cleaner import clean_json_string
 
 logger = structlog.get_logger("deep-research")
 
@@ -103,7 +104,7 @@ async def diversify_query(
             node_name="diversify_query"
         )
         
-        parsed = parser.parse(response.content)
+        parsed = parser.parse(clean_json_string(response.content))
         variants = parsed.get("variants", [])
         
         # Strip and filter empty variants

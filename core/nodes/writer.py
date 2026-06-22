@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 from core.models import GraphState, Report
 from core.nodes.scoping import router, get_router
+from core.utils.json_cleaner import clean_json_string
 
 logger = structlog.get_logger("deep-research")
 
@@ -87,7 +88,7 @@ async def report_writer_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed = parser.parse(response.content)
+        parsed = parser.parse(clean_json_string(response.content))
         writer_out = WriterOutput(**parsed)
         logger.info("Report writing complete", title=writer_out.title)
         

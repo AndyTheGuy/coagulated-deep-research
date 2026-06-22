@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 from core.models import GraphState, DREMEvaluation, MetricScore, SubQuestion
 from core.nodes.scoping import router, get_router
+from core.utils.json_cleaner import clean_json_string
 
 logger = structlog.get_logger("deep-research")
 
@@ -107,7 +108,7 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="extract_key_facts"
     )
     try:
-        extracted_facts = facts_parser.parse(facts_response.content).get("key_facts", [])
+        extracted_facts = facts_parser.parse(clean_json_string(facts_response.content)).get("key_facts", [])
     except Exception as e:
         logger.warning("Failed to extract key facts for KIC, using fallback facts", error=str(e))
         extracted_facts = [
@@ -140,7 +141,7 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="check_coverage"
     )
     try:
-        coverage_parsed = coverage_parser.parse(coverage_response.content).get("coverage_items", [])
+        coverage_parsed = coverage_parser.parse(clean_json_string(coverage_response.content)).get("coverage_items", [])
         yes_count = sum(1 for item in coverage_parsed if item.get("covered", False))
         total_count = len(coverage_parsed) if coverage_parsed else 1
         kic_score_val = yes_count / total_count
@@ -191,7 +192,7 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="evaluate_reasoning"
     )
     try:
-        rq_parsed = rq_parser.parse(rq_response.content)
+        rq_parsed = rq_parser.parse(clean_json_string(rq_response.content))
         rq_score_val = rq_parsed.get("score", 0.0)
         rq_notes = rq_parsed.get("explanation", "")
     except Exception as e:
@@ -234,7 +235,7 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="evaluate_factuality"
     )
     try:
-        factuality_parsed = factuality_parser.parse(factuality_response.content)
+        factuality_parsed = factuality_parser.parse(clean_json_string(factuality_response.content))
         llm_fact_score = factuality_parsed.get("score", 0.0)
         factuality_notes = factuality_parsed.get("explanation", "")
     except Exception as e:
@@ -318,7 +319,7 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
                 node_name="remediation_formulation"
             )
             try:
-                remediation_parsed = remediation_parser.parse(remediation_response.content)
+                remediation_parsed = remediation_parser.parse(clean_json_string(remediation_response.content))
                 notes = remediation_parsed.get("remediation_notes", "Evaluation failed thresholds.")
                 queries = remediation_parsed.get("remediation_queries", [])
 

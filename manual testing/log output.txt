@@ -1,0 +1,823 @@
+[2026-06-22 14:50:43] [ScopingAgent] [clarify_with_user] Invoking Vertex AI
+[2026-06-22 14:50:47] [System] [-] Clarification analysis complete
+[2026-06-22 14:50:47] [ScopingAgent] [-] Running write_research_brief_node
+[2026-06-22 14:50:47] [ScopingAgent] [write_research_brief] Invoking Vertex AI
+[2026-06-22 14:51:02] [ScopingAgent] [-] Failed to parse or validate research brief
+[2026-06-22 14:51:02] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:51:02] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:51:02] [ResearcherAgent] [-] Spawning parallel researcher nodes
+[2026-06-22 14:51:02] [ResearcherAgent] [-] Starting advanced researcher agent
+[2026-06-22 14:51:02] [MCTSPlanner] [-] Starting Plan-MCTS Planning Phase
+[2026-06-22 14:51:02] [ResearcherAgent] [-] Initializing Plan-MCTS Search
+[2026-06-22 14:51:02] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:51:02] [MCTSPlanner] [generate_candidate_intents] Invoking Vertex AI
+[2026-06-22 14:51:07] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:51:13] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:51:15] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:51:15] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:51:20] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:51:21] [MCTSPlanner] [-] MCTS optimal path selected
+[2026-06-22 14:51:21] [MCTSPlanner] [generate_queries_for_intent] Invoking Vertex AI
+[2026-06-22 14:51:23] [System] [-] Querying SearXNG
+[2026-06-22 14:51:23] [System] [-] Querying SearXNG
+[2026-06-22 14:51:23] [System] [-] Querying SearXNG
+[2026-06-22 14:51:23] [System] [-] HTTP Request: GET http://localhost:8080/?q=%22What+is+AI+safety%3F+Definition+and+core+principles%22&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:51:23] [System] [-] SearXNG server error
+[2026-06-22 14:51:23] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:51:23] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:51:23] [System] [-] HTTP Request: GET http://localhost:8080/?q=%22Define+AI+safety+benchmarks+and+their+role+in+evaluation%22&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:51:23] [System] [-] HTTP Request: GET http://localhost:8080/?q=%22Explain+AI+alignment+and+its+primary+goals%22&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:51:23] [System] [-] SearXNG server error
+[2026-06-22 14:51:23] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:51:23] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:51:23] [System] [-] SearXNG server error
+[2026-06-22 14:51:23] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:51:23] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:51:23] [ResearcherAgent] [-] response: https://www.bing.com/search?q=%22Define+AI+safety+benchmarks+and+their+role+in+evaluation%22 200
+[2026-06-22 14:51:23] [ResearcherAgent] [-] response: https://www.bing.com/search?q=%22What+is+AI+safety%3F+Definition+and+core+principles%22 200
+[2026-06-22 14:51:23] [ResearcherAgent] [-] response: https://www.bing.com/search?q=%22Explain+AI+alignment+and+its+primary+goals%22 200
+[2026-06-22 14:51:23] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:51:23] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:51:23] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:51:23] [System] [-] Executing Reciprocal Rank Fusion
+[2026-06-22 14:51:23] [System] [-] Reciprocal Rank Fusion complete
+[2026-06-22 14:51:23] [System] [-] URL deduplication complete
+[2026-06-22 14:51:23] [System] [-] Performing semantic deduplication
+[2026-06-22 14:51:24] [System] [-] Semantic deduplication complete
+[2026-06-22 14:51:24] [System] [-] Starting Mango starting-point optimization
+[2026-06-22 14:51:24] [System] [-] Connecting to MCP server
+[2026-06-22 14:51:24] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:51:24] [System] [-] Connecting to MCP server
+[2026-06-22 14:51:24] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:51:24] [System] [-] Connecting to MCP server
+[2026-06-22 14:51:24] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:51:24] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:51:24] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:51:24] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:51:24] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:51:26] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:51:26] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:51:26] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:51:26] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:51:26] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:51:27] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:51:27] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:51:27] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:51:27] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:51:27] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:51:29] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:51:29] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:51:29] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:51:29] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:51:29] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:51:30] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:51:30] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:51:30] [System] [-] Disconnected from MCP server
+[2026-06-22 14:51:30] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:51:30] [System] [-] Disconnected from MCP server
+[2026-06-22 14:51:30] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:51:30] [System] [-] Disconnected from MCP server
+[2026-06-22 14:51:30] [System] [-] All MCP Hub clients shut down.
+[2026-06-22 14:51:30] [ResearcherAgent] [-] Synthesizing research summary
+[2026-06-22 14:51:30] [ResearcherAgent] [summarize_sources] Invoking Vertex AI
+[2026-06-22 14:51:35] [ResearcherAgent] [-] Research summary synthesis complete
+[2026-06-22 14:51:35] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:51:35] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:51:35] [System] [-] No pending sub-questions, proceeding to context_aggregator
+[2026-06-22 14:51:35] [System] [-] Running context_aggregator_node
+[2026-06-22 14:51:35] [System] [-] Context aggregation complete
+[2026-06-22 14:51:35] [VerifierAgent] [-] Running verifier_node
+[2026-06-22 14:51:35] [System] [-] No device provided, using cpu
+[2026-06-22 14:51:35] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:36] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:36] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:36] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:36] [System] [-] Loading SentenceTransformer model from sentence-transformers/all-mpnet-base-v2.
+[2026-06-22 14:51:36] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:36] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:36] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:36] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md "HTTP/1.1 200 OK"
+[2026-06-22 14:51:37] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:37] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:37] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:37] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:37] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:51:38] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:38] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:38] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:51:38] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:51:39] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:51:39] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:51:39] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:39] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:40] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:40] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:40] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:40] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:40] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:40] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:41] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-22 14:51:41] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-22 14:51:41] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:51:41] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+[2026-06-22 14:51:41] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2 "HTTP/1.1 200 OK"
+[2026-06-22 14:51:41] [WriterAgent] [-] Starting verification pipeline for report
+[2026-06-22 14:51:41] [VerifierAgent] [-] Verification Stage 1: Extracting claims from report
+[2026-06-22 14:51:41] [VerifierAgent] [-] Extracting claims from report
+[2026-06-22 14:51:41] [VerifierAgent] [claim_extraction] Invoking Vertex AI
+[2026-06-22 14:51:49] [VerifierAgent] [-] Successfully extracted claims
+[2026-06-22 14:51:49] [VerifierAgent] [-] Extracted claims
+[2026-06-22 14:51:49] [System] [-] Verification Stage 2: Checking source accessibility and fetching content
+[2026-06-22 14:51:49] [System] [-] Checking source URL
+[2026-06-22 14:51:49] [System] [-] Checking source URL
+[2026-06-22 14:51:49] [System] [-] Checking source URL
+[2026-06-22 14:51:49] [System] [-] Checking source URL
+[2026-06-22 14:51:49] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:51:50] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:51:50] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:51:50] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:51:50] [System] [-] HTTP Request: GET https://dictionary.cambridge.org/dictionary/english/what "HTTP/1.1 200 OK"
+[2026-06-22 14:51:50] [ResearcherAgent] [-] Successfully cached scraped URL
+[2026-06-22 14:51:50] [System] [-] HTTP Request: GET https://www.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:51:50] [System] [-] Live URL returned error status
+[2026-06-22 14:51:50] [System] [-] HTTP Request: GET https://web.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:51:50] [System] [-] Live URL returned error status
+[2026-06-22 14:51:50] [System] [-] HTTP Request: GET https://en.wiktionary.org/wiki/what "HTTP/1.1 200 OK"
+[2026-06-22 14:51:51] [ResearcherAgent] [-] Successfully cached scraped URL
+[2026-06-22 14:51:51] [VerifierAgent] [-] Verification Stages 3 & 4: Verifying quotes and scoring confidence for each claim
+[2026-06-22 14:51:51] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:51:51] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:51:51] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:51:51] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:51:51] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:51:51] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:51:51] [System] [-] Verification pipeline complete
+[2026-06-22 14:51:51] [VerifierAgent] [verifier_critique] Invoking Vertex AI
+[2026-06-22 14:51:54] [VerifierAgent] [-] Failed to parse verifier critique, defaulting to proceeding with no gaps
+[2026-06-22 14:51:54] [SupervisorAgent] [-] Routing after verification critique
+[2026-06-22 14:51:54] [SupervisorAgent] [-] No gaps found. Routing to report writer to compile final report.
+[2026-06-22 14:51:54] [WriterAgent] [-] Running report_writer_node
+[2026-06-22 14:51:54] [WriterAgent] [report_writer] Invoking Vertex AI
+[2026-06-22 14:52:32] [WriterAgent] [-] Failed to parse report writer output, defaulting to draft report as final
+[2026-06-22 14:52:32] [EvaluatorAgent] [-] Running evaluator_node
+[2026-06-22 14:52:32] [EvaluatorAgent] [-] Evaluating Key-Information Coverage (KIC)
+[2026-06-22 14:52:32] [EvaluatorAgent] [extract_key_facts] Invoking Vertex AI
+[2026-06-22 14:52:41] [EvaluatorAgent] [-] Failed to extract key facts for KIC, using fallback facts
+[2026-06-22 14:52:41] [EvaluatorAgent] [check_coverage] Invoking Vertex AI
+[2026-06-22 14:52:45] [System] [-] Failed to parse coverage evaluation, defaulting to fallback score
+[2026-06-22 14:52:45] [System] [-] Evaluating Reasoning Quality (RQ)
+[2026-06-22 14:52:45] [EvaluatorAgent] [evaluate_reasoning] Invoking Vertex AI
+[2026-06-22 14:52:53] [System] [-] Failed to parse reasoning quality evaluation, using fallback
+[2026-06-22 14:52:53] [System] [-] Evaluating Factuality
+[2026-06-22 14:52:53] [EvaluatorAgent] [evaluate_factuality] Invoking Vertex AI
+[2026-06-22 14:52:58] [System] [-] Failed to parse factuality quality evaluation, using fallback
+[2026-06-22 14:52:58] [EvaluatorAgent] [-] Evaluator node: Evaluation failed. Calling LLM to formulate remediation sub-questions.
+[2026-06-22 14:52:58] [EvaluatorAgent] [remediation_formulation] Invoking Vertex AI
+[2026-06-22 14:53:03] [System] [-] Failed to parse remediation, creating default gap question
+[2026-06-22 14:53:03] [SupervisorAgent] [-] Routing after DREAM evaluation
+[2026-06-22 14:53:03] [SupervisorAgent] [-] DREAM evaluation failed with gaps. Routing back to supervisor for gap remediation.
+[2026-06-22 14:53:03] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:53:03] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:53:03] [ResearcherAgent] [-] Spawning parallel researcher nodes
+[2026-06-22 14:53:03] [ResearcherAgent] [-] Starting advanced researcher agent
+[2026-06-22 14:53:03] [MCTSPlanner] [-] Starting Plan-MCTS Planning Phase
+[2026-06-22 14:53:03] [ResearcherAgent] [-] Initializing Plan-MCTS Search
+[2026-06-22 14:53:03] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:53:03] [MCTSPlanner] [generate_candidate_intents] Invoking Vertex AI
+[2026-06-22 14:53:05] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:53:09] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:53:11] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:53:11] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:53:19] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:53:23] [MCTSPlanner] [-] MCTS optimal path selected
+[2026-06-22 14:53:23] [MCTSPlanner] [generate_queries_for_intent] Invoking Vertex AI
+[2026-06-22 14:53:24] [System] [-] Querying SearXNG
+[2026-06-22 14:53:24] [System] [-] Querying SearXNG
+[2026-06-22 14:53:24] [System] [-] Querying SearXNG
+[2026-06-22 14:53:25] [System] [-] HTTP Request: GET http://localhost:8080/?q=define+core+concepts+AI+safety+benchmarks&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:53:25] [System] [-] SearXNG server error
+[2026-06-22 14:53:25] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:53:25] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:53:25] [System] [-] HTTP Request: GET http://localhost:8080/?q=key+metrics+and+challenges+AI+safety+measurement&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:53:25] [System] [-] SearXNG server error
+[2026-06-22 14:53:25] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:53:25] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:53:25] [System] [-] HTTP Request: GET http://localhost:8080/?q=foundational+principles+AI+alignment+evaluation&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:53:25] [System] [-] SearXNG server error
+[2026-06-22 14:53:25] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:53:25] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:53:25] [ResearcherAgent] [-] response: https://www.bing.com/search?q=foundational+principles+AI+alignment+evaluation 200
+[2026-06-22 14:53:25] [ResearcherAgent] [-] response: https://www.bing.com/search?q=define+core+concepts+AI+safety+benchmarks 200
+[2026-06-22 14:53:25] [ResearcherAgent] [-] response: https://www.bing.com/search?q=key+metrics+and+challenges+AI+safety+measurement 200
+[2026-06-22 14:53:25] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:53:25] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:53:25] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:53:25] [System] [-] Executing Reciprocal Rank Fusion
+[2026-06-22 14:53:25] [System] [-] Reciprocal Rank Fusion complete
+[2026-06-22 14:53:25] [System] [-] URL deduplication complete
+[2026-06-22 14:53:25] [System] [-] Starting Mango starting-point optimization
+[2026-06-22 14:53:25] [System] [-] Connecting to MCP server
+[2026-06-22 14:53:25] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:53:25] [System] [-] Connecting to MCP server
+[2026-06-22 14:53:25] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:53:25] [System] [-] Connecting to MCP server
+[2026-06-22 14:53:25] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:53:25] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:53:25] [System] [-] Disconnected from MCP server
+[2026-06-22 14:53:25] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:53:25] [System] [-] Disconnected from MCP server
+[2026-06-22 14:53:25] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:53:25] [System] [-] Disconnected from MCP server
+[2026-06-22 14:53:25] [System] [-] All MCP Hub clients shut down.
+[2026-06-22 14:53:25] [ResearcherAgent] [-] Researcher node failed - no accessible sources
+[2026-06-22 14:53:25] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:53:25] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:53:25] [System] [-] No pending sub-questions, proceeding to context_aggregator
+[2026-06-22 14:53:25] [System] [-] Running context_aggregator_node
+[2026-06-22 14:53:25] [System] [-] Context aggregation complete
+[2026-06-22 14:53:25] [VerifierAgent] [-] Running verifier_node
+[2026-06-22 14:53:25] [System] [-] No device provided, using cpu
+[2026-06-22 14:53:26] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:26] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:26] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:26] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:26] [System] [-] Loading SentenceTransformer model from sentence-transformers/all-mpnet-base-v2.
+[2026-06-22 14:53:26] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:26] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:27] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:27] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md "HTTP/1.1 200 OK"
+[2026-06-22 14:53:27] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:27] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:27] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:27] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:28] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:53:28] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:28] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:28] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:53:29] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:53:29] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:53:29] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:53:30] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:30] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:30] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:30] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:30] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:30] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:31] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:31] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:31] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-22 14:53:31] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-22 14:53:32] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:53:32] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+[2026-06-22 14:53:32] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2 "HTTP/1.1 200 OK"
+[2026-06-22 14:53:32] [WriterAgent] [-] Starting verification pipeline for report
+[2026-06-22 14:53:32] [VerifierAgent] [-] Verification Stage 1: Extracting claims from report
+[2026-06-22 14:53:32] [VerifierAgent] [-] Extracting claims from report
+[2026-06-22 14:53:32] [VerifierAgent] [claim_extraction] Invoking Vertex AI
+[2026-06-22 14:53:44] [VerifierAgent] [-] Successfully extracted claims
+[2026-06-22 14:53:44] [VerifierAgent] [-] Extracted claims
+[2026-06-22 14:53:44] [System] [-] Verification Stage 2: Checking source accessibility and fetching content
+[2026-06-22 14:53:44] [System] [-] Checking source URL
+[2026-06-22 14:53:44] [System] [-] Checking source URL
+[2026-06-22 14:53:44] [System] [-] Checking source URL
+[2026-06-22 14:53:44] [System] [-] Checking source URL
+[2026-06-22 14:53:44] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:53:44] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:53:44] [System] [-] Source checker: Cache hit
+[2026-06-22 14:53:44] [System] [-] Source checker: Cache hit
+[2026-06-22 14:53:45] [System] [-] HTTP Request: GET https://www.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:53:45] [System] [-] Live URL returned error status
+[2026-06-22 14:53:45] [System] [-] HTTP Request: GET https://web.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:53:45] [System] [-] Live URL returned error status
+[2026-06-22 14:53:45] [VerifierAgent] [-] Verification Stages 3 & 4: Verifying quotes and scoring confidence for each claim
+[2026-06-22 14:53:45] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:53:45] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:53:45] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:53:45] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:53:45] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:53:45] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:53:45] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:53:45] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:53:45] [System] [-] Verification pipeline complete
+[2026-06-22 14:53:45] [VerifierAgent] [verifier_critique] Invoking Vertex AI
+[2026-06-22 14:53:51] [VerifierAgent] [-] Failed to parse verifier critique, defaulting to proceeding with no gaps
+[2026-06-22 14:53:51] [SupervisorAgent] [-] Routing after verification critique
+[2026-06-22 14:53:51] [SupervisorAgent] [-] No gaps found. Routing to report writer to compile final report.
+[2026-06-22 14:53:51] [WriterAgent] [-] Running report_writer_node
+[2026-06-22 14:53:51] [WriterAgent] [report_writer] Invoking Vertex AI
+[2026-06-22 14:54:13] [WriterAgent] [-] Failed to parse report writer output, defaulting to draft report as final
+[2026-06-22 14:54:13] [EvaluatorAgent] [-] Running evaluator_node
+[2026-06-22 14:54:13] [EvaluatorAgent] [-] Evaluating Key-Information Coverage (KIC)
+[2026-06-22 14:54:13] [EvaluatorAgent] [extract_key_facts] Invoking Vertex AI
+[2026-06-22 14:54:19] [EvaluatorAgent] [-] Failed to extract key facts for KIC, using fallback facts
+[2026-06-22 14:54:19] [EvaluatorAgent] [check_coverage] Invoking Vertex AI
+[2026-06-22 14:54:23] [System] [-] Failed to parse coverage evaluation, defaulting to fallback score
+[2026-06-22 14:54:23] [System] [-] Evaluating Reasoning Quality (RQ)
+[2026-06-22 14:54:23] [EvaluatorAgent] [evaluate_reasoning] Invoking Vertex AI
+[2026-06-22 14:54:28] [System] [-] Failed to parse reasoning quality evaluation, using fallback
+[2026-06-22 14:54:28] [System] [-] Evaluating Factuality
+[2026-06-22 14:54:28] [EvaluatorAgent] [evaluate_factuality] Invoking Vertex AI
+[2026-06-22 14:54:32] [System] [-] Failed to parse factuality quality evaluation, using fallback
+[2026-06-22 14:54:32] [EvaluatorAgent] [-] Evaluator node: Evaluation failed. Calling LLM to formulate remediation sub-questions.
+[2026-06-22 14:54:32] [EvaluatorAgent] [remediation_formulation] Invoking Vertex AI
+[2026-06-22 14:54:38] [System] [-] Failed to parse remediation, creating default gap question
+[2026-06-22 14:54:38] [SupervisorAgent] [-] Routing after DREAM evaluation
+[2026-06-22 14:54:38] [SupervisorAgent] [-] DREAM evaluation failed with gaps. Routing back to supervisor for gap remediation.
+[2026-06-22 14:54:38] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:54:38] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:54:38] [ResearcherAgent] [-] Spawning parallel researcher nodes
+[2026-06-22 14:54:38] [ResearcherAgent] [-] Starting advanced researcher agent
+[2026-06-22 14:54:38] [MCTSPlanner] [-] Starting Plan-MCTS Planning Phase
+[2026-06-22 14:54:38] [ResearcherAgent] [-] Initializing Plan-MCTS Search
+[2026-06-22 14:54:38] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:54:38] [MCTSPlanner] [generate_candidate_intents] Invoking Vertex AI
+[2026-06-22 14:54:41] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:54:47] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:54:49] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:54:49] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:55:00] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:55:01] [MCTSPlanner] [-] MCTS optimal path selected
+[2026-06-22 14:55:01] [MCTSPlanner] [generate_queries_for_intent] Invoking Vertex AI
+[2026-06-22 14:55:03] [System] [-] Querying SearXNG
+[2026-06-22 14:55:03] [System] [-] Querying SearXNG
+[2026-06-22 14:55:03] [System] [-] Querying SearXNG
+[2026-06-22 14:55:03] [System] [-] HTTP Request: GET http://localhost:8080/?q=AI+safety+benchmarks+core+concepts+definitions&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:55:03] [System] [-] SearXNG server error
+[2026-06-22 14:55:03] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:55:03] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:55:03] [System] [-] HTTP Request: GET http://localhost:8080/?q=Foundational+concepts+of+AI+safety+and+alignment+benchmark+design&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:55:03] [System] [-] SearXNG server error
+[2026-06-22 14:55:03] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:55:03] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:55:03] [System] [-] HTTP Request: GET http://localhost:8080/?q=AI+alignment+benchmarks+theoretical+foundations+principles&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:55:03] [System] [-] SearXNG server error
+[2026-06-22 14:55:03] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:55:03] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:55:04] [ResearcherAgent] [-] response: https://www.bing.com/search?q=AI+safety+benchmarks+core+concepts+definitions 200
+[2026-06-22 14:55:04] [ResearcherAgent] [-] response: https://www.bing.com/search?q=AI+alignment+benchmarks+theoretical+foundations+principles 200
+[2026-06-22 14:55:04] [ResearcherAgent] [-] response: https://www.bing.com/search?q=Foundational+concepts+of+AI+safety+and+alignment+benchmark+design 200
+[2026-06-22 14:55:04] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:55:04] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:55:04] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:55:04] [System] [-] Executing Reciprocal Rank Fusion
+[2026-06-22 14:55:04] [System] [-] Reciprocal Rank Fusion complete
+[2026-06-22 14:55:04] [System] [-] URL deduplication complete
+[2026-06-22 14:55:04] [System] [-] Starting Mango starting-point optimization
+[2026-06-22 14:55:04] [System] [-] Connecting to MCP server
+[2026-06-22 14:55:04] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:55:04] [System] [-] Connecting to MCP server
+[2026-06-22 14:55:04] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:55:04] [System] [-] Connecting to MCP server
+[2026-06-22 14:55:04] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:55:04] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:55:04] [System] [-] Disconnected from MCP server
+[2026-06-22 14:55:04] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:55:04] [System] [-] Disconnected from MCP server
+[2026-06-22 14:55:04] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:55:04] [System] [-] Disconnected from MCP server
+[2026-06-22 14:55:04] [System] [-] All MCP Hub clients shut down.
+[2026-06-22 14:55:04] [ResearcherAgent] [-] Researcher node failed - no accessible sources
+[2026-06-22 14:55:04] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:55:04] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:55:04] [System] [-] No pending sub-questions, proceeding to context_aggregator
+[2026-06-22 14:55:04] [System] [-] Running context_aggregator_node
+[2026-06-22 14:55:04] [System] [-] Context aggregation complete
+[2026-06-22 14:55:04] [VerifierAgent] [-] Running verifier_node
+[2026-06-22 14:55:04] [System] [-] No device provided, using cpu
+[2026-06-22 14:55:04] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:05] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:05] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:05] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:05] [System] [-] Loading SentenceTransformer model from sentence-transformers/all-mpnet-base-v2.
+[2026-06-22 14:55:05] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:05] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:05] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:05] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md "HTTP/1.1 200 OK"
+[2026-06-22 14:55:06] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:06] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:06] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:06] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:06] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:55:07] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:07] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:07] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:55:07] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:55:08] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:55:08] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:55:08] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:08] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:09] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:09] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:09] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:09] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:09] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:09] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:10] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-22 14:55:10] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-22 14:55:10] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:55:10] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+[2026-06-22 14:55:10] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2 "HTTP/1.1 200 OK"
+[2026-06-22 14:55:10] [WriterAgent] [-] Starting verification pipeline for report
+[2026-06-22 14:55:10] [VerifierAgent] [-] Verification Stage 1: Extracting claims from report
+[2026-06-22 14:55:10] [VerifierAgent] [-] Extracting claims from report
+[2026-06-22 14:55:10] [VerifierAgent] [claim_extraction] Invoking Vertex AI
+[2026-06-22 14:55:23] [VerifierAgent] [-] Successfully extracted claims
+[2026-06-22 14:55:23] [VerifierAgent] [-] Extracted claims
+[2026-06-22 14:55:23] [System] [-] Verification Stage 2: Checking source accessibility and fetching content
+[2026-06-22 14:55:23] [System] [-] Checking source URL
+[2026-06-22 14:55:23] [System] [-] Checking source URL
+[2026-06-22 14:55:23] [System] [-] Checking source URL
+[2026-06-22 14:55:23] [System] [-] Checking source URL
+[2026-06-22 14:55:23] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:55:23] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:55:23] [System] [-] Source checker: Cache hit
+[2026-06-22 14:55:23] [System] [-] Source checker: Cache hit
+[2026-06-22 14:55:23] [System] [-] HTTP Request: GET https://www.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:55:23] [System] [-] Live URL returned error status
+[2026-06-22 14:55:23] [System] [-] HTTP Request: GET https://web.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:55:23] [System] [-] Live URL returned error status
+[2026-06-22 14:55:23] [VerifierAgent] [-] Verification Stages 3 & 4: Verifying quotes and scoring confidence for each claim
+[2026-06-22 14:55:23] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:55:23] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:55:23] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:55:23] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:55:23] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:55:23] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:55:23] [System] [-] Verification pipeline complete
+[2026-06-22 14:55:23] [VerifierAgent] [verifier_critique] Invoking Vertex AI
+[2026-06-22 14:55:26] [VerifierAgent] [-] Failed to parse verifier critique, defaulting to proceeding with no gaps
+[2026-06-22 14:55:26] [SupervisorAgent] [-] Routing after verification critique
+[2026-06-22 14:55:26] [SupervisorAgent] [-] No gaps found. Routing to report writer to compile final report.
+[2026-06-22 14:55:26] [WriterAgent] [-] Running report_writer_node
+[2026-06-22 14:55:27] [WriterAgent] [report_writer] Invoking Vertex AI
+[2026-06-22 14:55:42] [WriterAgent] [-] Failed to parse report writer output, defaulting to draft report as final
+[2026-06-22 14:55:42] [EvaluatorAgent] [-] Running evaluator_node
+[2026-06-22 14:55:42] [EvaluatorAgent] [-] Evaluating Key-Information Coverage (KIC)
+[2026-06-22 14:55:42] [EvaluatorAgent] [extract_key_facts] Invoking Vertex AI
+[2026-06-22 14:55:51] [EvaluatorAgent] [-] Failed to extract key facts for KIC, using fallback facts
+[2026-06-22 14:55:51] [EvaluatorAgent] [check_coverage] Invoking Vertex AI
+[2026-06-22 14:55:56] [System] [-] Failed to parse coverage evaluation, defaulting to fallback score
+[2026-06-22 14:55:56] [System] [-] Evaluating Reasoning Quality (RQ)
+[2026-06-22 14:55:56] [EvaluatorAgent] [evaluate_reasoning] Invoking Vertex AI
+[2026-06-22 14:56:00] [System] [-] Failed to parse reasoning quality evaluation, using fallback
+[2026-06-22 14:56:00] [System] [-] Evaluating Factuality
+[2026-06-22 14:56:00] [EvaluatorAgent] [evaluate_factuality] Invoking Vertex AI
+[2026-06-22 14:56:05] [System] [-] Failed to parse factuality quality evaluation, using fallback
+[2026-06-22 14:56:05] [EvaluatorAgent] [-] Evaluator node: Evaluation failed. Calling LLM to formulate remediation sub-questions.
+[2026-06-22 14:56:05] [EvaluatorAgent] [remediation_formulation] Invoking Vertex AI
+[2026-06-22 14:56:11] [System] [-] Failed to parse remediation, creating default gap question
+[2026-06-22 14:56:11] [SupervisorAgent] [-] Routing after DREAM evaluation
+[2026-06-22 14:56:11] [SupervisorAgent] [-] DREAM evaluation failed with gaps. Routing back to supervisor for gap remediation.
+[2026-06-22 14:56:11] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:56:11] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:56:11] [ResearcherAgent] [-] Spawning parallel researcher nodes
+[2026-06-22 14:56:11] [ResearcherAgent] [-] Starting advanced researcher agent
+[2026-06-22 14:56:11] [MCTSPlanner] [-] Starting Plan-MCTS Planning Phase
+[2026-06-22 14:56:11] [ResearcherAgent] [-] Initializing Plan-MCTS Search
+[2026-06-22 14:56:11] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:56:11] [MCTSPlanner] [generate_candidate_intents] Invoking Vertex AI
+[2026-06-22 14:56:14] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:56:22] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:56:23] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:56:23] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:56:31] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:56:37] [MCTSPlanner] [-] MCTS optimal path selected
+[2026-06-22 14:56:37] [MCTSPlanner] [generate_queries_for_intent] Invoking Vertex AI
+[2026-06-22 14:56:39] [System] [-] Querying SearXNG
+[2026-06-22 14:56:39] [System] [-] Querying SearXNG
+[2026-06-22 14:56:39] [System] [-] Querying SearXNG
+[2026-06-22 14:56:39] [System] [-] HTTP Request: GET http://localhost:8080/?q=%22AI+safety%22+definition+in+benchmark+metrics&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:56:39] [System] [-] SearXNG server error
+[2026-06-22 14:56:39] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:56:39] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:56:39] [System] [-] HTTP Request: GET http://localhost:8080/?q=distinction+between+%22AI+safety%22+and+%22AI+alignment%22+in+AI+benchmarks&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:56:39] [System] [-] SearXNG server error
+[2026-06-22 14:56:39] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:56:39] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:56:39] [System] [-] HTTP Request: GET http://localhost:8080/?q=%22AI+alignment%22+definition+in+benchmark+evaluation&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:56:39] [System] [-] SearXNG server error
+[2026-06-22 14:56:39] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:56:39] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:56:40] [ResearcherAgent] [-] response: https://www.bing.com/search?q=distinction+between+%22AI+safety%22+and+%22AI+alignment%22+in+AI+benchmarks 200
+[2026-06-22 14:56:40] [ResearcherAgent] [-] response: https://www.bing.com/search?q=%22AI+safety%22+definition+in+benchmark+metrics 200
+[2026-06-22 14:56:40] [ResearcherAgent] [-] response: https://www.bing.com/search?q=%22AI+alignment%22+definition+in+benchmark+evaluation 200
+[2026-06-22 14:56:40] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:56:40] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:56:40] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:56:40] [System] [-] Executing Reciprocal Rank Fusion
+[2026-06-22 14:56:40] [System] [-] Reciprocal Rank Fusion complete
+[2026-06-22 14:56:40] [System] [-] URL deduplication complete
+[2026-06-22 14:56:40] [System] [-] Performing semantic deduplication
+[2026-06-22 14:56:40] [System] [-] Found semantically redundant result
+[2026-06-22 14:56:40] [System] [-] Semantic deduplication complete
+[2026-06-22 14:56:40] [System] [-] Starting Mango starting-point optimization
+[2026-06-22 14:56:40] [System] [-] Connecting to MCP server
+[2026-06-22 14:56:40] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:56:40] [System] [-] Connecting to MCP server
+[2026-06-22 14:56:40] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:56:40] [System] [-] Connecting to MCP server
+[2026-06-22 14:56:40] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:56:40] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:56:40] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:56:40] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:56:40] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:56:42] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:56:42] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:56:42] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:56:42] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:56:42] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:56:43] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:56:43] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:56:43] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:56:43] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:56:43] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:56:45] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:56:45] [System] [-] Mango Thompson Sampling selected URL
+[2026-06-22 14:56:45] [ResearcherAgent] [-] Mango selecting arm to scrape
+[2026-06-22 14:56:45] [System] [-] BrowserExplorer exploring URL
+[2026-06-22 14:56:45] [ResearcherAgent] [evaluate_relevance] Invoking Vertex AI
+[2026-06-22 14:56:48] [System] [-] Mango Thompson Sampling updated reward
+[2026-06-22 14:56:48] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:56:48] [System] [-] Disconnected from MCP server
+[2026-06-22 14:56:48] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:56:48] [System] [-] Disconnected from MCP server
+[2026-06-22 14:56:48] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:56:48] [System] [-] Disconnected from MCP server
+[2026-06-22 14:56:48] [System] [-] All MCP Hub clients shut down.
+[2026-06-22 14:56:48] [ResearcherAgent] [-] Synthesizing research summary
+[2026-06-22 14:56:48] [ResearcherAgent] [summarize_sources] Invoking Vertex AI
+[2026-06-22 14:56:51] [ResearcherAgent] [-] Research summary synthesis complete
+[2026-06-22 14:56:51] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:56:51] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:56:51] [System] [-] No pending sub-questions, proceeding to context_aggregator
+[2026-06-22 14:56:51] [System] [-] Running context_aggregator_node
+[2026-06-22 14:56:51] [System] [-] Context aggregation complete
+[2026-06-22 14:56:51] [VerifierAgent] [-] Running verifier_node
+[2026-06-22 14:56:51] [System] [-] No device provided, using cpu
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:52] [System] [-] Loading SentenceTransformer model from sentence-transformers/all-mpnet-base-v2.
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:52] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md "HTTP/1.1 200 OK"
+[2026-06-22 14:56:53] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:53] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:53] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:53] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:53] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:56:54] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:54] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:54] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:56:55] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:56:55] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:56:55] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:56] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:57] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-22 14:56:57] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-22 14:56:57] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:56:57] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+[2026-06-22 14:56:58] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2 "HTTP/1.1 200 OK"
+[2026-06-22 14:56:58] [WriterAgent] [-] Starting verification pipeline for report
+[2026-06-22 14:56:58] [VerifierAgent] [-] Verification Stage 1: Extracting claims from report
+[2026-06-22 14:56:58] [VerifierAgent] [-] Extracting claims from report
+[2026-06-22 14:56:58] [VerifierAgent] [claim_extraction] Invoking Vertex AI
+[2026-06-22 14:57:19] [VerifierAgent] [-] Successfully extracted claims
+[2026-06-22 14:57:19] [VerifierAgent] [-] Extracted claims
+[2026-06-22 14:57:19] [System] [-] Verification Stage 2: Checking source accessibility and fetching content
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Checking source URL
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache hit
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache hit
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:57:19] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:57:19] [System] [-] HTTP Request: GET https://deepai.org/chat/what-is-ai "HTTP/1.1 200 OK"
+[2026-06-22 14:57:19] [System] [-] HTTP Request: GET https://deepai.org/ "HTTP/1.1 200 OK"
+[2026-06-22 14:57:19] [ResearcherAgent] [-] Successfully cached scraped URL
+[2026-06-22 14:57:19] [ResearcherAgent] [-] Successfully cached scraped URL
+[2026-06-22 14:57:19] [System] [-] HTTP Request: GET https://openai.com/ "HTTP/1.1 200 OK"
+[2026-06-22 14:57:19] [ResearcherAgent] [-] Successfully cached scraped URL
+[2026-06-22 14:57:19] [System] [-] HTTP Request: GET https://web.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:57:19] [System] [-] HTTP Request: GET https://www.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:57:19] [System] [-] Live URL returned error status
+[2026-06-22 14:57:19] [System] [-] Live URL returned error status
+[2026-06-22 14:57:19] [System] [-] HTTP Request: GET https://ai.google/ "HTTP/1.1 200 OK"
+[2026-06-22 14:57:19] [ResearcherAgent] [-] Successfully cached scraped URL
+[2026-06-22 14:57:19] [VerifierAgent] [-] Verification Stages 3 & 4: Verifying quotes and scoring confidence for each claim
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:57:19] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:57:19] [System] [-] Verification pipeline complete
+[2026-06-22 14:57:19] [VerifierAgent] [verifier_critique] Invoking Vertex AI
+[2026-06-22 14:57:23] [VerifierAgent] [-] Failed to parse verifier critique, defaulting to proceeding with no gaps
+[2026-06-22 14:57:23] [SupervisorAgent] [-] Routing after verification critique
+[2026-06-22 14:57:23] [SupervisorAgent] [-] No gaps found. Routing to report writer to compile final report.
+[2026-06-22 14:57:23] [WriterAgent] [-] Running report_writer_node
+[2026-06-22 14:57:23] [WriterAgent] [report_writer] Invoking Vertex AI
+[2026-06-22 14:57:50] [WriterAgent] [-] Failed to parse report writer output, defaulting to draft report as final
+[2026-06-22 14:57:50] [EvaluatorAgent] [-] Running evaluator_node
+[2026-06-22 14:57:50] [EvaluatorAgent] [-] Evaluating Key-Information Coverage (KIC)
+[2026-06-22 14:57:50] [EvaluatorAgent] [extract_key_facts] Invoking Vertex AI
+[2026-06-22 14:58:00] [EvaluatorAgent] [-] Failed to extract key facts for KIC, using fallback facts
+[2026-06-22 14:58:00] [EvaluatorAgent] [check_coverage] Invoking Vertex AI
+[2026-06-22 14:58:05] [System] [-] Failed to parse coverage evaluation, defaulting to fallback score
+[2026-06-22 14:58:05] [System] [-] Evaluating Reasoning Quality (RQ)
+[2026-06-22 14:58:05] [EvaluatorAgent] [evaluate_reasoning] Invoking Vertex AI
+[2026-06-22 14:58:12] [System] [-] Failed to parse reasoning quality evaluation, using fallback
+[2026-06-22 14:58:12] [System] [-] Evaluating Factuality
+[2026-06-22 14:58:12] [EvaluatorAgent] [evaluate_factuality] Invoking Vertex AI
+[2026-06-22 14:58:17] [System] [-] Failed to parse factuality quality evaluation, using fallback
+[2026-06-22 14:58:17] [EvaluatorAgent] [-] Evaluator node: Evaluation failed. Calling LLM to formulate remediation sub-questions.
+[2026-06-22 14:58:17] [EvaluatorAgent] [remediation_formulation] Invoking Vertex AI
+[2026-06-22 14:58:23] [System] [-] Failed to parse remediation, creating default gap question
+[2026-06-22 14:58:23] [SupervisorAgent] [-] Routing after DREAM evaluation
+[2026-06-22 14:58:23] [SupervisorAgent] [-] DREAM evaluation failed with gaps. Routing back to supervisor for gap remediation.
+[2026-06-22 14:58:23] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:58:23] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:58:23] [ResearcherAgent] [-] Spawning parallel researcher nodes
+[2026-06-22 14:58:23] [ResearcherAgent] [-] Starting advanced researcher agent
+[2026-06-22 14:58:23] [MCTSPlanner] [-] Starting Plan-MCTS Planning Phase
+[2026-06-22 14:58:23] [ResearcherAgent] [-] Initializing Plan-MCTS Search
+[2026-06-22 14:58:23] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:58:23] [MCTSPlanner] [generate_candidate_intents] Invoking Vertex AI
+[2026-06-22 14:58:26] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:58:32] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:58:34] [MCTSPlanner] [-] MCTS Iteration
+[2026-06-22 14:58:34] [MCTSPlanner] [simulate_outcome_state] Invoking Vertex AI
+[2026-06-22 14:58:43] [MCTSPlanner] [evaluate_state_quality] Invoking Vertex AI
+[2026-06-22 14:58:44] [MCTSPlanner] [-] MCTS optimal path selected
+[2026-06-22 14:58:44] [MCTSPlanner] [generate_queries_for_intent] Invoking Vertex AI
+[2026-06-22 14:58:47] [System] [-] Querying SearXNG
+[2026-06-22 14:58:47] [System] [-] Querying SearXNG
+[2026-06-22 14:58:47] [System] [-] Querying SearXNG
+[2026-06-22 14:58:47] [System] [-] HTTP Request: GET http://localhost:8080/?q=definitions+of+AI+safety+and+alignment+benchmarks&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:58:47] [System] [-] SearXNG server error
+[2026-06-22 14:58:47] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:58:47] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:58:47] [System] [-] HTTP Request: GET http://localhost:8080/?q=conceptual+frameworks+for+AI+alignment+evaluation&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:58:47] [System] [-] SearXNG server error
+[2026-06-22 14:58:47] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:58:47] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:58:47] [System] [-] HTTP Request: GET http://localhost:8080/?q=common+theoretical+models+AI+safety+benchmarks&format=json "HTTP/1.1 308 Permanent Redirect"
+[2026-06-22 14:58:47] [System] [-] SearXNG server error
+[2026-06-22 14:58:47] [ResearcherAgent] [-] SearXNG search failed, falling back to DDG
+[2026-06-22 14:58:47] [System] [-] Querying DuckDuckGo (fallback)
+[2026-06-22 14:58:47] [ResearcherAgent] [-] response: https://www.bing.com/search?q=definitions+of+AI+safety+and+alignment+benchmarks 200
+[2026-06-22 14:58:47] [ResearcherAgent] [-] response: https://www.bing.com/search?q=conceptual+frameworks+for+AI+alignment+evaluation 200
+[2026-06-22 14:58:48] [ResearcherAgent] [-] response: https://www.bing.com/search?q=common+theoretical+models+AI+safety+benchmarks 200
+[2026-06-22 14:58:48] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:58:48] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:58:48] [ResearcherAgent] [-] DuckDuckGo search successful
+[2026-06-22 14:58:48] [System] [-] Executing Reciprocal Rank Fusion
+[2026-06-22 14:58:48] [System] [-] Reciprocal Rank Fusion complete
+[2026-06-22 14:58:48] [System] [-] URL deduplication complete
+[2026-06-22 14:58:48] [System] [-] Starting Mango starting-point optimization
+[2026-06-22 14:58:48] [System] [-] Connecting to MCP server
+[2026-06-22 14:58:48] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:58:48] [System] [-] Connecting to MCP server
+[2026-06-22 14:58:48] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:58:48] [System] [-] Connecting to MCP server
+[2026-06-22 14:58:48] [System] [-] Successfully connected to mock MCP server
+[2026-06-22 14:58:48] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:58:48] [System] [-] Disconnected from MCP server
+[2026-06-22 14:58:48] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:58:48] [System] [-] Disconnected from MCP server
+[2026-06-22 14:58:48] [System] [-] Disconnecting from MCP server
+[2026-06-22 14:58:48] [System] [-] Disconnected from MCP server
+[2026-06-22 14:58:48] [System] [-] All MCP Hub clients shut down.
+[2026-06-22 14:58:48] [ResearcherAgent] [-] Researcher node failed - no accessible sources
+[2026-06-22 14:58:48] [SupervisorAgent] [-] Running supervisor_node
+[2026-06-22 14:58:48] [SupervisorAgent] [-] Running route_research decision
+[2026-06-22 14:58:48] [System] [-] No pending sub-questions, proceeding to context_aggregator
+[2026-06-22 14:58:48] [System] [-] Running context_aggregator_node
+[2026-06-22 14:58:48] [System] [-] Context aggregation complete
+[2026-06-22 14:58:48] [VerifierAgent] [-] Running verifier_node
+[2026-06-22 14:58:48] [System] [-] No device provided, using cpu
+[2026-06-22 14:58:48] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:48] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:49] [System] [-] Loading SentenceTransformer model from sentence-transformers/all-mpnet-base-v2.
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config_sentence_transformers.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/README.md "HTTP/1.1 200 OK"
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:49] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/modules.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:50] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:50] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/sentence_bert_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:50] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:58:50] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:50] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:51] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:58:51] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:58:51] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:58:52] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+[2026-06-22 14:58:52] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:52] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:52] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:52] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:53] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:53] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:53] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:53] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/tokenizer_config.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:53] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+[2026-06-22 14:58:54] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+[2026-06-22 14:58:54] [System] [-] HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-mpnet-base-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+[2026-06-22 14:58:54] [System] [-] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-mpnet-base-v2/e8c3b32edf5434bc2275fc9bab85f82640a19130/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+[2026-06-22 14:58:54] [System] [-] HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-mpnet-base-v2 "HTTP/1.1 200 OK"
+[2026-06-22 14:58:54] [WriterAgent] [-] Starting verification pipeline for report
+[2026-06-22 14:58:54] [VerifierAgent] [-] Verification Stage 1: Extracting claims from report
+[2026-06-22 14:58:54] [VerifierAgent] [-] Extracting claims from report
+[2026-06-22 14:58:54] [VerifierAgent] [claim_extraction] Invoking Vertex AI
+[2026-06-22 14:59:12] [VerifierAgent] [-] Successfully extracted claims
+[2026-06-22 14:59:12] [VerifierAgent] [-] Extracted claims
+[2026-06-22 14:59:12] [System] [-] Verification Stage 2: Checking source accessibility and fetching content
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Checking source URL
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache hit
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache hit
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache hit
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache hit
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache hit
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache miss, fetching live URL
+[2026-06-22 14:59:12] [System] [-] Source checker: Cache hit
+[2026-06-22 14:59:12] [System] [-] HTTP Request: GET https://www.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:59:12] [System] [-] HTTP Request: GET https://web.whatsapp.com/ "HTTP/1.1 400 Bad Request"
+[2026-06-22 14:59:12] [System] [-] Live URL returned error status
+[2026-06-22 14:59:12] [System] [-] Live URL returned error status
+[2026-06-22 14:59:12] [VerifierAgent] [-] Verification Stages 3 & 4: Verifying quotes and scoring confidence for each claim
+[2026-06-22 14:59:12] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:59:12] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:59:12] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:59:12] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:59:12] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:59:12] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:59:12] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:59:12] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:59:12] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:59:12] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:59:12] [VerifierAgent] [-] Scoring claim confidence
+[2026-06-22 14:59:12] [VerifierAgent] [-] Claim scored
+[2026-06-22 14:59:12] [System] [-] Verification pipeline complete
+[2026-06-22 14:59:12] [VerifierAgent] [verifier_critique] Invoking Vertex AI
+[2026-06-22 14:59:16] [VerifierAgent] [-] Failed to parse verifier critique, defaulting to proceeding with no gaps
+[2026-06-22 14:59:16] [SupervisorAgent] [-] Routing after verification critique
+[2026-06-22 14:59:16] [SupervisorAgent] [-] No gaps found. Routing to report writer to compile final report.
+[2026-06-22 14:59:16] [WriterAgent] [-] Running report_writer_node
+[2026-06-22 14:59:16] [WriterAgent] [report_writer] Invoking Vertex AI
+[2026-06-22 14:59:54] [WriterAgent] [-] Failed to parse report writer output, defaulting to draft report as final
+[2026-06-22 14:59:54] [EvaluatorAgent] [-] Running evaluator_node
+[2026-06-22 14:59:54] [EvaluatorAgent] [-] Evaluating Key-Information Coverage (KIC)
+[2026-06-22 14:59:54] [EvaluatorAgent] [extract_key_facts] Invoking Vertex AI
+[2026-06-22 15:00:01] [EvaluatorAgent] [-] Failed to extract key facts for KIC, using fallback facts
+[2026-06-22 15:00:01] [EvaluatorAgent] [check_coverage] Invoking Vertex AI
+[2026-06-22 15:00:06] [System] [-] Failed to parse coverage evaluation, defaulting to fallback score
+[2026-06-22 15:00:06] [System] [-] Evaluating Reasoning Quality (RQ)
+[2026-06-22 15:00:06] [EvaluatorAgent] [evaluate_reasoning] Invoking Vertex AI
+[2026-06-22 15:00:12] [System] [-] Failed to parse reasoning quality evaluation, using fallback
+[2026-06-22 15:00:12] [System] [-] Evaluating Factuality
+[2026-06-22 15:00:12] [EvaluatorAgent] [evaluate_factuality] Invoking Vertex AI
+[2026-06-22 15:00:16] [System] [-] Failed to parse factuality quality evaluation, using fallback
+[2026-06-22 15:00:16] [EvaluatorAgent] [-] Evaluator node: Max self-correction loops reached, forcing pass to terminate.
+[2026-06-22 15:00:16] [SupervisorAgent] [-] Routing after DREAM evaluation
+[2026-06-22 15:00:16] [EvaluatorAgent] [-] DREAM evaluation passed successfully! Ending workflow.

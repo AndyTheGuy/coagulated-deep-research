@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 from core.models import GraphState, Report, SubQuestion
 from core.nodes.scoping import router, get_router
 from verification.pipeline import VerificationPipeline
+from core.utils.json_cleaner import clean_json_string
 
 logger = structlog.get_logger("deep-research")
 
@@ -118,7 +119,7 @@ async def verifier_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed = parser.parse(response.content)
+        parsed = parser.parse(clean_json_string(response.content))
         critique = VerifierCritique(**parsed)
         logger.info("Adversarial verifier analysis complete", gaps_found=critique.gaps_found)
         

@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 from pydantic import BaseModel, Field
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
+from core.utils.json_cleaner import clean_json_string
 
 from core.models import Report, Claim
 
@@ -53,7 +54,7 @@ class ClaimExtractor:
                 node_name="claim_extraction"
             )
             
-            parsed = self.parser.parse(response.content)
+            parsed = self.parser.parse(clean_json_string(response.content))
             claims_data = parsed.get("claims", [])
             
             claims: List[Claim] = []
