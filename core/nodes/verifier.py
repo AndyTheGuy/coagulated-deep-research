@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from core.models import GraphState, Report, SubQuestion
 from core.nodes.scoping import router, get_router
 from verification.pipeline import VerificationPipeline
-from core.utils.json_cleaner import clean_json_string
+from core.utils.json_cleaner import clean_json_string, parse_json_safely
 
 logger = structlog.get_logger("deep-research")
 
@@ -119,7 +119,18 @@ async def verifier_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed = parser.parse(clean_json_string(response.content))
+        parsed = parse_json_safely(response.content)
+        if not isinstance(parsed, dict):
+            raise ValueError("Parsed JSON is not a dict")
+            
+        parsed["gaps_found"] = bool(parsed.get("gaps_found", False))
+        parsed["critique_text"] = parsed.get("critique_text") or "No detailed critique provided."
+        
+        sq = parsed.get("suggested_queries") or []
+        if isinstance(sq, str):
+            sq = [sq]
+        parsed["suggested_queries"] = [str(q) for q in sq]
+        
         critique = VerifierCritique(**parsed)
         logger.info("Adversarial verifier analysis complete", gaps_found=critique.gaps_found)
         

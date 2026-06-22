@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 from core.models import GraphState, DREMEvaluation, MetricScore, SubQuestion
 from core.nodes.scoping import router, get_router
-from core.utils.json_cleaner import clean_json_string
+from core.utils.json_cleaner import clean_json_string, parse_json_safely
 
 logger = structlog.get_logger("deep-research")
 
@@ -108,7 +108,12 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="extract_key_facts"
     )
     try:
-        extracted_facts = facts_parser.parse(clean_json_string(facts_response.content)).get("key_facts", [])
+        parsed = parse_json_safely(facts_response.content)
+        if not isinstance(parsed, dict):
+            parsed = {"key_facts": []}
+        extracted_facts = parsed.get("key_facts", [])
+        if isinstance(extracted_facts, str):
+            extracted_facts = [extracted_facts]
     except Exception as e:
         logger.warning("Failed to extract key facts for KIC, using fallback facts", error=str(e))
         extracted_facts = [
@@ -141,8 +146,14 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="check_coverage"
     )
     try:
-        coverage_parsed = coverage_parser.parse(clean_json_string(coverage_response.content)).get("coverage_items", [])
-        yes_count = sum(1 for item in coverage_parsed if item.get("covered", False))
+        parsed = parse_json_safely(coverage_response.content)
+        if not isinstance(parsed, dict):
+            parsed = {"coverage_items": []}
+        coverage_parsed = parsed.get("coverage_items", [])
+        if isinstance(coverage_parsed, dict):
+            coverage_parsed = [coverage_parsed]
+        
+        yes_count = sum(1 for item in coverage_parsed if isinstance(item, dict) and item.get("covered", False))
         total_count = len(coverage_parsed) if coverage_parsed else 1
         kic_score_val = yes_count / total_count
         kic_details = {item.get("fact"): {"covered": item.get("covered"), "justification": item.get("explanation")} for item in coverage_parsed}
@@ -192,8 +203,10 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="evaluate_reasoning"
     )
     try:
-        rq_parsed = rq_parser.parse(clean_json_string(rq_response.content))
-        rq_score_val = rq_parsed.get("score", 0.0)
+        rq_parsed = parse_json_safely(rq_response.content)
+        if not isinstance(rq_parsed, dict):
+            rq_parsed = {"score": 0.0, "explanation": "Invalid JSON response"}
+        rq_score_val = float(rq_parsed.get("score", 0.0))
         rq_notes = rq_parsed.get("explanation", "")
     except Exception as e:
         logger.error("Failed to parse reasoning quality evaluation, using fallback", error=str(e))
@@ -235,8 +248,10 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
         node_name="evaluate_factuality"
     )
     try:
-        factuality_parsed = factuality_parser.parse(clean_json_string(factuality_response.content))
-        llm_fact_score = factuality_parsed.get("score", 0.0)
+        factuality_parsed = parse_json_safely(factuality_response.content)
+        if not isinstance(factuality_parsed, dict):
+            factuality_parsed = {"score": 0.0, "explanation": "Invalid JSON response"}
+        llm_fact_score = float(factuality_parsed.get("score", 0.0))
         factuality_notes = factuality_parsed.get("explanation", "")
     except Exception as e:
         logger.error("Failed to parse factuality quality evaluation, using fallback", error=str(e))
@@ -319,9 +334,13 @@ async def evaluator_node(state: GraphState) -> Dict[str, Any]:
                 node_name="remediation_formulation"
             )
             try:
-                remediation_parsed = remediation_parser.parse(clean_json_string(remediation_response.content))
+                remediation_parsed = parse_json_safely(remediation_response.content)
+                if not isinstance(remediation_parsed, dict):
+                    remediation_parsed = {}
                 notes = remediation_parsed.get("remediation_notes", "Evaluation failed thresholds.")
                 queries = remediation_parsed.get("remediation_queries", [])
+                if isinstance(queries, str):
+                    queries = [queries]
 
                 for idx, query in enumerate(queries):
                     q_id = f"eval_gap_{eval_gap_count + idx + 1}"

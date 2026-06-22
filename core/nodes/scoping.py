@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 from core.models import GraphState, ResearchBrief, SubQuestion
 from core.llm_router import LLMRouter
-from core.utils.json_cleaner import clean_json_string
+from core.utils.json_cleaner import clean_json_string, parse_json_safely
 
 logger = structlog.get_logger("deep-research")
 
@@ -93,7 +93,9 @@ async def clarify_with_user_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed = parser.parse(clean_json_string(response.content))
+        parsed = parse_json_safely(response.content)
+        if not isinstance(parsed, dict):
+            parsed = {"clarification_needed": False}
         logger.info("Clarification analysis complete", clarification_needed=parsed.get("clarification_needed"))
         return {
             "clarification_needed": parsed.get("clarification_needed", False),
@@ -147,8 +149,30 @@ async def write_research_brief_node(state: GraphState) -> Dict[str, Any]:
     )
     
     try:
-        parsed_brief = parser.parse(clean_json_string(response.content))
-        brief = ResearchBrief(**parsed_brief)
+        parsed_dict = parse_json_safely(response.content)
+        if not isinstance(parsed_dict, dict):
+            raise ValueError("Parsed JSON is not an object")
+            
+        parsed_dict["topic"] = parsed_dict.get("topic") or state.topic or state.user_query
+        parsed_dict["scope"] = parsed_dict.get("scope") or "Detailed study based on query"
+        parsed_dict["constraints"] = parsed_dict.get("constraints") or []
+        if isinstance(parsed_dict["constraints"], str):
+            parsed_dict["constraints"] = [parsed_dict["constraints"]]
+            
+        sub_qs = parsed_dict.get("sub_questions") or []
+        healed_sub_qs = []
+        for idx, q in enumerate(sub_qs):
+            if isinstance(q, str):
+                healed_sub_qs.append({"id": f"q{idx+1}", "question": q})
+            elif isinstance(q, dict):
+                healed_sub_qs.append({
+                    "id": q.get("id") or f"q{idx+1}",
+                    "question": q.get("question") or "Research details"
+                })
+        parsed_dict["sub_questions"] = healed_sub_qs
+        parsed_dict["target_source_count"] = int(parsed_dict.get("target_source_count") or 20)
+        
+        brief = ResearchBrief(**parsed_dict)
         logger.info("Generated research brief", topic=brief.topic, sub_questions=[q.question for q in brief.sub_questions])
         
         return {

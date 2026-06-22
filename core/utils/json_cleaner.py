@@ -40,6 +40,49 @@ def escape_control_chars_in_json_strings(s: str) -> str:
         i += 1
     return "".join(chars)
 
+def find_outermost_balanced_block(s: str, start_char: str = '{', end_char: str = '}') -> str:
+    """Finds the largest substring starting with start_char that forms a balanced structure."""
+    first_idx = s.find(start_char)
+    if first_idx == -1:
+        return ""
+        
+    # Scan from first occurrence and count balancing depth
+    n = len(s)
+    for start in range(first_idx, n):
+        if s[start] != start_char:
+            continue
+            
+        depth = 0
+        in_string = False
+        escaped = False
+        
+        for i in range(start, n):
+            char = s[i]
+            
+            if char == '"' and not escaped:
+                in_string = not in_string
+                escaped = False
+                continue
+                
+            if in_string:
+                if char == '\\':
+                    escaped = not escaped
+                else:
+                    escaped = False
+                continue
+                
+            # Keep track of escape sequences outside strings (usually irrelevant but safe)
+            escaped = False
+            
+            if char == start_char:
+                depth += 1
+            elif char == end_char:
+                depth -= 1
+                if depth == 0:
+                    return s[start:i+1]
+                    
+    return ""
+
 def clean_json_string(s: str) -> str:
     """Cleans a string containing JSON output from an LLM.
     Strips markdown code blocks, extracts the JSON object, and fixes common syntax issues.
@@ -51,26 +94,23 @@ def clean_json_string(s: str) -> str:
     s = s.strip()
     
     # 2. Strip Markdown code blocks if they wrap the content
-    if s.startswith("```"):
-        s = re.sub(r"^```(?:json)?\n", "", s)
-        s = re.sub(r"\n```$", "", s)
-        s = s.strip()
+    pattern = r"```(?:json)?\s*(.*?)\s*```"
+    match = re.search(pattern, s, re.DOTALL)
+    if match:
+        s = match.group(1).strip()
         
-    # 3. Find the boundaries of the JSON block (either { } or [ ])
-    first_brace = s.find('{')
-    last_brace = s.rfind('}')
+    # 3. Extract balanced JSON block
+    balanced_brace = find_outermost_balanced_block(s, '{', '}')
+    balanced_bracket = find_outermost_balanced_block(s, '[', ']')
     
-    first_bracket = s.find('[')
-    last_bracket = s.rfind(']')
-    
-    if first_brace != -1 and last_brace != -1:
-        # Check if there is an outer bracket wrapping the braces
-        if first_bracket != -1 and first_bracket < first_brace and last_bracket != -1 and last_bracket > last_brace:
-            s = s[first_bracket:last_bracket+1]
+    if balanced_brace:
+        # Check if bracket wraps the brace
+        if balanced_bracket and s.find('[') < s.find('{') and s.rfind(']') > s.rfind('}'):
+            s = balanced_bracket
         else:
-            s = s[first_brace:last_brace+1]
-    elif first_bracket != -1 and last_bracket != -1:
-        s = s[first_bracket:last_bracket+1]
+            s = balanced_brace
+    elif balanced_bracket:
+        s = balanced_bracket
         
     # Escape literal control characters in JSON strings before comma cleanup
     s = escape_control_chars_in_json_strings(s)
