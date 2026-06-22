@@ -98,3 +98,34 @@ async def test_browser_explorer_click_element_fail():
     success = await explorer.click_element("#invalid-btn")
     
     assert success is False
+
+@pytest.mark.asyncio
+async def test_browser_explorer_mock_bypass():
+    """Test that BrowserExplorer bypasses the Puppeteer MCP client if it is in mock mode."""
+    mock_hub = MagicMock()
+    mock_client = MagicMock()
+    mock_client.mock = True
+    mock_hub.get_client = AsyncMock(return_value=mock_client)
+    
+    explorer = BrowserExplorer(mcp_hub=mock_hub)
+    
+    with patch("planning.browser_explorer.scrape_url", new_callable=AsyncMock) as mock_scrape:
+        mock_scrape.return_value = ("Scraped Page", "Bypassed mocked client and scraped live.")
+        res = await explorer.explore_url("https://example.com/test")
+        
+        assert res["success"] is True
+        assert res["method"] == "scraper_fallback"
+        assert res["content"] == "Bypassed mocked client and scraped live."
+        mock_scrape.assert_called_once_with("https://example.com/test")
+
+@pytest.mark.asyncio
+async def test_browser_explorer_click_mock_bypass():
+    """Test click operation is bypassed if client is in mock mode."""
+    mock_hub = MagicMock()
+    mock_client = MagicMock()
+    mock_client.mock = True
+    mock_hub.get_client = AsyncMock(return_value=mock_client)
+    
+    explorer = BrowserExplorer(mcp_hub=mock_hub)
+    success = await explorer.click_element("#any-btn")
+    assert success is False

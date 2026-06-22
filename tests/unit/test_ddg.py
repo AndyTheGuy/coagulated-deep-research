@@ -52,3 +52,32 @@ async def test_search_ddg_error():
         
         with pytest.raises(DDGSearchError, match="DuckDuckGo search failed"):
             await search_ddg("test query")
+
+@pytest.mark.asyncio
+async def test_search_ddg_quote_sanitization():
+    """Test that outer quotes are stripped from query."""
+    mock_results = [{"title": "Test", "href": "https://example.com", "body": "Body"}]
+    with patch("search.ddg.DDGS") as mock_ddgs_cls:
+        mock_ddgs_instance = MagicMock()
+        mock_ddgs_instance.text.return_value = mock_results
+        mock_ddgs_cls.return_value.__enter__.return_value = mock_ddgs_instance
+        
+        await search_ddg('"exact phrase query"', num_results=5)
+        # Verify quotes were stripped
+        mock_ddgs_instance.text.assert_called_once_with("exact phrase query", max_results=5)
+
+@pytest.mark.asyncio
+async def test_search_ddg_url_filtering():
+    """Test that search engine results are filtered out of retrieved URLs."""
+    mock_results = [
+        {"title": "Google search result", "href": "https://www.google.com/search?q=test", "body": "ignore"},
+        {"title": "Valid result", "href": "https://example.com/page", "body": "keep"}
+    ]
+    with patch("search.ddg.DDGS") as mock_ddgs_cls:
+        mock_ddgs_instance = MagicMock()
+        mock_ddgs_instance.text.return_value = mock_results
+        mock_ddgs_cls.return_value.__enter__.return_value = mock_ddgs_instance
+        
+        results = await search_ddg("test query")
+        assert len(results) == 1
+        assert results[0].url == "https://example.com/page"
