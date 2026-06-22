@@ -20,6 +20,23 @@ def _sync_ddg_search(query: str, num_results: int) -> List[dict]:
     except Exception as e:
         raise DDGSearchError(f"DuckDuckGo search failed: {e}") from e
 
+BLOCKED_PATTERNS = [
+    "google.com/search",
+    "bing.com/search",
+    "duckduckgo.com/",
+    "yahoo.com/search",
+    "yandex.com/search",
+    "baidu.com/s",
+    "searxng.org",
+    "ask.com/web",
+]
+
+def _is_blocked_url(url: str) -> bool:
+    if not url:
+        return True
+    url_lower = url.lower()
+    return any(pattern in url_lower for pattern in BLOCKED_PATTERNS)
+
 async def search_ddg(query: str, num_results: int = 10) -> List[SearchResult]:
     """Search DuckDuckGo asynchronously and return standardized SearchResult list.
     
@@ -36,6 +53,11 @@ async def search_ddg(query: str, num_results: int = 10) -> List[SearchResult]:
     if not query or not query.strip():
         return []
         
+    query = query.strip()
+    # Strip outer quotes if they wrap the entire query
+    if (query.startswith('"') and query.endswith('"')) or (query.startswith("'") and query.endswith("'")):
+        query = query[1:-1].strip()
+        
     logger.info("Querying DuckDuckGo (fallback)", query=query, num_results=num_results)
     
     try:
@@ -47,6 +69,10 @@ async def search_ddg(query: str, num_results: int = 10) -> List[SearchResult]:
             url = item.get("href", "")
             content = item.get("body", "")
             
+            if _is_blocked_url(url):
+                logger.info("Filtering out blocked search engine/aggregator URL", url=url)
+                continue
+                
             search_results.append(
                 SearchResult(
                     title=title,
