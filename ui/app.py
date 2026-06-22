@@ -29,7 +29,13 @@ st.set_page_config(
 # Initialize session state variables
 init_state()
 
-from config.settings import set_mock_llm_enabled
+try:
+    from config.settings import set_mock_llm_enabled
+except ImportError:
+    import importlib
+    import config.settings
+    importlib.reload(config.settings)
+    from config.settings import set_mock_llm_enabled
 
 # Resolve Mock LLM environment variable and thread-local state from session state *before* running any graph blocking loop
 if "mock_llm_mode" in st.session_state:
