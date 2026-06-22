@@ -148,7 +148,8 @@ class PCTSEngine:
             ("system", (
                 "You are an expert search planner. A research search intent has failed due to connection issues or empty results.\n"
                 "Your job is to dynamically REPAIR the plan by generating 3 alternative, highly robust search queries that bypass the failure.\n"
-                "For example, use broader terms, synonymous concepts, alternative public sources, or focus on adjacent details."
+                "For example, use broader terms, synonymous concepts, alternative public sources, or focus on adjacent details.\n"
+                "CRITICAL: Do NOT start any search query with conversational or instructional verbs (e.g., 'explain', 'describe', 'define', 'discuss', 'analyze', 'summarize', 'find', 'search', 'get', 'what is', 'how to'). Standard search engines interpret these as instructions to find dictionary/glossary definitions, leading to low-quality, generic results. Instead, output direct nouns, technical terms, specifications, and factual keyword phrases."
             )),
             ("user", (
                 "Target Research Question: {sub_question}\n"
@@ -311,6 +312,7 @@ class PCTSEngine:
             ("system", (
                 "You are a search query optimizer. Given a target research sub-question and a chosen plan intent, "
                 "generate exactly 3 highly specific, diverse web search queries designed to gather the precise evidence needed.\n"
+                "CRITICAL: Do NOT start any search query with conversational or instructional verbs (e.g., 'explain', 'describe', 'define', 'discuss', 'analyze', 'summarize', 'find', 'search', 'get', 'what is', 'how to'). Standard search engines interpret these as instructions to find dictionary/glossary definitions, leading to low-quality, generic results. Instead, output direct nouns, technical terms, specifications, and factual keyword phrases.\n"
                 "Provide exactly 3 queries, one per line. No numbering, no markdown formatting."
             )),
             ("user", (

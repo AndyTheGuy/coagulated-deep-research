@@ -84,6 +84,7 @@ async def diversify_query(
             "The queries should cover different aspects, synonyms, key technical terms, or perspectives of "
             "the question. They must be formatted for maximum search engine recall (e.g. keywords and short phrases, "
             "avoiding filler conversational words).\n\n"
+            "CRITICAL: Do NOT start any search query with conversational or instructional verbs (e.g., 'explain', 'describe', 'define', 'discuss', 'analyze', 'summarize', 'find', 'search', 'get', 'what is', 'how to'). Standard search engines interpret these as instructions to find dictionary/glossary definitions, leading to low-quality, generic results. Instead, output direct nouns, technical terms, specifications, and factual keyword phrases.\n\n"
             "Format the output strictly as a JSON object matching the following schema:\n"
             "{format_instructions}"
         )),
