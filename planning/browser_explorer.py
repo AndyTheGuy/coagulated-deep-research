@@ -21,6 +21,25 @@ class BrowserExplorer:
         """
         logger.info("BrowserExplorer exploring URL", url=url)
         
+        import os
+        if os.environ.get("MOCK_LLM") == "true":
+            logger.info("BrowserExplorer returning mock content in mock mode", url=url)
+            mock_content = ""
+            if "urllib.request" in url:
+                mock_content = "This document shows that urllib.request with asyncio run_in_executor runs beautifully and asynchronously."
+            elif "math" in url:
+                mock_content = "This math reference proves that cosine similarity computed via math.sqrt and sum is extremely fast."
+            else:
+                mock_content = f"Mocked content for external source {url} with lightweight agent utilities."
+            
+            return {
+                "url": url,
+                "title": "Mocked Python Standard Library Documentation",
+                "content": mock_content,
+                "method": "mock_mode",
+                "success": True
+            }
+
         try:
             # Try Puppeteer MCP server first
             puppeteer_client = await self.mcp_hub.get_client("puppeteer")

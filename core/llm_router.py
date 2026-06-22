@@ -272,6 +272,21 @@ class LLMRouter:
                 "evaluator_notes": "Highly precise report aligning perfectly with modern standard-library constraints. Accurate citation mappings."
             }"""
             input_tokens, output_tokens = 400, 180
+        elif agent_name == "MCTSPlanner" and node_name == "generate_candidate_intents":
+            content = "Determine best lightweight modules for async HTTP requests\nAnalyze native vector indexing using math functions\nEvaluate standard multiprocessing vs multithreading for CPU bound work"
+            input_tokens, output_tokens = 30, 45
+        elif agent_name == "MCTSPlanner" and node_name == "simulate_outcome_state":
+            content = "Simulated progress: identified urllib.request and ProcessPoolExecutor as built-in standard library solutions. Satisfied."
+            input_tokens, output_tokens = 35, 25
+        elif agent_name == "MCTSPlanner" and node_name == "evaluate_state_quality":
+            content = "0.85"
+            input_tokens, output_tokens = 20, 5
+        elif agent_name == "MCTSPlanner" and node_name == "generate_queries_for_intent":
+            content = "python urllib request async\npython in-memory vector index math\npython multiprocessing vs multithreading"
+            input_tokens, output_tokens = 30, 25
+        elif agent_name == "MCTSPlanner" and node_name == "repair_plan":
+            content = "lightweight python async http\nnative python vector similarity\npython concurrency GIL subprocess"
+            input_tokens, output_tokens = 30, 25
         else:
             content = '{"status": "success"}'
             input_tokens, output_tokens = 10, 5
