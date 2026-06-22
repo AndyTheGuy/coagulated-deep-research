@@ -1,6 +1,10 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from typing import Any
 import streamlit as st
 import time
-import os
 import asyncio
 import textwrap
 from ui.state import init_state
@@ -225,6 +229,185 @@ def run_async_safely(coro) -> Any:
         except Exception:
             pass
 
+# Side panel stats renderer
+def render_sidebar_html() -> str:
+    cost_stats = st.session_state.cost_stats
+    total_calls = cost_stats["vertex_calls"] + cost_stats["freellm_calls"]
+    total_tokens = cost_stats["vertex_input"] + cost_stats["vertex_output"] + cost_stats["freellm_input"] + cost_stats["freellm_output"]
+    est_rem = estimate_remaining_cost()
+    
+    html = f"""
+    <div class="glass-card">
+        <h5 style="text-align: center; color: #7f56da; margin-bottom: 15px; border-bottom: 1px solid rgba(127, 86, 218, 0.2); padding-bottom: 8px;">LLM Router Cost Ticker</h5>
+        
+        <div class="stat-ticker">
+            <div class="stat-label">Cumulative Cost</div>
+            <div class="stat-value neon">${cost_stats['vertex_cost']:.5f}</div>
+        </div>
+        
+        <div class="stat-ticker">
+            <div class="stat-label">Estimated Remaining</div>
+            <div class="stat-value" style="color: #ffaa66;">${est_rem:.5f}</div>
+        </div>
+        
+        <div style="margin-top: 15px; font-size: 0.85rem;">
+            <p><b>Total API Invocations</b>: <code>{total_calls}</code></p>
+            <p><b>Total Token Volume</b>: <code>{total_tokens:,}</code></p>
+            <p><b>FreeLLM Failovers</b>: <code style="color: #ff9933;">{cost_stats.get('failovers', 0)}</code></p>
+        </div>
+        
+        <hr style="border-top: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
+        
+        <h6 style="color: #58a6ff; font-size: 0.9rem; margin-bottom: 8px;">Vertex AI (Gemini 3.5 Flash)</h6>
+        <div style="font-size: 0.8rem; line-height: 1.5; color: #8b949e;">
+            Calls: <code>{cost_stats['vertex_calls']}</code><br>
+            Input: <code>{cost_stats['vertex_input']:,}</code> tok<br>
+            Output: <code>{cost_stats['vertex_output']:,}</code> tok
+        </div>
+        
+        <hr style="border-top: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
+        
+        <h6 style="color: #66ff66; font-size: 0.9rem; margin-bottom: 8px;">FreeLLMAPI (Failover-ready)</h6>
+        <div style="font-size: 0.8rem; line-height: 1.5; color: #8b949e;">
+            Calls: <code>{cost_stats['freellm_calls']}</code><br>
+            Input: <code>{cost_stats['freellm_input']:,}</code> tok<br>
+            Output: <code>{cost_stats['freellm_output']:,}</code> tok<br>
+            Cost: <code>$0.00000</code>
+        </div>
+    </div>
+    """
+    cleaned_html = "\n".join(line.strip() for line in html.splitlines())
+    return cleaned_html
+
+
+async def run_deep_research(query_str: str, target_count: int, constraints_str: str, status_placeholder):
+    # Parse constraints
+    constraints_list = [c.strip() for c in constraints_str.split(",") if c.strip()]
+    
+    # Setup initial state
+    initial_state = {
+        "user_query": query_str,
+        "topic": query_str[:50],
+        "sub_questions_state": [],
+        "search_results": [],
+        "verified_sources": [],
+        "claims": [],
+        "errors": [],
+        "logs": [],
+        "token_usage": {
+            "vertex_ai": {"input_tokens": 0, "output_tokens": 0, "calls": 0},
+            "freellmapi": {"input_tokens": 0, "output_tokens": 0, "calls": 0},
+            "failovers": 0
+        }
+    }
+    
+    # Reset in-memory / state trace
+    st.session_state.graph_state = GraphState()
+    st.session_state.user_query = query_str
+    
+    # Clear previous log file for a fresh trace
+    if os.path.exists("agent.json.log"):
+        try:
+            with open("agent.json.log", "w", encoding="utf-8") as f:
+                f.write("")
+        except Exception:
+            pass
+    
+    app = compile_graph()
+    
+    with status_placeholder.container():
+        live_status = st.status("🧬 Executing Autonomous Research Graph...", expanded=True)
+        with live_status:
+            queue_placeholder = st.empty()
+            try:
+                async for chunk in app.astream(initial_state, stream_mode="updates"):
+                    # 1. Update main GraphState inside session state
+                    update_graph_state_with_chunk(chunk)
+                    
+                    # 2. Extract and format logs to show live agent Trace
+                    html_logs = read_logs_from_file("agent.json.log")
+                    if html_logs:
+                        log_content = "\n".join(html_logs)
+                        log_live_placeholder.markdown(f'<div class="log-box">{log_content}</div>', unsafe_allow_html=True)
+                        
+                    # 3. Synchronize and display cost metrics live in sidebar
+                    update_cost_stats_from_state()
+                    stats_placeholder.markdown(render_sidebar_html(), unsafe_allow_html=True)
+                    
+                    # 4. Display current state of the parallel research queue
+                    sub_qs = getattr(st.session_state.graph_state, "sub_questions_state", []) or []
+                    if sub_qs:
+                        queue_html = "##### 📋 Sub-questions Status Queue:\n"
+                        for q in sub_qs:
+                            badge_type = "badge-warning" if q.status == "pending" else "badge-info" if q.status == "in_progress" else "badge-success" if q.status == "completed" else "badge-danger"
+                            queue_html += f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>\n"
+                        queue_placeholder.markdown(queue_html, unsafe_allow_html=True)
+                            
+                live_status.update(label="✅ Workflow Execution Finished Successfully!", state="complete")
+                
+            except Exception as e:
+                live_status.update(label="❌ Workflow Execution Failed", state="error")
+                st.error(f"Error during graph execution: {str(e)}")
+                st.session_state.graph_state.errors.append(str(e))
+    
+    # Final page rerun to render tabs in completed state
+    st.rerun()
+
+
+async def resume_with_clarification(status_placeholder):
+    question = st.session_state.graph_state.clarification_question
+    clarification_response = st.session_state.clarification_response
+    
+    initial_state = {
+        "user_query": st.session_state.user_query,
+        "clarification_question": question,
+        "clarification_response": clarification_response,
+        "clarification_needed": False,
+        "sub_questions_state": [],
+        "search_results": [],
+        "verified_sources": [],
+        "claims": [],
+        "errors": [],
+        "logs": [],
+        "token_usage": st.session_state.graph_state.token_usage
+    }
+    
+    app = compile_graph()
+    
+    with status_placeholder.container():
+        live_status = st.status("🧬 Resuming Deep Research Workflow...", expanded=True)
+        with live_status:
+            queue_placeholder = st.empty()
+            try:
+                async for chunk in app.astream(initial_state, stream_mode="updates"):
+                    update_graph_state_with_chunk(chunk)
+                    
+                    html_logs = read_logs_from_file("agent.json.log")
+                    if html_logs:
+                        log_content = "\n".join(html_logs)
+                        log_live_placeholder.markdown(f'<div class="log-box">{log_content}</div>', unsafe_allow_html=True)
+                        
+                    update_cost_stats_from_state()
+                    stats_placeholder.markdown(render_sidebar_html(), unsafe_allow_html=True)
+                    
+                    sub_qs = getattr(st.session_state.graph_state, "sub_questions_state", []) or []
+                    if sub_qs:
+                        queue_html = "##### 📋 Sub-questions Status Queue:\n"
+                        for q in sub_qs:
+                            badge_type = "badge-warning" if q.status == "pending" else "badge-info" if q.status == "in_progress" else "badge-success" if q.status == "completed" else "badge-danger"
+                            queue_html += f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>\n"
+                        queue_placeholder.markdown(queue_html, unsafe_allow_html=True)
+                            
+                live_status.update(label="✅ Workflow Execution Finished Successfully!", state="complete")
+                
+            except Exception as e:
+                live_status.update(label="❌ Workflow Execution Failed", state="error")
+                st.error(f"Error during graph execution: {str(e)}")
+                st.session_state.graph_state.errors.append(str(e))
+        
+    st.rerun()
+
+
 # 4. Layout: Left Main Column and Right Statistics Column
 col_main, col_stats = st.columns([3, 1])
 
@@ -252,86 +435,12 @@ with col_main:
             target_source_count = st.slider("Target Source Count", min_value=5, max_value=50, value=20)
             
         start_btn = st.button("Start Deep Research", type="primary")
+        status_container_placeholder = st.empty()
         st.markdown('</div>', unsafe_allow_html=True)
-        
-        # Async run handler
-        async def run_deep_research(query_str: str, target_count: int, constraints_str: str):
-            # Parse constraints
-            constraints_list = [c.strip() for c in constraints_str.split(",") if c.strip()]
-            
-            # Setup initial state
-            initial_state = {
-                "user_query": query_str,
-                "topic": query_str[:50],
-                "sub_questions_state": [],
-                "search_results": [],
-                "verified_sources": [],
-                "claims": [],
-                "errors": [],
-                "logs": [],
-                "token_usage": {
-                    "vertex_ai": {"input_tokens": 0, "output_tokens": 0, "calls": 0},
-                    "freellmapi": {"input_tokens": 0, "output_tokens": 0, "calls": 0},
-                    "failovers": 0
-                }
-            }
-            
-            # Reset in-memory / state trace
-            st.session_state.graph_state = GraphState()
-            st.session_state.user_query = query_str
-            
-            # Clear previous log file for a fresh trace
-            if os.path.exists("agent.json.log"):
-                try:
-                    with open("agent.json.log", "w", encoding="utf-8") as f:
-                        f.write("")
-                except Exception:
-                    pass
-            
-            app = compile_graph()
-            
-            # Live placeholders to display streaming content within the button block
-            live_status = st.status("🧬 Executing Autonomous Research Graph...", expanded=True)
-            
-            with live_status:
-                queue_placeholder = st.empty()
-                try:
-                    async for chunk in app.astream(initial_state, stream_mode="updates"):
-                        # 1. Update main GraphState inside session state
-                        update_graph_state_with_chunk(chunk)
-                        
-                        # 2. Extract and format logs to show live agent Trace
-                        html_logs = read_logs_from_file("agent.json.log")
-                        if html_logs:
-                            log_content = "\n".join(html_logs)
-                            log_live_placeholder.markdown(f'<div class="log-box">{log_content}</div>', unsafe_allow_html=True)
-                            
-                        # 3. Synchronize and display cost metrics live in sidebar
-                        update_cost_stats_from_state()
-                        stats_placeholder.markdown(render_sidebar_html(), unsafe_allow_html=True)
-                        
-                        # 4. Display current state of the parallel research queue
-                        sub_qs = getattr(st.session_state.graph_state, "sub_questions_state", []) or []
-                        if sub_qs:
-                            queue_html = "##### 📋 Sub-questions Status Queue:\n"
-                            for q in sub_qs:
-                                badge_type = "badge-warning" if q.status == "pending" else "badge-info" if q.status == "in_progress" else "badge-success" if q.status == "completed" else "badge-danger"
-                                queue_html += f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>\n"
-                            queue_placeholder.markdown(queue_html, unsafe_allow_html=True)
-                                
-                    live_status.update(label="✅ Workflow Execution Finished Successfully!", state="complete")
-                    
-                except Exception as e:
-                    live_status.update(label="❌ Workflow Execution Failed", state="error")
-                    st.error(f"Error during graph execution: {str(e)}")
-                    st.session_state.graph_state.errors.append(str(e))
-            
-            # Final page rerun to render tabs in completed state
-            st.rerun()
 
-        # Handle button click trigger
+        # Handle button click trigger (deferred to bottom once all placeholders are rendered)
         if start_btn and user_query:
-            run_async_safely(run_deep_research(user_query, target_source_count, constraints_input))
+            st.session_state.run_triggered = True
 
         # Inline Clarification dialog
         state = st.session_state.graph_state
@@ -342,61 +451,12 @@ with col_main:
             
             clarification_response = st.text_input("Your Response:", value=st.session_state.clarification_response)
             submit_clarification = st.button("Submit Clarification", type="primary")
+            clarification_status_placeholder = st.empty()
             st.markdown('</div>', unsafe_allow_html=True)
             
             if submit_clarification and clarification_response:
                 st.session_state.clarification_response = clarification_response
-                
-                async def resume_with_clarification():
-                    initial_state = {
-                        "user_query": st.session_state.user_query,
-                        "clarification_question": question,
-                        "clarification_response": clarification_response,
-                        "clarification_needed": False,
-                        "sub_questions_state": [],
-                        "search_results": [],
-                        "verified_sources": [],
-                        "claims": [],
-                        "errors": [],
-                        "logs": [],
-                        "token_usage": st.session_state.graph_state.token_usage
-                    }
-                    
-                    app = compile_graph()
-                    live_status = st.status("🧬 Resuming Deep Research Workflow...", expanded=True)
-                    
-                    with live_status:
-                        queue_placeholder = st.empty()
-                        try:
-                            async for chunk in app.astream(initial_state, stream_mode="updates"):
-                                update_graph_state_with_chunk(chunk)
-                                
-                                html_logs = read_logs_from_file("agent.json.log")
-                                if html_logs:
-                                    log_content = "\n".join(html_logs)
-                                    log_live_placeholder.markdown(f'<div class="log-box">{log_content}</div>', unsafe_allow_html=True)
-                                    
-                                update_cost_stats_from_state()
-                                stats_placeholder.markdown(render_sidebar_html(), unsafe_allow_html=True)
-                                
-                                sub_qs = getattr(st.session_state.graph_state, "sub_questions_state", []) or []
-                                if sub_qs:
-                                    queue_html = "##### 📋 Sub-questions Status Queue:\n"
-                                    for q in sub_qs:
-                                        badge_type = "badge-warning" if q.status == "pending" else "badge-info" if q.status == "in_progress" else "badge-success" if q.status == "completed" else "badge-danger"
-                                        queue_html += f"- **{q.id}**: {q.question} <span class='badge {badge_type}'>{q.status}</span>\n"
-                                    queue_placeholder.markdown(queue_html, unsafe_allow_html=True)
-                                        
-                            live_status.update(label="✅ Workflow Execution Finished Successfully!", state="complete")
-                            
-                        except Exception as e:
-                            live_status.update(label="❌ Workflow Execution Failed", state="error")
-                            st.error(f"Error during graph execution: {str(e)}")
-                            st.session_state.graph_state.errors.append(str(e))
-                    
-                    st.rerun()
-                    
-                run_async_safely(resume_with_clarification())
+                st.session_state.resume_triggered = True
 
         # Research Brief Viewer (Rendered statically when complete)
         if state and state.research_brief:
@@ -526,56 +586,21 @@ with col_stats:
     
     stats_placeholder = st.empty()
     
-    # Side panel stats renderer
-    def render_sidebar_html() -> str:
-        cost_stats = st.session_state.cost_stats
-        total_calls = cost_stats["vertex_calls"] + cost_stats["freellm_calls"]
-        total_tokens = cost_stats["vertex_input"] + cost_stats["vertex_output"] + cost_stats["freellm_input"] + cost_stats["freellm_output"]
-        est_rem = estimate_remaining_cost()
-        
-        html = f"""
-        <div class="glass-card">
-            <h5 style="text-align: center; color: #7f56da; margin-bottom: 15px; border-bottom: 1px solid rgba(127, 86, 218, 0.2); padding-bottom: 8px;">LLM Router Cost Ticker</h5>
-            
-            <div class="stat-ticker">
-                <div class="stat-label">Cumulative Cost</div>
-                <div class="stat-value neon">${cost_stats['vertex_cost']:.5f}</div>
-            </div>
-            
-            <div class="stat-ticker">
-                <div class="stat-label">Estimated Remaining</div>
-                <div class="stat-value" style="color: #ffaa66;">${est_rem:.5f}</div>
-            </div>
-            
-            <div style="margin-top: 15px; font-size: 0.85rem;">
-                <p><b>Total API Invocations</b>: <code>{total_calls}</code></p>
-                <p><b>Total Token Volume</b>: <code>{total_tokens:,}</code></p>
-                <p><b>FreeLLM Failovers</b>: <code style="color: #ff9933;">{cost_stats.get('failovers', 0)}</code></p>
-            </div>
-            
-            <hr style="border-top: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
-            
-            <h6 style="color: #58a6ff; font-size: 0.9rem; margin-bottom: 8px;">Vertex AI (Gemini 3.5 Flash)</h6>
-            <div style="font-size: 0.8rem; line-height: 1.5; color: #8b949e;">
-                Calls: <code>{cost_stats['vertex_calls']}</code><br>
-                Input: <code>{cost_stats['vertex_input']:,}</code> tok<br>
-                Output: <code>{cost_stats['vertex_output']:,}</code> tok
-            </div>
-            
-            <hr style="border-top: 1px solid rgba(255,255,255,0.05); margin: 15px 0;">
-            
-            <h6 style="color: #66ff66; font-size: 0.9rem; margin-bottom: 8px;">FreeLLMAPI (Failover-ready)</h6>
-            <div style="font-size: 0.8rem; line-height: 1.5; color: #8b949e;">
-                Calls: <code>{cost_stats['freellm_calls']}</code><br>
-                Input: <code>{cost_stats['freellm_input']:,}</code> tok<br>
-                Output: <code>{cost_stats['freellm_output']:,}</code> tok<br>
-                Cost: <code>$0.00000</code>
-            </div>
-        </div>
-        """
-        cleaned_html = "\n".join(line.strip() for line in html.splitlines())
-        return cleaned_html
-
     # Initial render of stats sidebar
     update_cost_stats_from_state()
     stats_placeholder.markdown(render_sidebar_html(), unsafe_allow_html=True)
+
+
+# 6. Execute deferred background workflows at the very bottom once all placeholders are rendered
+if getattr(st.session_state, "run_triggered", False):
+    st.session_state.run_triggered = False  # Reset flag
+    q = user_query if 'user_query' in locals() else st.session_state.get("user_query", "")
+    c = constraints_input if 'constraints_input' in locals() else ""
+    t = target_source_count if 'target_source_count' in locals() else 20
+    placeholder = status_container_placeholder if 'status_container_placeholder' in locals() else st.empty()
+    run_async_safely(run_deep_research(q, t, c, placeholder))
+
+if getattr(st.session_state, "resume_triggered", False):
+    st.session_state.resume_triggered = False  # Reset flag
+    placeholder = clarification_status_placeholder if 'clarification_status_placeholder' in locals() else st.empty()
+    run_async_safely(resume_with_clarification(placeholder))
